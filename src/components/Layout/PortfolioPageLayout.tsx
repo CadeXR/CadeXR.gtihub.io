@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import FrostedWindow from '../UI/FrostedWindow'
 import Scene from '../Background/Scene'
 import StyledLink from '../UI/StyledLink'
+import SocialContent from '@/components/UI/SocialContent'
 
 interface PortfolioPageLayoutProps {
   children: React.ReactNode
@@ -242,57 +243,12 @@ export default function PortfolioPageLayout({ children }: PortfolioPageLayoutPro
         onMove={(pos) => setLinksPosition(pos)}
         className="z-[150]"
       >
-        <div style={{ minWidth: '300px', maxHeight: '70vh', overflowY: 'auto' }}>
-          <h2 style={{ marginBottom: '1rem' }}>Links</h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            <a 
-              href="#" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              style={{ color: 'white', textDecoration: 'none' }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.textDecoration = 'underline'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.textDecoration = 'none'
-              }}
-            >
-              GitHub
-            </a>
-            <a 
-              href="#" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              style={{ color: 'white', textDecoration: 'none' }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.textDecoration = 'underline'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.textDecoration = 'none'
-              }}
-            >
-              LinkedIn
-            </a>
-            <a 
-              href="#" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              style={{ color: 'white', textDecoration: 'none' }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.textDecoration = 'underline'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.textDecoration = 'none'
-              }}
-            >
-              Twitter
-            </a>
-          </div>
-        </div>
+        <SocialContent />
       </FrostedWindow>
     </main>
   )
 }
+
 
 
 
