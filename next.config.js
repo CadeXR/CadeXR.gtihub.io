@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'export',
-  basePath: '/your-repo-name',
+  basePath: '/CadeXR.gtihub.io',
   images: {
     unoptimized: true,
   },
