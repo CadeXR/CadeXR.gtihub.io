@@ -11,6 +11,14 @@ export default function Home() {
   })
 
   useEffect(() => {
+    // Check for redirect in session storage
+    const redirect = sessionStorage.getItem('redirect')
+    if (redirect) {
+      sessionStorage.removeItem('redirect') // Clear the stored path
+      window.location.href = `/${redirect}` // Redirect to the stored path
+      return
+    }
+
     // Debug logging
     console.log('Home page mounted')
     
@@ -114,6 +122,7 @@ export default function Home() {
     </main>
   )
 }
+
 
 
 
