@@ -27,11 +27,11 @@ export default function NavBar({
     document.body.appendChild(overlay)
 
     overlay.getBoundingClientRect()
-    
     overlay.style.opacity = '1'
     
     setTimeout(() => {
-      window.location.href = '/CadeXR.github.io'
+      // Fix: Use the complete path including repository name
+      window.location.href = '/CadeXR.github.io/CadeXR.github.io'
     }, 3500)
   }
 
