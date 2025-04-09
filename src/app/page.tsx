@@ -3,8 +3,10 @@
 import Scene from '@/components/Background/Scene'
 import FrostedWindow from '@/components/UI/FrostedWindow'
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 export default function Home() {
+  const router = useRouter()
   const [windowPosition, setWindowPosition] = useState({ 
     x: typeof window !== 'undefined' ? window.innerWidth / 2 - 150 : 0, 
     y: typeof window !== 'undefined' ? window.innerHeight / 2 - 100 : 0 
@@ -68,8 +70,7 @@ export default function Home() {
     overlay.style.opacity = '1'
     
     setTimeout(() => {
-      // Fix: Use the complete path including repository name
-      window.location.href = '/CadeXR.github.io/CadeXR.github.io/home'
+      router.push('/home')
     }, 3500)
   }
 
@@ -119,6 +120,7 @@ export default function Home() {
     </main>
   )
 }
+
 
 
 

@@ -20,7 +20,6 @@ export default function NavBar({
   const [isActive, setIsActive] = useState(false)
 
   const handleBack = () => {
-    // Create fade-in overlay
     const overlay = document.createElement('div')
     overlay.className = 'scene-transition-overlay'
     overlay.style.opacity = '0'
@@ -30,8 +29,7 @@ export default function NavBar({
     overlay.style.opacity = '1'
     
     setTimeout(() => {
-      // Fix: Use the complete path including repository name
-      window.location.href = '/CadeXR.github.io/CadeXR.github.io'
+      router.push('/')
     }, 3500)
   }
 
@@ -146,15 +144,5 @@ export default function NavBar({
     </nav>
   )
 }
-
-
-
-
-
-
-
-
-
-
 
 

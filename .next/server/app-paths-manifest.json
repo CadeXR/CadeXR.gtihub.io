@@ -1,1 +1,7 @@
-{}
+{
+  "/_not-found/page": "app/_not-found/page.js",
+  "/home/page": "app/home/page.js",
+  "/page": "app/page.js",
+  "/projects/battlegrounds/page": "app/projects/battlegrounds/page.js",
+  "/projects/flexvr-wellness/page": "app/projects/flexvr-wellness/page.js"
+}
