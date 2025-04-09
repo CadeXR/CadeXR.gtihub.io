@@ -12,6 +12,8 @@ import { useState, useEffect } from 'react'
 
 const MARGIN = 100; // Increased margin for better spacing
 const NAVBAR_WIDTH = 64;
+const WALL_MARGIN = '1rem'; // Match the margin used in NavBar/Header components
+const SPACING = 16; // Spacing between windows
 
 const calculateSafePosition = (desiredX: number, desiredY: number, windowWidth: number, windowHeight: number) => {
   if (typeof window === 'undefined') return { x: MARGIN, y: MARGIN };
@@ -34,6 +36,82 @@ const calculateSafePosition = (desiredX: number, desiredY: number, windowWidth: 
   return { x: safeX, y: safeY };
 };
 
+// Define spawn node interface
+interface SpawnNode {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+// Define window dimensions
+const WINDOW_DIMENSIONS = {
+  about: { width: 450, height: 400 },
+  portfolio: { width: 350, height: 600 },
+  socials: { width: 300, height: 300 }
+};
+
+const calculateSpawnNodes = () => {
+  if (typeof window === 'undefined') return {
+    about: { x: 0, y: 0, width: 0, height: 0 },
+    portfolio: { x: 0, y: 0, width: 0, height: 0 },
+    socials: { x: 0, y: 0, width: 0, height: 0 }
+  };
+
+  // Get navbar element for reference
+  const navbar = document.querySelector('[data-frosted-box="navbar"]');
+  if (!navbar) return null;
+
+  const navbarBounds = navbar.getBoundingClientRect();
+  
+  // Calculate spawn nodes
+  const aboutNode: SpawnNode = {
+    x: navbarBounds.right - 284, // 284 pixels left of the navbar's right edge
+    y: navbarBounds.top + 100, // 100 pixels below the navbar's top
+    ...WINDOW_DIMENSIONS.about
+  };
+
+  const portfolioNode: SpawnNode = {
+    x: aboutNode.x - 500, // 500 pixels left of the about node
+    y: aboutNode.y,
+    ...WINDOW_DIMENSIONS.portfolio
+  };
+
+  const socialsNode: SpawnNode = {
+    x: aboutNode.x - (WINDOW_DIMENSIONS.socials.width / 2),
+    y: aboutNode.y + WINDOW_DIMENSIONS.about.height + SPACING + 60, // Reduced from 62 to 60 pixels
+    ...WINDOW_DIMENSIONS.socials
+  };
+
+  return { about: aboutNode, portfolio: portfolioNode, socials: socialsNode };
+};
+
+const calculateInitialPositions = () => {
+  const spawnNodes = calculateSpawnNodes();
+  if (!spawnNodes) return {
+    about: { x: 151, y: 98 },  // Rounded from x: 151.28750610351562, y: 97.5999984741211
+    portfolio: { x: 200, y: 200 },
+    socials: { x: 364, y: 598 }
+  };
+
+  // Calculate window positions based on spawn nodes
+  // Note: Subtracting the width to position from top-right corner
+  return {
+    about: { 
+      x: spawnNodes.about.x - WINDOW_DIMENSIONS.about.width, 
+      y: spawnNodes.about.y 
+    },
+    portfolio: { 
+      x: spawnNodes.portfolio.x - WINDOW_DIMENSIONS.portfolio.width, 
+      y: spawnNodes.portfolio.y 
+    },
+    socials: { 
+      x: spawnNodes.socials.x - WINDOW_DIMENSIONS.socials.width, 
+      y: spawnNodes.socials.y 
+    }
+  };
+};
+
 export default function HomePage() {
   const [isAboutOpen, setIsAboutOpen] = useState(false)
   const [isSocialsOpen, setIsSocialsOpen] = useState(false)
@@ -41,38 +119,18 @@ export default function HomePage() {
 
   const [windowScale, setWindowScale] = useState(1)
   const [aboutPosition, setAboutPosition] = useState(() => {
-    if (typeof window === 'undefined') return { x: 0, y: MARGIN };
-    
-    const isMobile = window.innerWidth <= 768;
-    if (isMobile) {
-      return { x: 0, y: MARGIN };
-    }
-    
-    // Position on the right side with proper margin
-    // We want the right edge of the window to be MARGIN pixels from the right edge of the screen
-    return {
-      x: window.innerWidth - (33.333 * window.innerWidth / 100) - MARGIN,
-      y: MARGIN
-    };
+    const positions = calculateInitialPositions();
+    return positions.about;
   });
-  const [socialsPosition, setSocialsPosition] = useState(() => {
-    if (typeof window === 'undefined') return { x: MARGIN, y: MARGIN };
 
-    // Center horizontally and position at bottom with margin
-    const width = 350; // Updated from 300 to 350
-    return {
-      x: (window.innerWidth - width) / 2,
-      y: window.innerHeight - MARGIN - 300
-    };
-  });
   const [portfolioPosition, setPortfolioPosition] = useState(() => {
-    if (typeof window === 'undefined') return { x: MARGIN, y: MARGIN };
-    
-    // Position next to navbar with proper margin
-    return {
-      x: NAVBAR_WIDTH + MARGIN,
-      y: MARGIN
-    };
+    const positions = calculateInitialPositions();
+    return positions.portfolio;
+  });
+
+  const [socialsPosition, setSocialsPosition] = useState(() => {
+    const positions = calculateInitialPositions();
+    return positions.socials;
   });
 
   useEffect(() => {
@@ -121,86 +179,61 @@ export default function HomePage() {
   }, [])
 
   const handleWindowMove = (position: { x: number, y: number }, windowType: 'about' | 'socials' | 'portfolio') => {
-    const windowWidth = 300 * windowScale;
-    const windowHeight = 200 * windowScale;
+    const windowDimensions = WINDOW_DIMENSIONS[windowType];
+    const spawnNodes = calculateSpawnNodes();
+    
+    if (!spawnNodes) return;
 
+    // Calculate position relative to spawn node
+    const spawnNode = spawnNodes[windowType];
+    
     // Apply margin constraints
-    position = calculateSafePosition(position.x, position.y, windowWidth, windowHeight);
+    const safePosition = calculateSafePosition(
+      position.x, 
+      position.y, 
+      windowDimensions.width, 
+      windowDimensions.height
+    );
 
-    let otherWindows = [];
-    if (windowType !== 'about' && isAboutOpen) otherWindows.push({ position: aboutPosition });
-    if (windowType !== 'socials' && isSocialsOpen) otherWindows.push({ position: socialsPosition });
-    if (windowType !== 'portfolio' && isPortfolioOpen) otherWindows.push({ position: portfolioPosition });
-
-    for (const otherWindow of otherWindows) {
-      const currentRect = {
-        left: position.x,
-        right: position.x + windowWidth,
-        top: position.y,
-        bottom: position.y + windowHeight
-      }
-
-      const otherRect = {
-        left: otherWindow.position.x,
-        right: otherWindow.position.x + windowWidth,
-        top: otherWindow.position.y,
-        bottom: otherWindow.position.y + windowHeight
-      }
-
-      if (!(currentRect.right < otherRect.left || 
-          currentRect.left > otherRect.right || 
-          currentRect.bottom < otherRect.top || 
-          currentRect.top > otherRect.bottom)) {
-        position.y = otherRect.bottom + 20
-      }
-    }
-
-    position.x = Math.max(0, Math.min(position.x, window.innerWidth - windowWidth))
-    position.y = Math.max(0, Math.min(position.y, window.innerHeight - windowHeight))
-
+    // Update position based on window type
     switch (windowType) {
       case 'about':
-        setAboutPosition(position)
-        break
+        setAboutPosition(safePosition);
+        break;
       case 'socials':
-        setSocialsPosition(position)
-        break
+        setSocialsPosition(safePosition);
+        break;
       case 'portfolio':
-        setPortfolioPosition(position)
-        break
+        setPortfolioPosition(safePosition);
+        break;
     }
-  }
+  };
 
   useEffect(() => {
     const handleResize = () => {
       const isMobile = window.innerWidth <= 768;
 
-      // About window
       if (isMobile) {
         setAboutPosition({ x: 0, y: MARGIN });
+        setSocialsPosition({ x: 0, y: MARGIN });
+        setPortfolioPosition({ x: 0, y: MARGIN });
       } else {
-        setAboutPosition({
-          x: window.innerWidth - (33.333 * window.innerWidth / 100) - MARGIN,
-          y: MARGIN
-        });
+        const positions = calculateInitialPositions();
+        setAboutPosition(positions.about);
+        setPortfolioPosition(positions.portfolio);
+        setSocialsPosition(positions.socials);
       }
-
-      // Socials window - center bottom
-      const width = 350; // Updated from 300 to 350
-      setSocialsPosition({
-        x: (window.innerWidth - width) / 2,
-        y: window.innerHeight - MARGIN - 300
-      });
-
-      // Portfolio window - next to navbar
-      setPortfolioPosition({
-        x: NAVBAR_WIDTH + MARGIN,
-        y: MARGIN
-      });
     };
 
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
+    const positions = calculateInitialPositions();
+    setAboutPosition(positions.about);
+    setPortfolioPosition(positions.portfolio);
+    setSocialsPosition(positions.socials);
   }, []);
 
   return (
