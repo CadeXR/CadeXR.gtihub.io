@@ -48,7 +48,7 @@ interface SpawnNode {
 const WINDOW_DIMENSIONS = {
   about: { width: 450, height: 400 },
   portfolio: { width: 350, height: 600 },
-  socials: { width: 300, height: 300 }
+  socials: { width: 300, height: 115 }  // Reduced from 130 to 115
 };
 
 const calculateSpawnNodes = () => {
@@ -72,14 +72,14 @@ const calculateSpawnNodes = () => {
   };
 
   const portfolioNode: SpawnNode = {
-    x: aboutNode.x - 500, // 500 pixels left of the about node
+    x: aboutNode.x - 525, // Changed from 515 to 525 to move 10px more to the left
     y: aboutNode.y,
     ...WINDOW_DIMENSIONS.portfolio
   };
 
   const socialsNode: SpawnNode = {
     x: aboutNode.x - (WINDOW_DIMENSIONS.socials.width / 2),
-    y: aboutNode.y + WINDOW_DIMENSIONS.about.height + SPACING + 60, // Reduced from 62 to 60 pixels
+    y: aboutNode.y + WINDOW_DIMENSIONS.about.height + SPACING + 185, // Added 25 more pixels (from 160 to 185)
     ...WINDOW_DIMENSIONS.socials
   };
 

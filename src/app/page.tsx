@@ -59,6 +59,7 @@ export default function Home() {
         isOpen={true}
         onClose={() => {}}
         defaultPosition={windowPosition}
+        showCloseButton={false}
       >
         <div style={{ minWidth: '300px' }}>
           <h2 
@@ -96,6 +97,7 @@ export default function Home() {
     </main>
   )
 }
+
 
 
 

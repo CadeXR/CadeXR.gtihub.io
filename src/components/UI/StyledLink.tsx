@@ -21,6 +21,7 @@ export default function StyledLink({ href, children, className = '' }: StyledLin
         borderRadius: '0.5rem',
         border: '1px solid rgba(255, 255, 255, 0.4)',
         transition: 'all 0.2s ease',
+        fontFamily: 'inherit', // This will inherit the Conthrax font
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.3)'

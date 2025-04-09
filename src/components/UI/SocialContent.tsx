@@ -7,25 +7,28 @@ const buttonStyle = {
   borderRadius: '0.5rem',
   border: '1px solid rgba(255, 255, 255, 0.4)',
   cursor: 'pointer',
-  fontSize: '1rem',
+  fontSize: '0.75rem',
   transition: 'all 0.2s ease',
   textAlign: 'center' as const,
   textDecoration: 'none',
-  flex: '1',
-  margin: '0 0.5rem',
+  whiteSpace: 'nowrap' as const,
 };
 
 export default function SocialContent() {
   return (
     <div style={{ 
-      minWidth: '300px',
-      backgroundColor: 'transparent'
+      width: '100%',
+      backgroundColor: 'transparent',
+      padding: '0.0rem',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      gap: '0.0rem'
     }}>
       <h2 style={{ 
         color: 'white', 
-        fontSize: '1.25rem',
+        fontSize: '1rem',
         fontWeight: 'bold',
-        marginBottom: '1rem',
         textAlign: 'center'
       }}>
         Connect with me
@@ -33,10 +36,9 @@ export default function SocialContent() {
 
       <div style={{
         display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        gap: '1rem',
-        padding: '0 0.5rem'
+        justifyContent: 'center',
+        gap: '0.5rem',
+        width: '100%'
       }}>
         <a 
           href="https://www.linkedin.com/in/cade-gilbert/"
@@ -86,6 +88,15 @@ export default function SocialContent() {
     </div>
   )
 }
+
+
+
+
+
+
+
+
+
 
 
 

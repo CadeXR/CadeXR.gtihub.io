@@ -31,8 +31,8 @@ export default function Scene() {
   // Refined constants for smoother behavior
   const PARTICLE_SIZE = {
     NORMAL: 4,
-    LARGE: 8,
-    TRANSITION: 10
+    LARGE: 4,
+    TRANSITION: 4  
   }
   const PARTICLE_COUNT = 150
   const BASE_VELOCITY = 3

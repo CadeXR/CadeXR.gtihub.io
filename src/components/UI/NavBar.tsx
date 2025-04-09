@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useCallback, useEffect } from 'react'
+import { conthrax } from '@/app/fonts'
 
 interface NavBarProps {
   onOpenAbout: () => void
@@ -16,32 +17,6 @@ export default function NavBar({
   className 
 }: NavBarProps) {
   const [isActive, setIsActive] = useState(false)
-
-  const updateParticleSystem = useCallback(() => {
-    const navElement = document.querySelector('[data-frosted-box="navbar"]')
-    if (!navElement) return
-
-    const bounds = navElement.getBoundingClientRect()
-    const event = new CustomEvent('windowUpdate', {
-      detail: {
-        id: 'navbar',
-        bounds: {
-          left: bounds.left,
-          right: bounds.right,
-          top: bounds.top,
-          bottom: bounds.bottom,
-          isActive
-        }
-      }
-    })
-    
-    const scene = document.querySelector('canvas[data-scene]')
-    scene?.dispatchEvent(event)
-  }, [isActive])
-
-  useEffect(() => {
-    updateParticleSystem()
-  }, [isActive, updateParticleSystem])
 
   const buttonStyle = {
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
@@ -78,6 +53,7 @@ export default function NavBar({
     >
       <button 
         onClick={onOpenAbout}
+        className={conthrax.className}
         style={buttonStyle}
         onMouseEnter={(e) => {
           e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.3)'
@@ -90,6 +66,7 @@ export default function NavBar({
       </button>
       <button 
         onClick={onOpenSocials}
+        className={conthrax.className}
         style={buttonStyle}
         onMouseEnter={(e) => {
           e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.3)'
@@ -102,6 +79,7 @@ export default function NavBar({
       </button>
       <button 
         onClick={onOpenPortfolio}
+        className={conthrax.className}
         style={buttonStyle}
         onMouseEnter={(e) => {
           e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.3)'

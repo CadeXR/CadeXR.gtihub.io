@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import FrostedWindow from './FrostedWindow'
+import { conthrax } from '@/app/fonts'
 
 interface PortfolioWindowProps {
   id?: string
@@ -112,6 +113,7 @@ export default function PortfolioWindow({
               key={project.path}
               onClick={() => handleProjectClick(project.path)}
               style={buttonStyle}
+              className={conthrax.className}
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)'
               }}
@@ -127,6 +129,7 @@ export default function PortfolioWindow({
     </FrostedWindow>
   )
 }
+
 
 
 

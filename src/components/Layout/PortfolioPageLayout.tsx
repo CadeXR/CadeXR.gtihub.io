@@ -6,9 +6,25 @@ import FrostedWindow from '../UI/FrostedWindow'
 import Scene from '../Background/Scene'
 import StyledLink from '../UI/StyledLink'
 import SocialContent from '@/components/UI/SocialContent'
+import { conthrax } from '@/app/fonts'
 
 interface PortfolioPageLayoutProps {
   children: React.ReactNode
+}
+
+const buttonStyle = {
+  backgroundColor: 'rgba(255, 255, 255, 0.1)',
+  color: 'white',
+  width: '80px', // Increased from 48px
+  height: '48px',
+  borderRadius: '0.75rem',
+  cursor: 'pointer',
+  border: '1px solid rgba(255, 255, 255, 0.2)',
+  fontSize: '0.875rem',
+  transition: 'all 0.2s ease',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
 }
 
 export default function PortfolioPageLayout({ children }: PortfolioPageLayoutProps) {
@@ -44,26 +60,32 @@ export default function PortfolioPageLayout({ children }: PortfolioPageLayoutPro
 
   // Center all windows by default
   const [contentPosition, setContentPosition] = useState({ 
-    x: typeof window !== 'undefined' ? (window.innerWidth - 450) / 2 : 0,
-    y: typeof window !== 'undefined' ? (window.innerHeight - 600) / 2 : 0 
+    x: typeof window !== 'undefined' ? (window.innerWidth - 650) / 2 : 0, // Adjusted for new width
+    y: typeof window !== 'undefined' ? (window.innerHeight - 600) / 2 - 100 : 0 // 100px higher
   })
-  const [linksPosition, setLinksPosition] = useState({ 
-    x: typeof window !== 'undefined' ? (window.innerWidth - 300) / 2 : 0,
-    y: typeof window !== 'undefined' ? (window.innerHeight - 300) / 2 : 0 
+  const [linksPosition, setLinksPosition] = useState(() => {
+    if (typeof window === 'undefined') return { x: 0, y: 0 };
+    
+    // Position relative to viewport width, similar to the navbar position
+    const navbarRight = window.innerWidth - 16; // 1rem from right
+    return {
+      x: navbarRight - 350 - 16, // Keeping the same X position
+      y: 99, // Moved 5px up (was 104)
+    };
   })
 
   useEffect(() => {
     const handleResize = () => {
       // Keep content window centered
       setContentPosition({
-        x: (window.innerWidth - 450) / 2,
-        y: (window.innerHeight - 600) / 2
+        x: (window.innerWidth - 650) / 2, // Increased from 450px
+        y: (window.innerHeight - 600) / 2 - 100 // 100px higher
       })
       
-      // Keep links window centered
+      // Keep links window positioned relative to navbar
       setLinksPosition({
-        x: (window.innerWidth - 300) / 2,
-        y: (window.innerHeight - 300) / 2
+        x: (window.innerWidth - 16) - 350 - 16, // Consistent with initial position
+        y: 99 // Consistent with initial position
       })
     }
 
@@ -175,19 +197,15 @@ export default function PortfolioPageLayout({ children }: PortfolioPageLayoutPro
         <Scene />
       </div>
       
-      {/* Left Navbar - using home page styling */}
-      <nav
-        data-frosted-box="true"
+      {/* Back Button - top left */}
+      <div
+        data-frosted-box="back-button"
         style={{
           position: 'fixed',
-          top: '50%',
+          top: '1rem',
           left: '1rem',
-          transform: 'translateY(-50%)',
           zIndex: 50,
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '1rem',
-          padding: '1rem',
+          padding: '0.5rem',
           backgroundColor: 'rgba(255, 255, 255, 0.1)',
           backdropFilter: 'blur(10px)',
           WebkitBackdropFilter: 'blur(10px)',
@@ -197,39 +215,47 @@ export default function PortfolioPageLayout({ children }: PortfolioPageLayoutPro
       >
         <button 
           onClick={handleBack}
-          style={{
-            backgroundColor: 'rgba(255, 255, 255, 0.2)',
-            color: 'white',
-            width: '48px',
-            height: '48px',
-            borderRadius: '0.5rem',
-            cursor: 'pointer',
-            border: '1px solid rgba(255, 255, 255, 0.4)',
-            fontSize: '1.5rem',
-            transition: 'all 0.2s ease',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
+          className={conthrax.className}
+          style={buttonStyle}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)'
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)'
           }}
         >
           ←
         </button>
+      </div>
 
+      {/* Navbar - top right */}
+      <nav
+        data-frosted-box="true"
+        style={{
+          position: 'fixed',
+          top: '1rem',
+          right: '1rem',
+          zIndex: 50,
+          display: 'flex',
+          flexDirection: 'row',
+          gap: '1rem',
+          padding: '0.5rem',
+          backgroundColor: 'rgba(255, 255, 255, 0.1)',
+          backdropFilter: 'blur(10px)',
+          WebkitBackdropFilter: 'blur(10px)',
+          borderRadius: '0.75rem',
+          border: '1px solid rgba(255, 255, 255, 0.2)',
+        }}
+      >
         <button 
           onClick={() => setIsLinksOpen(true)}
-          style={{
-            backgroundColor: 'rgba(255, 255, 255, 0.2)',
-            color: 'white',
-            width: '48px',
-            height: '48px',
-            borderRadius: '0.5rem',
-            cursor: 'pointer',
-            border: '1px solid rgba(255, 255, 255, 0.4)',
-            fontSize: '0.875rem',
-            transition: 'all 0.2s ease',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
+          className={conthrax.className}
+          style={buttonStyle}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)'
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)'
           }}
         >
           Links
@@ -243,10 +269,11 @@ export default function PortfolioPageLayout({ children }: PortfolioPageLayoutPro
         onClose={() => {}}
         defaultPosition={contentPosition}
         onMove={(pos) => setContentPosition(pos)}
-        className="!fixed !w-[450px] max-w-[450px] z-[50]"
+        className="!fixed !w-[650px] max-w-[650px] z-[50]"
+        showCloseButton={false}
         style={{
-          width: '450px',
-          maxWidth: '450px',
+          width: '650px',
+          maxWidth: '650px',
           maxHeight: '80vh',
         }}
       >
@@ -285,23 +312,6 @@ export default function PortfolioPageLayout({ children }: PortfolioPageLayoutPro
     </main>
   )
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

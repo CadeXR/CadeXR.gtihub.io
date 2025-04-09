@@ -4,14 +4,15 @@ import { motion, AnimatePresence, useMotionValue } from 'framer-motion'
 import { useEffect, useCallback, useState } from 'react'
 
 interface FrostedWindowProps {
-  id: string
-  children: React.ReactNode
+  id?: string
   isOpen: boolean
   onClose: () => void
   defaultPosition: { x: number, y: number }
   onMove?: (position: { x: number, y: number }) => void
   style?: React.CSSProperties
   className?: string
+  showCloseButton?: boolean
+  children: React.ReactNode
 }
 
 export default function FrostedWindow({ 
@@ -22,7 +23,8 @@ export default function FrostedWindow({
   defaultPosition, 
   onMove,
   style,
-  className
+  className,
+  showCloseButton = true
 }: FrostedWindowProps) {
   const [isActive, setIsActive] = useState(false)
   const x = useMotionValue(defaultPosition?.x ?? 0)
@@ -136,29 +138,39 @@ export default function FrostedWindow({
           dragElastic={0}
           dragTransition={{ power: 0, timeConstant: 0 }}
         >
-          <button
-            onClick={onClose}
-            style={{
-              position: 'absolute',
-              right: '1rem',
-              top: '1rem',
-              backgroundColor: 'rgba(255, 255, 255, 0.2)',
-              color: 'white',
-              width: '32px',
-              height: '32px',
-              borderRadius: '0.5rem',
-              cursor: 'pointer',
-              border: '1px solid rgba(255, 255, 255, 0.4)',
-              fontSize: '1.25rem',
-              transition: 'all 0.2s ease',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            ×
-          </button>
-          <div className="window-content" style={{ marginTop: '1rem' }}>
+          <div className="window-header" style={{ position: 'relative' }}>
+            {showCloseButton && (
+              <button
+                onClick={onClose}
+                style={{
+                  position: 'absolute',
+                  top: '-1rem',
+                  right: '-1rem',
+                  width: '24px',
+                  height: '24px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                  border: '1px solid rgba(255, 255, 255, 0.4)',
+                  borderRadius: '4px',
+                  color: 'white',
+                  fontSize: '16px',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.3)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
+                }}
+              >
+                ×
+              </button>
+            )}
+          </div>
+          <div className="window-content">
             {children}
           </div>
         </motion.div>
