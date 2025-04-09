@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useCallback, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import FrostedWindow from '../UI/FrostedWindow'
 import Scene from '../Background/Scene'
@@ -31,7 +31,61 @@ export default function PortfolioPageLayout({ children }: PortfolioPageLayoutPro
   const router = useRouter()
   const [isLinksOpen, setIsLinksOpen] = useState(false)
   const [isContentOpen, setIsContentOpen] = useState(true)
-  
+  const [isBackButtonActive, setIsBackButtonActive] = useState(false)
+  const [isNavButtonActive, setIsNavButtonActive] = useState(false)
+
+  const updateBackButtonParticles = useCallback(() => {
+    const buttonElement = document.querySelector('[data-frosted-box="back-button"]')
+    if (!buttonElement) return
+
+    const bounds = buttonElement.getBoundingClientRect()
+    const event = new CustomEvent('windowUpdate', {
+      detail: {
+        id: 'back-button',
+        bounds: {
+          left: bounds.left,
+          right: bounds.right,
+          top: bounds.top,
+          bottom: bounds.bottom,
+          isActive: isBackButtonActive
+        }
+      }
+    })
+    
+    const scene = document.querySelector('canvas[data-scene]')
+    scene?.dispatchEvent(event)
+  }, [isBackButtonActive])
+
+  const updateNavButtonParticles = useCallback(() => {
+    const buttonElement = document.querySelector('[data-frosted-box="nav-button"]')
+    if (!buttonElement) return
+
+    const bounds = buttonElement.getBoundingClientRect()
+    const event = new CustomEvent('windowUpdate', {
+      detail: {
+        id: 'nav-button',
+        bounds: {
+          left: bounds.left,
+          right: bounds.right,
+          top: bounds.top,
+          bottom: bounds.bottom,
+          isActive: isNavButtonActive
+        }
+      }
+    })
+    
+    const scene = document.querySelector('canvas[data-scene]')
+    scene?.dispatchEvent(event)
+  }, [isNavButtonActive])
+
+  useEffect(() => {
+    updateBackButtonParticles()
+  }, [isBackButtonActive, updateBackButtonParticles])
+
+  useEffect(() => {
+    updateNavButtonParticles()
+  }, [isNavButtonActive, updateNavButtonParticles])
+
   const handleBack = () => {
     // Create and append the overlay
     const overlay = document.createElement('div')
@@ -133,7 +187,7 @@ export default function PortfolioPageLayout({ children }: PortfolioPageLayoutPro
         const links = contentRef.current?.getElementsByTagName('a')
         if (!links) return
 
-        Array.from(links).forEach(link => {
+        Array.from(links).forEach((link: HTMLAnchorElement) => {
           // Skip if link is already styled
           if (link.getAttribute('data-styled')) return
           
@@ -200,6 +254,8 @@ export default function PortfolioPageLayout({ children }: PortfolioPageLayoutPro
       {/* Back Button - top left */}
       <div
         data-frosted-box="back-button"
+        onMouseEnter={() => setIsBackButtonActive(true)}
+        onMouseLeave={() => setIsBackButtonActive(false)}
         style={{
           position: 'fixed',
           top: '1rem',
@@ -230,7 +286,9 @@ export default function PortfolioPageLayout({ children }: PortfolioPageLayoutPro
 
       {/* Navbar - top right */}
       <nav
-        data-frosted-box="true"
+        data-frosted-box="nav-button"
+        onMouseEnter={() => setIsNavButtonActive(true)}
+        onMouseLeave={() => setIsNavButtonActive(false)}
         style={{
           position: 'fixed',
           top: '1rem',
@@ -312,12 +370,6 @@ export default function PortfolioPageLayout({ children }: PortfolioPageLayoutPro
     </main>
   )
 }
-
-
-
-
-
-
 
 
 

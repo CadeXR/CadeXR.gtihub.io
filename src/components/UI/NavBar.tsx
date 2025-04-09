@@ -18,6 +18,32 @@ export default function NavBar({
 }: NavBarProps) {
   const [isActive, setIsActive] = useState(false)
 
+  const updateParticleSystem = useCallback(() => {
+    const navbarElement = document.querySelector('[data-frosted-box="navbar"]')
+    if (!navbarElement) return
+
+    const bounds = navbarElement.getBoundingClientRect()
+    const event = new CustomEvent('windowUpdate', {
+      detail: {
+        id: 'navbar',
+        bounds: {
+          left: bounds.left,
+          right: bounds.right,
+          top: bounds.top,
+          bottom: bounds.bottom,
+          isActive
+        }
+      }
+    })
+    
+    const scene = document.querySelector('canvas[data-scene]')
+    scene?.dispatchEvent(event)
+  }, [isActive])
+
+  useEffect(() => {
+    updateParticleSystem()
+  }, [isActive, updateParticleSystem])
+
   const buttonStyle = {
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
     color: 'white',
