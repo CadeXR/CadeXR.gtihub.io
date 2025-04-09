@@ -26,12 +26,15 @@ export default function NavBar({
     overlay.style.opacity = '0'
     document.body.appendChild(overlay)
 
+    // Force reflow
     overlay.getBoundingClientRect()
     
+    // Fade in to white
     overlay.style.opacity = '1'
     
+    // Navigate after transition
     setTimeout(() => {
-      window.location.href = '/cadexr.github.io'
+      router.push('/')
     }, 3500)
   }
 

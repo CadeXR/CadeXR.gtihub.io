@@ -14,13 +14,13 @@ interface PortfolioWindowProps {
 }
 
 const projects = [
-  { name: 'Battlegrounds', path: '/projects/battlegrounds' },
-  { name: 'FlexVR Wellness - RH25', path: '/projects/flexvr-wellness' },
-  { name: 'DeskBuddy - ImmerseGT', path: '/projects/deskbuddy' },
-  { name: 'Intentional Locomotion - RH25', path: '/projects/intentional-locomotion' },
-  { name: 'Hex VR', path: '/projects/hex-vr' },
-  { name: 'Lightless', path: '/projects/lightless' },
-  { name: 'PersonifyAI', path: '/projects/personifyai' }
+  { name: 'Battlegrounds', path: '/cadexr.github.io/projects/battlegrounds' },
+  { name: 'FlexVR Wellness - RH25', path: '/cadexr.github.io/projects/flexvr-wellness' },
+  { name: 'DeskBuddy - ImmerseGT', path: '/cadexr.github.io/projects/deskbuddy' },
+  { name: 'Intentional Locomotion - RH25', path: '/cadexr.github.io/projects/intentional-locomotion' },
+  { name: 'Hex VR', path: '/cadexr.github.io/projects/hex-vr' },
+  { name: 'Lightless', path: '/cadexr.github.io/projects/lightless' },
+  { name: 'PersonifyAI', path: '/cadexr.github.io/projects/personifyai' }
 ]
 
 const buttonStyle = {
@@ -133,6 +133,7 @@ export default function PortfolioWindow({
     </FrostedWindow>
   )
 }
+
 
 
 
