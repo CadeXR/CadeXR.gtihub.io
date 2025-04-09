@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'export',
-  basePath: '/CadeXR.gtihub.io',
+  // Remove basePath since this is your main GitHub Pages site
   images: {
     unoptimized: true,
   },
