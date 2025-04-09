@@ -31,7 +31,14 @@ export default function HomePage() {
       socials: isSocialsOpen,
       portfolio: isPortfolioOpen
     })
-  }, [isAboutOpen, isSocialsOpen, isPortfolioOpen])
+    
+    // Add debug logging for positions
+    console.log('Window positions:', {
+      portfolio: portfolioPosition,
+      about: aboutPosition,
+      socials: socialsPosition
+    })
+  }, [isAboutOpen, isSocialsOpen, isPortfolioOpen, portfolioPosition, aboutPosition, socialsPosition])
 
   useEffect(() => {
     // Clean up any existing overlays first
@@ -116,9 +123,18 @@ export default function HomePage() {
       <Scene />
       <div className="fixed inset-0 pointer-events-none">
         <NavBar 
-          onOpenAbout={() => setIsAboutOpen(true)}
-          onOpenSocials={() => setIsSocialsOpen(true)}
-          onOpenPortfolio={() => setIsPortfolioOpen(true)}
+          onOpenAbout={() => {
+            console.log('Opening About window')
+            setIsAboutOpen(true)
+          }}
+          onOpenSocials={() => {
+            console.log('Opening Socials window')
+            setIsSocialsOpen(true)
+          }}
+          onOpenPortfolio={() => {
+            console.log('Opening Portfolio window')
+            setIsPortfolioOpen(true)
+          }}
           className="pointer-events-auto"
         />
 
@@ -126,7 +142,10 @@ export default function HomePage() {
           <PortfolioWindow 
             id="portfolio-window"
             isOpen={isPortfolioOpen}
-            onClose={() => setIsPortfolioOpen(false)}
+            onClose={() => {
+              console.log('Closing Portfolio window')
+              setIsPortfolioOpen(false)
+            }}
             defaultPosition={portfolioPosition}
             onMove={(pos) => handleWindowMove(pos, 'portfolio')}
           />
@@ -134,7 +153,10 @@ export default function HomePage() {
           <FrostedWindow 
             id="about-window"
             isOpen={isAboutOpen}
-            onClose={() => setIsAboutOpen(false)}
+            onClose={() => {
+              console.log('Closing About window')
+              setIsAboutOpen(false)
+            }}
             defaultPosition={aboutPosition}
             onMove={(pos) => handleWindowMove(pos, 'about')}
           >
@@ -144,7 +166,10 @@ export default function HomePage() {
           <FrostedWindow 
             id="socials-window"
             isOpen={isSocialsOpen}
-            onClose={() => setIsSocialsOpen(false)}
+            onClose={() => {
+              console.log('Closing Socials window')
+              setIsSocialsOpen(false)
+            }}
             defaultPosition={socialsPosition}
             onMove={(pos) => handleWindowMove(pos, 'socials')}
           >
