@@ -16,6 +16,32 @@ export default function PortfolioPageLayout({ children }: PortfolioPageLayoutPro
   const [isLinksOpen, setIsLinksOpen] = useState(false)
   const [isContentOpen, setIsContentOpen] = useState(true)
   
+  const handleBack = () => {
+    // Create and append the overlay
+    const overlay = document.createElement('div')
+    overlay.className = 'scene-transition-overlay'
+    overlay.style.opacity = '0'
+    document.body.appendChild(overlay)
+
+    // Force reflow
+    overlay.getBoundingClientRect()
+    overlay.style.opacity = '1'
+    
+    // First trigger the shrink transition
+    const scene = document.querySelector('canvas[data-scene]')
+    if (scene) {
+      const transitionEvent = new CustomEvent('startTransition', {
+        detail: { direction: 'shrink' }
+      })
+      scene.dispatchEvent(transitionEvent)
+    }
+    
+    // Wait for the screen to go completely white before navigating
+    setTimeout(() => {
+      router.push('/home')
+    }, 1750) // Half of the full transition time to ensure we're at peak white
+  }
+
   // Center all windows by default
   const [contentPosition, setContentPosition] = useState({ 
     x: typeof window !== 'undefined' ? (window.innerWidth - 450) / 2 : 0,
@@ -45,24 +71,35 @@ export default function PortfolioPageLayout({ children }: PortfolioPageLayoutPro
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  const handleBack = () => {
-    // Create fade-in overlay
+  useEffect(() => {
+    // Clean up any existing overlays first
+    document.querySelectorAll('.scene-transition-overlay').forEach(el => el.remove())
+
+    // Create initial white overlay
     const overlay = document.createElement('div')
     overlay.className = 'scene-transition-overlay'
-    overlay.style.opacity = '0'
+    overlay.style.opacity = '1' // Start fully opaque
     document.body.appendChild(overlay)
 
     // Force reflow
     overlay.getBoundingClientRect()
-    
-    // Fade in to white
-    overlay.style.opacity = '1'
-    
-    // Navigate after transition
-    setTimeout(() => {
-      router.push('/home')
-    }, 3500)
-  }
+
+    // Fade out the white overlay after a brief delay
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        overlay.style.opacity = '0'
+        
+        // Remove overlay after animation completes
+        setTimeout(() => {
+          overlay.remove()
+        }, 3500) // Match the duration in globals.css
+      }, 100) // Small delay to ensure the page is ready
+    })
+
+    return () => {
+      overlay.remove()
+    }
+  }, [])
 
   const ContentWithStyledLinks = ({ children }: { children: React.ReactNode }) => {
     const contentRef = useRef<HTMLDivElement>(null)
@@ -248,6 +285,10 @@ export default function PortfolioPageLayout({ children }: PortfolioPageLayoutPro
     </main>
   )
 }
+
+
+
+
 
 
 

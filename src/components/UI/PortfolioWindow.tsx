@@ -48,6 +48,34 @@ export default function PortfolioWindow({
 }: PortfolioWindowProps) {
   const router = useRouter()
   
+  const handleProjectClick = (path: string) => {
+    // Create and append the overlay
+    const overlay = document.createElement('div')
+    overlay.className = 'scene-transition-overlay'
+    overlay.style.opacity = '0'
+    document.body.appendChild(overlay)
+
+    // Force reflow
+    overlay.getBoundingClientRect()
+    
+    // Fade to white
+    overlay.style.opacity = '1'
+    
+    // First trigger the grow transition (particles to white)
+    const scene = document.querySelector('canvas[data-scene]')
+    if (scene) {
+      const transitionEvent = new CustomEvent('startTransition', {
+        detail: { direction: 'grow' }
+      })
+      scene.dispatchEvent(transitionEvent)
+    }
+    
+    // Navigate after transition starts
+    setTimeout(() => {
+      router.push(path)
+    }, 1500) // Shorter delay to ensure smooth transition
+  }
+  
   return (
     <FrostedWindow
       id={id}
@@ -56,16 +84,14 @@ export default function PortfolioWindow({
       defaultPosition={defaultPosition}
       onMove={onMove}
       style={{
-        backgroundColor: 'rgba(255, 255, 255, 0.1)', // Add this to ensure it's not being overridden
+        backgroundColor: 'rgba(255, 255, 255, 0.1)',
         ...style
       }}
       className={className}
-      data-frosted-box="true"
-      data-active={isOpen ? "true" : "false"}
     >
       <div style={{ 
         minWidth: '300px',
-        backgroundColor: 'transparent' // Add this to ensure child isn't causing issues
+        backgroundColor: 'transparent'
       }}>
         <h2 style={{ 
           color: 'white', 
@@ -84,45 +110,13 @@ export default function PortfolioWindow({
           {projects.map((project) => (
             <button
               key={project.path}
-              onClick={() => {
-                const scene = document.querySelector('canvas[data-scene]')
-                if (!scene) return
-                
-                // First trigger the grow transition (particles to white)
-                const transitionEvent = new CustomEvent('startTransition', {
-                  detail: { direction: 'grow' }
-                })
-                scene.dispatchEvent(transitionEvent)
-                
-                // Navigate after transition is complete
-                setTimeout(() => {
-                  router.push(project.path)
-                }, 3000) // Slightly shorter to ensure navigation happens before transition ends
-              }}
-              style={{
-                backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                color: 'white',
-                width: '100%',
-                height: '48px',
-                borderRadius: '0.5rem',
-                border: '1px solid rgba(255, 255, 255, 0.4)',
-                cursor: 'pointer',
-                fontSize: '0.875rem',
-                transition: 'all 0.2s ease',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: '0 1rem',
-                textAlign: 'center',
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-              }}
+              onClick={() => handleProjectClick(project.path)}
+              style={buttonStyle}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.3)'
+                e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)'
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)'
+                e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)'
               }}
             >
               {project.name}
@@ -133,6 +127,7 @@ export default function PortfolioWindow({
     </FrostedWindow>
   )
 }
+
 
 
 

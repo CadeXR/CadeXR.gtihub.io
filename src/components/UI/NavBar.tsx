@@ -1,55 +1,24 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
-import { useCallback, useEffect, useState } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 
 interface NavBarProps {
-  onOpenAbout?: () => void
-  onOpenSocials?: () => void
-  onOpenPortfolio?: () => void
+  onOpenAbout: () => void
+  onOpenSocials: () => void
+  onOpenPortfolio: () => void
   className?: string
 }
 
 export default function NavBar({ 
   onOpenAbout, 
   onOpenSocials, 
-  onOpenPortfolio,
+  onOpenPortfolio, 
   className 
 }: NavBarProps) {
-  const router = useRouter()
   const [isActive, setIsActive] = useState(false)
 
-  const handleBack = () => {
-    const overlay = document.createElement('div')
-    overlay.className = 'scene-transition-overlay'
-    overlay.style.opacity = '0'
-    document.body.appendChild(overlay)
-
-    overlay.getBoundingClientRect()
-    overlay.style.opacity = '1'
-    
-    setTimeout(() => {
-      router.push('/')
-    }, 3500)
-  }
-
-  const buttonStyle = {
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    color: 'white',
-    width: '48px',
-    height: '48px',
-    borderRadius: '0.5rem',
-    cursor: 'pointer',
-    border: '1px solid rgba(255, 255, 255, 0.4)',
-    fontSize: '0.875rem',
-    transition: 'all 0.2s ease',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  }
-
   const updateParticleSystem = useCallback(() => {
-    const navElement = document.querySelector('nav')
+    const navElement = document.querySelector('[data-frosted-box="navbar"]')
     if (!navElement) return
 
     const bounds = navElement.getBoundingClientRect()
@@ -74,10 +43,16 @@ export default function NavBar({
     updateParticleSystem()
   }, [isActive, updateParticleSystem])
 
-  useEffect(() => {
-    window.addEventListener('resize', updateParticleSystem)
-    return () => window.removeEventListener('resize', updateParticleSystem)
-  }, [updateParticleSystem])
+  const buttonStyle = {
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    color: 'white',
+    padding: '0.75rem 1.5rem',
+    borderRadius: '0.5rem',
+    cursor: 'pointer',
+    border: '1px solid rgba(255, 255, 255, 0.4)',
+    fontSize: '1rem',
+    transition: 'all 0.2s ease',
+  }
 
   return (
     <nav
@@ -87,14 +62,13 @@ export default function NavBar({
       className={className}
       style={{
         position: 'fixed',
-        top: '50%',
-        left: '1rem',
-        transform: 'translateY(-50%)',
+        top: '1rem',
+        right: '1rem',
         zIndex: 50,
         display: 'flex',
-        flexDirection: 'column',
+        flexDirection: 'row',
         gap: '1rem',
-        padding: '1rem',
+        padding: '0.5rem',
         backgroundColor: 'rgba(255, 255, 255, 0.1)',
         backdropFilter: 'blur(10px)',
         WebkitBackdropFilter: 'blur(10px)',
@@ -103,39 +77,7 @@ export default function NavBar({
       }}
     >
       <button 
-        onClick={handleBack}
-        style={buttonStyle}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.3)'
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)'
-        }}
-      >
-        ←
-      </button>
-
-      <button 
-        onClick={() => {
-          console.log('Portfolio button clicked')
-          onOpenPortfolio?.()
-        }}
-        style={buttonStyle}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.3)'
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)'
-        }}
-      >
-        Work
-      </button>
-
-      <button 
-        onClick={() => {
-          console.log('About button clicked')
-          onOpenAbout?.()
-        }}
+        onClick={onOpenAbout}
         style={buttonStyle}
         onMouseEnter={(e) => {
           e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.3)'
@@ -146,12 +88,8 @@ export default function NavBar({
       >
         About
       </button>
-
       <button 
-        onClick={() => {
-          console.log('Socials button clicked')
-          onOpenSocials?.()
-        }}
+        onClick={onOpenSocials}
         style={buttonStyle}
         onMouseEnter={(e) => {
           e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.3)'
@@ -161,6 +99,18 @@ export default function NavBar({
         }}
       >
         Links
+      </button>
+      <button 
+        onClick={onOpenPortfolio}
+        style={buttonStyle}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.3)'
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)'
+        }}
+      >
+        Portfolio
       </button>
     </nav>
   )

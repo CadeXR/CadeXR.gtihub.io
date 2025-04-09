@@ -30,9 +30,20 @@ canvas[data-scene] {
   width: 100%;
   height: 100%;
   background-color: white;
-  z-index: 9999;
+  opacity: 0;
   pointer-events: none;
-  transition: opacity 1s ease-in-out;
+  z-index: 9999;
+  transition: opacity 3.5s ease-in-out; /* Match the scene transition duration */
+}
+
+/* Ensure the overlay is above everything else during transitions */
+.scene-transition-overlay {
+  z-index: 99999;
+}
+
+/* Prevent any flickering during transition */
+body:has(.scene-transition-overlay) {
+  background-color: black !important;
 }
 
 .scene-transition-overlay.fade-out {
@@ -144,6 +155,8 @@ html, body {
     filter: brightness(1);
   }
 }
+
+
 
 
 

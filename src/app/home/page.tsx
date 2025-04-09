@@ -3,6 +3,8 @@
 import Scene from '@/components/Background/Scene'
 import FrostedWindow from '@/components/UI/FrostedWindow'
 import NavBar from '@/components/UI/NavBar'
+import Header from '@/components/UI/Header'
+import BackButton from '@/components/UI/BackButton'
 import PortfolioWindow from '@/components/UI/PortfolioWindow'
 import AboutContent from '@/components/UI/AboutContent'
 import SocialContent from '@/components/UI/SocialContent'
@@ -204,23 +206,16 @@ export default function HomePage() {
   return (
     <main className="relative w-screen h-screen overflow-hidden bg-black">
       <Scene />
-      <div className="fixed inset-0">
-        <NavBar 
-          onOpenAbout={() => {
-            console.log('Opening About window')
-            setIsAboutOpen(true)
-          }}
-          onOpenSocials={() => {
-            console.log('Opening Socials window')
-            setIsSocialsOpen(true)
-          }}
-          onOpenPortfolio={() => {
-            console.log('Opening Portfolio window')
-            setIsPortfolioOpen(true)
-          }}
-          className="pointer-events-auto"
-        />
-
+      <div className="fixed inset-0 pointer-events-none">
+        <div className="pointer-events-auto">
+          <BackButton />
+          <Header />
+          <NavBar 
+            onOpenAbout={() => setIsAboutOpen(true)}
+            onOpenSocials={() => setIsSocialsOpen(true)}
+            onOpenPortfolio={() => setIsPortfolioOpen(true)}
+          />
+        </div>
         <div className="pointer-events-auto">
           <PortfolioWindow 
             id="portfolio-window"
