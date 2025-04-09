@@ -7,18 +7,20 @@
         // Get the current URL and path
         const currentPath = window.location.pathname;
         const baseUrl = window.location.origin;
+        const repoName = '/cadexr.github.io';
         
-        // Remove the leading slash and store the path
-        const pathToStore = currentPath.replace(/^\//, '');
+        // Remove the base path and leading slash, then store the path
+        const pathToStore = currentPath.replace(repoName, '').replace(/^\//, '');
         sessionStorage.setItem('redirect', pathToStore);
         
         // Redirect to the root with the correct base URL
-        window.location.href = baseUrl;
+        window.location.href = baseUrl + repoName;
     </script>
 </head>
 <body>
     <p>Redirecting...</p>
 </body>
 </html>
+
 
 

@@ -64,15 +64,11 @@ export default function Home() {
     overlay.style.opacity = '0'
     document.body.appendChild(overlay)
 
-    // Force reflow
     overlay.getBoundingClientRect()
-    
-    // Fade in to white
     overlay.style.opacity = '1'
     
-    // Navigate after transition
     setTimeout(() => {
-      window.location.href = '/home'
+      window.location.href = '/cadexr.github.io/home'
     }, 3500)
   }
 
@@ -122,6 +118,8 @@ export default function Home() {
     </main>
   )
 }
+
+
 
 
 
