@@ -4,17 +4,21 @@
     <meta charset="utf-8">
     <title>Redirecting...</title>
     <script>
-        // Get the current path excluding the domain
-        const segment = window.location.pathname.split('/').pop();
+        // Get the current URL and path
+        const currentPath = window.location.pathname;
+        const baseUrl = window.location.origin;
         
-        // Store the path in session storage
-        sessionStorage.setItem('redirect', segment);
+        // Remove the leading slash and store the path
+        const pathToStore = currentPath.replace(/^\//, '');
+        sessionStorage.setItem('redirect', pathToStore);
         
-        // Redirect to the main page
-        window.location.replace('/');
+        // Redirect to the root with the correct base URL
+        window.location.href = baseUrl;
     </script>
 </head>
 <body>
-    Redirecting...
+    <p>Redirecting...</p>
 </body>
 </html>
+
+
