@@ -13,17 +13,6 @@ export default function Home() {
   })
 
   useEffect(() => {
-    // Check for redirect in session storage
-    const redirect = sessionStorage.getItem('redirect')
-    if (redirect) {
-      sessionStorage.removeItem('redirect') // Clear the stored path
-      window.location.href = `/${redirect}` // Redirect to the stored path
-      return
-    }
-
-    // Debug logging
-    console.log('Home page mounted')
-    
     // Clean up any existing overlays first
     document.querySelectorAll('.scene-transition-overlay').forEach(el => el.remove())
     
@@ -41,26 +30,13 @@ export default function Home() {
       overlay.style.opacity = '0'
       
       // Remove overlay after animation
-      const timeoutId = setTimeout(() => {
+      setTimeout(() => {
         overlay.remove()
       }, 3500)
-
-      // Cleanup function
-      return () => {
-        clearTimeout(timeoutId)
-        overlay.remove()
-      }
     })
-    
-    // Remove any lingering transition classes
-    document.body.classList.remove('scene-transition-grow', 'scene-transition-shrink')
-    
-    // Ensure body background is not white
-    document.body.style.backgroundColor = 'black'
   }, [])
 
   const handleEnter = () => {
-    // Create fade-in overlay
     const overlay = document.createElement('div')
     overlay.className = 'scene-transition-overlay'
     overlay.style.opacity = '0'
@@ -120,6 +96,8 @@ export default function Home() {
     </main>
   )
 }
+
+
 
 
 
