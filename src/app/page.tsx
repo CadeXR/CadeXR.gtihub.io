@@ -68,7 +68,8 @@ export default function Home() {
     overlay.style.opacity = '1'
     
     setTimeout(() => {
-      window.location.href = '/cadexr.github.io/home'
+      // Use the correct path with proper casing
+      window.location.href = '/CadeXR.github.io/home'
     }, 3500)
   }
 
@@ -118,6 +119,8 @@ export default function Home() {
     </main>
   )
 }
+
+
 
 
 

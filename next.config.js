@@ -1,12 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'export',
-  basePath: '/cadexr.github.io',
+  basePath: 'CadeXR.github.io/CadeXR.github.io',
   images: {
     unoptimized: true,
   },
 }
 
 module.exports = nextConfig
+
 
 
