@@ -108,7 +108,11 @@ export default function Scene() {
         trail: [],
         isFollowing: false,
         followingWindowId: null,
-        isOrbiting: false
+        isOrbiting: false,
+        orbitAngle: Math.random() * Math.PI * 2,
+        orbitRadius: ORBIT_RADIUS_MIN + Math.random() * (ORBIT_RADIUS_MAX - ORBIT_RADIUS_MIN),
+        transitionProgress: 0,
+        edgeIndex: Math.floor(Math.random() * 4)
       }
     })
   }, [])

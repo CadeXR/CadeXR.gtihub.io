@@ -7,10 +7,15 @@ interface NavBarProps {
   onOpenAbout?: () => void
   onOpenSocials?: () => void
   onOpenPortfolio?: () => void
-  style?: React.CSSProperties
+  className?: string
 }
 
-export default function NavBar({ onOpenAbout, onOpenSocials, onOpenPortfolio }: NavBarProps) {
+export default function NavBar({ 
+  onOpenAbout, 
+  onOpenSocials, 
+  onOpenPortfolio,
+  className 
+}: NavBarProps) {
   const router = useRouter()
   const [isActive, setIsActive] = useState(false)
 
@@ -84,6 +89,7 @@ export default function NavBar({ onOpenAbout, onOpenSocials, onOpenPortfolio }: 
       data-frosted-box="navbar"
       onMouseEnter={() => setIsActive(true)}
       onMouseLeave={() => setIsActive(false)}
+      className={className}
       style={{
         position: 'fixed',
         top: '50%',
