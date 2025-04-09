@@ -104,9 +104,12 @@ export default function NavBar({
     >
       <button 
         onClick={handleBack}
-        style={{
-          ...buttonStyle,
-          fontSize: '1.5rem',
+        style={buttonStyle}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.3)'
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)'
         }}
       >
         ←
@@ -118,6 +121,12 @@ export default function NavBar({
           onOpenPortfolio?.()
         }}
         style={buttonStyle}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.3)'
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)'
+        }}
       >
         Work
       </button>
@@ -128,6 +137,12 @@ export default function NavBar({
           onOpenAbout?.()
         }}
         style={buttonStyle}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.3)'
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)'
+        }}
       >
         About
       </button>
@@ -138,6 +153,12 @@ export default function NavBar({
           onOpenSocials?.()
         }}
         style={buttonStyle}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.3)'
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)'
+        }}
       >
         Links
       </button>

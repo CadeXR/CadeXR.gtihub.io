@@ -121,7 +121,7 @@ export default function HomePage() {
   return (
     <main className="relative w-screen h-screen overflow-hidden bg-black">
       <Scene />
-      <div className="fixed inset-0 pointer-events-none">
+      <div className="fixed inset-0">
         <NavBar 
           onOpenAbout={() => {
             console.log('Opening About window')
@@ -142,10 +142,7 @@ export default function HomePage() {
           <PortfolioWindow 
             id="portfolio-window"
             isOpen={isPortfolioOpen}
-            onClose={() => {
-              console.log('Closing Portfolio window')
-              setIsPortfolioOpen(false)
-            }}
+            onClose={() => setIsPortfolioOpen(false)}
             defaultPosition={portfolioPosition}
             onMove={(pos) => handleWindowMove(pos, 'portfolio')}
           />
@@ -153,27 +150,21 @@ export default function HomePage() {
           <FrostedWindow 
             id="about-window"
             isOpen={isAboutOpen}
-            onClose={() => {
-              console.log('Closing About window')
-              setIsAboutOpen(false)
-            }}
+            onClose={() => setIsAboutOpen(false)}
             defaultPosition={aboutPosition}
             onMove={(pos) => handleWindowMove(pos, 'about')}
           >
-            <div>About Content</div>
+            <div className="text-white">About Content</div>
           </FrostedWindow>
 
           <FrostedWindow 
             id="socials-window"
             isOpen={isSocialsOpen}
-            onClose={() => {
-              console.log('Closing Socials window')
-              setIsSocialsOpen(false)
-            }}
+            onClose={() => setIsSocialsOpen(false)}
             defaultPosition={socialsPosition}
             onMove={(pos) => handleWindowMove(pos, 'socials')}
           >
-            <div>Socials Content</div>
+            <div className="text-white">Socials Content</div>
           </FrostedWindow>
         </div>
       </div>

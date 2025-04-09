@@ -28,9 +28,14 @@ export default function FrostedWindow({
   const x = useMotionValue(defaultPosition?.x ?? 0)
   const y = useMotionValue(defaultPosition?.y ?? 0)
 
+  // Add debug logging
+  useEffect(() => {
+    console.log(`FrostedWindow ${id} isOpen:`, isOpen)
+    console.log(`FrostedWindow ${id} position:`, defaultPosition)
+  }, [id, isOpen, defaultPosition])
+
   useEffect(() => {
     if (!isOpen) {
-      // When window closes, dispatch event to remove window bounds
       const scene = document.querySelector('canvas[data-scene]')
       if (scene) {
         const event = new CustomEvent('windowUpdate', {
@@ -48,7 +53,10 @@ export default function FrostedWindow({
     if (!isOpen) return
 
     const windowElement = document.querySelector(`[data-frosted-box="${id}"]`)
-    if (!windowElement) return
+    if (!windowElement) {
+      console.log(`Window element not found for id: ${id}`)
+      return
+    }
 
     const bounds = windowElement.getBoundingClientRect()
     const event = new CustomEvent('windowUpdate', {
@@ -87,7 +95,7 @@ export default function FrostedWindow({
       {isOpen && (
         <motion.div
           id={id}
-          className={`frosted-window ${className || ''}`}
+          className={`frosted-window z-50 ${className || ''}`}
           data-frosted-box={id}
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -109,6 +117,7 @@ export default function FrostedWindow({
             overflowY: 'auto',
             x,
             y,
+            zIndex: 50,
             ...style
           }}
           onMouseEnter={() => setIsActive(true)}
@@ -117,7 +126,6 @@ export default function FrostedWindow({
           dragMomentum={false}
           onDragStart={() => setIsActive(true)}
           onDragEnd={(event, info) => {
-            // Don't set isActive to false here
             if (onMove) {
               onMove({
                 x: x.get(),
