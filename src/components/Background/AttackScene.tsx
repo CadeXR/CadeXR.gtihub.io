@@ -16,7 +16,7 @@ interface AttackParticle {
   isProjectile?: boolean
   orbitAngle: number
   orbitSpeed: number
-  orbitTransition: number  // New: 0 to 1 for transition into orbit
+  orbitTransition: number  // Required property
 }
 
 interface Enemy {
@@ -135,7 +135,8 @@ export default function AttackScene({ onScoreChange }: Props) {
       size: PARTICLE_SIZE,
       isProjectile: true,
       orbitAngle: Math.random() * Math.PI * 2,
-      orbitSpeed: BASE_ORBIT_SPEED
+      orbitSpeed: BASE_ORBIT_SPEED,
+      orbitTransition: 0  // Initialize with 0
     }
     projectilesRef.current.push(projectile)
   }, [])
@@ -534,6 +535,8 @@ export default function AttackScene({ onScoreChange }: Props) {
     </>
   )
 }
+
+
 
 
 
