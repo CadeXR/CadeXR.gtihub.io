@@ -23,18 +23,7 @@
       "static/chunks/main-app-a4efe02a0e91ebc7.js",
       "static/css/437af546035c708e.css",
       "static/chunks/618-2dfd05cc5837eabf.js",
-      "static/chunks/app/activities/attack/page-00a2877ea08f696d.js"
-    ],
-    "/activities/page": [
-      "static/chunks/webpack-d3a2946976649ff0.js",
-      "static/chunks/fd9d1056-b11b2651f33aae7f.js",
-      "static/chunks/117-a17ddbafd442a3f9.js",
-      "static/chunks/main-app-a4efe02a0e91ebc7.js",
-      "static/css/437af546035c708e.css",
-      "static/chunks/879-f7128ff25d701b36.js",
-      "static/chunks/618-2dfd05cc5837eabf.js",
-      "static/chunks/904-0a329cfd30344bae.js",
-      "static/chunks/app/activities/page-58f6fd6fc326e924.js"
+      "static/chunks/app/activities/attack/page-db9dcb638057d04b.js"
     ],
     "/home/page": [
       "static/chunks/webpack-d3a2946976649ff0.js",
@@ -42,38 +31,29 @@
       "static/chunks/117-a17ddbafd442a3f9.js",
       "static/chunks/main-app-a4efe02a0e91ebc7.js",
       "static/css/437af546035c708e.css",
-      "static/chunks/879-f7128ff25d701b36.js",
+      "static/chunks/879-82210cb739e68585.js",
       "static/chunks/904-0a329cfd30344bae.js",
-      "static/chunks/app/home/page-d6f867cdaa0764d6.js"
+      "static/chunks/app/home/page-188472f63f1bc9ae.js"
+    ],
+    "/activities/page": [
+      "static/chunks/webpack-d3a2946976649ff0.js",
+      "static/chunks/fd9d1056-b11b2651f33aae7f.js",
+      "static/chunks/117-a17ddbafd442a3f9.js",
+      "static/chunks/main-app-a4efe02a0e91ebc7.js",
+      "static/css/437af546035c708e.css",
+      "static/chunks/879-82210cb739e68585.js",
+      "static/chunks/618-2dfd05cc5837eabf.js",
+      "static/chunks/904-0a329cfd30344bae.js",
+      "static/chunks/app/activities/page-56e3c45ed0523f38.js"
     ],
     "/page": [
       "static/chunks/webpack-d3a2946976649ff0.js",
       "static/chunks/fd9d1056-b11b2651f33aae7f.js",
       "static/chunks/117-a17ddbafd442a3f9.js",
       "static/chunks/main-app-a4efe02a0e91ebc7.js",
-      "static/chunks/879-f7128ff25d701b36.js",
+      "static/chunks/879-82210cb739e68585.js",
       "static/chunks/904-0a329cfd30344bae.js",
-      "static/chunks/app/page-21dbf039c7c0cab2.js"
-    ],
-    "/projects/flexvr-wellness/page": [
-      "static/chunks/webpack-d3a2946976649ff0.js",
-      "static/chunks/fd9d1056-b11b2651f33aae7f.js",
-      "static/chunks/117-a17ddbafd442a3f9.js",
-      "static/chunks/main-app-a4efe02a0e91ebc7.js",
-      "static/css/437af546035c708e.css",
-      "static/chunks/879-f7128ff25d701b36.js",
-      "static/chunks/904-0a329cfd30344bae.js",
-      "static/chunks/app/projects/flexvr-wellness/page-8ecd3d7d780e5a67.js"
-    ],
-    "/projects/battlegrounds/page": [
-      "static/chunks/webpack-d3a2946976649ff0.js",
-      "static/chunks/fd9d1056-b11b2651f33aae7f.js",
-      "static/chunks/117-a17ddbafd442a3f9.js",
-      "static/chunks/main-app-a4efe02a0e91ebc7.js",
-      "static/css/437af546035c708e.css",
-      "static/chunks/879-f7128ff25d701b36.js",
-      "static/chunks/904-0a329cfd30344bae.js",
-      "static/chunks/app/projects/battlegrounds/page-ce72bf697f349cdb.js"
+      "static/chunks/app/page-29f9bf328ff9558e.js"
     ],
     "/projects/deskbuddy/page": [
       "static/chunks/webpack-d3a2946976649ff0.js",
@@ -81,19 +61,9 @@
       "static/chunks/117-a17ddbafd442a3f9.js",
       "static/chunks/main-app-a4efe02a0e91ebc7.js",
       "static/css/437af546035c708e.css",
-      "static/chunks/879-f7128ff25d701b36.js",
+      "static/chunks/879-82210cb739e68585.js",
       "static/chunks/904-0a329cfd30344bae.js",
-      "static/chunks/app/projects/deskbuddy/page-f05e6858a1a2ce9a.js"
-    ],
-    "/projects/intentional-locomotion/page": [
-      "static/chunks/webpack-d3a2946976649ff0.js",
-      "static/chunks/fd9d1056-b11b2651f33aae7f.js",
-      "static/chunks/117-a17ddbafd442a3f9.js",
-      "static/chunks/main-app-a4efe02a0e91ebc7.js",
-      "static/css/437af546035c708e.css",
-      "static/chunks/879-f7128ff25d701b36.js",
-      "static/chunks/904-0a329cfd30344bae.js",
-      "static/chunks/app/projects/intentional-locomotion/page-6beb89c1138a307b.js"
+      "static/chunks/app/projects/deskbuddy/page-b6cecaa30001bbd7.js"
     ],
     "/projects/hex-vr/page": [
       "static/chunks/webpack-d3a2946976649ff0.js",
@@ -101,9 +71,39 @@
       "static/chunks/117-a17ddbafd442a3f9.js",
       "static/chunks/main-app-a4efe02a0e91ebc7.js",
       "static/css/437af546035c708e.css",
-      "static/chunks/879-f7128ff25d701b36.js",
+      "static/chunks/879-82210cb739e68585.js",
       "static/chunks/904-0a329cfd30344bae.js",
-      "static/chunks/app/projects/hex-vr/page-6370dc04542eb81d.js"
+      "static/chunks/app/projects/hex-vr/page-6a1275bad558a49f.js"
+    ],
+    "/projects/flexvr-wellness/page": [
+      "static/chunks/webpack-d3a2946976649ff0.js",
+      "static/chunks/fd9d1056-b11b2651f33aae7f.js",
+      "static/chunks/117-a17ddbafd442a3f9.js",
+      "static/chunks/main-app-a4efe02a0e91ebc7.js",
+      "static/css/437af546035c708e.css",
+      "static/chunks/879-82210cb739e68585.js",
+      "static/chunks/904-0a329cfd30344bae.js",
+      "static/chunks/app/projects/flexvr-wellness/page-5628c2a5d7a24871.js"
+    ],
+    "/projects/battlegrounds/page": [
+      "static/chunks/webpack-d3a2946976649ff0.js",
+      "static/chunks/fd9d1056-b11b2651f33aae7f.js",
+      "static/chunks/117-a17ddbafd442a3f9.js",
+      "static/chunks/main-app-a4efe02a0e91ebc7.js",
+      "static/css/437af546035c708e.css",
+      "static/chunks/879-82210cb739e68585.js",
+      "static/chunks/904-0a329cfd30344bae.js",
+      "static/chunks/app/projects/battlegrounds/page-c90e4847ba9789c3.js"
+    ],
+    "/projects/intentional-locomotion/page": [
+      "static/chunks/webpack-d3a2946976649ff0.js",
+      "static/chunks/fd9d1056-b11b2651f33aae7f.js",
+      "static/chunks/117-a17ddbafd442a3f9.js",
+      "static/chunks/main-app-a4efe02a0e91ebc7.js",
+      "static/css/437af546035c708e.css",
+      "static/chunks/879-82210cb739e68585.js",
+      "static/chunks/904-0a329cfd30344bae.js",
+      "static/chunks/app/projects/intentional-locomotion/page-604860cd6eef33e4.js"
     ],
     "/projects/lightless/page": [
       "static/chunks/webpack-d3a2946976649ff0.js",
@@ -111,9 +111,9 @@
       "static/chunks/117-a17ddbafd442a3f9.js",
       "static/chunks/main-app-a4efe02a0e91ebc7.js",
       "static/css/437af546035c708e.css",
-      "static/chunks/879-f7128ff25d701b36.js",
+      "static/chunks/879-82210cb739e68585.js",
       "static/chunks/904-0a329cfd30344bae.js",
-      "static/chunks/app/projects/lightless/page-8a836cc6cc65cf1d.js"
+      "static/chunks/app/projects/lightless/page-81c27bac189eebb9.js"
     ],
     "/projects/personifyai/page": [
       "static/chunks/webpack-d3a2946976649ff0.js",
@@ -121,9 +121,9 @@
       "static/chunks/117-a17ddbafd442a3f9.js",
       "static/chunks/main-app-a4efe02a0e91ebc7.js",
       "static/css/437af546035c708e.css",
-      "static/chunks/879-f7128ff25d701b36.js",
+      "static/chunks/879-82210cb739e68585.js",
       "static/chunks/904-0a329cfd30344bae.js",
-      "static/chunks/app/projects/personifyai/page-8491d2fe3f6486bd.js"
+      "static/chunks/app/projects/personifyai/page-f666567aa443e278.js"
     ]
   }
 }

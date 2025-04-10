@@ -1,11 +1,12 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { conthrax } from '@/app/fonts'
 
 export default function BackButton() {
   const router = useRouter()
+  const pathname = usePathname()
   const [isActive, setIsActive] = useState(false)
   const buttonRef = useRef<HTMLButtonElement>(null)
 
@@ -74,30 +75,36 @@ export default function BackButton() {
   }, [updateParticles])
 
   const handleClick = () => {
-    // Create and append transition overlay for current scene (attack)
+    // First transition: fade to white
     const overlay = document.createElement('div')
-    overlay.className = 'scene-transition-grow'
+    overlay.className = 'scene-transition-grow'  // Start transparent and grow to white
     document.body.appendChild(overlay)
 
     const scene = document.querySelector('canvas[data-scene]')
     scene?.dispatchEvent(new CustomEvent('startTransition', { 
-      detail: { direction: 'shrink' } 
+      detail: { direction: 'grow' } 
     }))
-    
+
+    // Wait for fade to white to complete, then navigate
     setTimeout(() => {
-      router.push('/home')
+      // If we're on /home/, go to root ('/'), otherwise go to /home/
+      if (pathname === '/home/') {  // Updated to match exact path
+        router.push('/')  // This will go to the landing page
+      } else {
+        router.push('/home/')  // Updated to include trailing slash
+      }
       
-      // Create fade-out overlay for home scene
+      // After navigation, fade from white
       const exitOverlay = document.createElement('div')
-      exitOverlay.className = 'scene-transition-shrink'
+      exitOverlay.className = 'scene-transition-shrink'  // Start white and fade out
       document.body.appendChild(exitOverlay)
       
-      // Remove both overlays after complete transition
+      // Remove overlays after transition completes
       setTimeout(() => {
         overlay.remove()
         exitOverlay.remove()
       }, 500)
-    }, 3500) // Increased to match the slower fade-in animation
+    }, 3500)  // Match this with your CSS transition duration
   }
 
   return (
@@ -121,6 +128,11 @@ export default function BackButton() {
     </div>
   )
 }
+
+
+
+
+
 
 
 
