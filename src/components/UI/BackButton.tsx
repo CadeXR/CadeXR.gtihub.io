@@ -105,10 +105,6 @@ export default function BackButton() {
       <button
         ref={buttonRef}
         onClick={handleClick}
-        onMouseEnter={() => setIsActive(true)}
-        onMouseLeave={() => setIsActive(false)}
-        className={conthrax.className}
-        style={buttonStyle}
         onMouseEnter={(e) => {
           e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.3)'
           setIsActive(true)
@@ -117,12 +113,15 @@ export default function BackButton() {
           e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)'
           setIsActive(false)
         }}
+        className={conthrax.className}
+        style={buttonStyle}
       >
         ←
       </button>
     </div>
   )
 }
+
 
 
 

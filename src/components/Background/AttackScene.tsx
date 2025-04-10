@@ -136,7 +136,7 @@ export default function AttackScene({ onScoreChange }: Props) {
       isProjectile: true,
       orbitAngle: Math.random() * Math.PI * 2,
       orbitSpeed: BASE_ORBIT_SPEED,
-      orbitTransition: 0  // Initialize with 0
+      orbitTransition: 0  // Added the missing property
     }
     projectilesRef.current.push(projectile)
   }, [])
@@ -535,6 +535,7 @@ export default function AttackScene({ onScoreChange }: Props) {
     </>
   )
 }
+
 
 
 
