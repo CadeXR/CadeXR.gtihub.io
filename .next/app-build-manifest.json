@@ -45,16 +45,6 @@
       "static/chunks/904-c3313acdd3f4fad4.js",
       "static/chunks/app/page-29f9bf328ff9558e.js"
     ],
-    "/projects/battlegrounds/page": [
-      "static/chunks/webpack-d3a2946976649ff0.js",
-      "static/chunks/fd9d1056-b11b2651f33aae7f.js",
-      "static/chunks/117-a17ddbafd442a3f9.js",
-      "static/chunks/main-app-a4efe02a0e91ebc7.js",
-      "static/css/437af546035c708e.css",
-      "static/chunks/879-82210cb739e68585.js",
-      "static/chunks/904-c3313acdd3f4fad4.js",
-      "static/chunks/app/projects/battlegrounds/page-c90e4847ba9789c3.js"
-    ],
     "/home/page": [
       "static/chunks/webpack-d3a2946976649ff0.js",
       "static/chunks/fd9d1056-b11b2651f33aae7f.js",
@@ -65,6 +55,16 @@
       "static/chunks/365-c40e4aa9fa31c6b9.js",
       "static/chunks/904-c3313acdd3f4fad4.js",
       "static/chunks/app/home/page-d1e2d2e7d3dffad0.js"
+    ],
+    "/projects/battlegrounds/page": [
+      "static/chunks/webpack-d3a2946976649ff0.js",
+      "static/chunks/fd9d1056-b11b2651f33aae7f.js",
+      "static/chunks/117-a17ddbafd442a3f9.js",
+      "static/chunks/main-app-a4efe02a0e91ebc7.js",
+      "static/css/437af546035c708e.css",
+      "static/chunks/879-82210cb739e68585.js",
+      "static/chunks/904-c3313acdd3f4fad4.js",
+      "static/chunks/app/projects/battlegrounds/page-c90e4847ba9789c3.js"
     ],
     "/projects/deskbuddy/page": [
       "static/chunks/webpack-d3a2946976649ff0.js",
@@ -96,7 +96,7 @@
       "static/chunks/904-c3313acdd3f4fad4.js",
       "static/chunks/app/projects/hex-vr/page-6a1275bad558a49f.js"
     ],
-    "/projects/intentional-locomotion/page": [
+    "/projects/personifyai/page": [
       "static/chunks/webpack-d3a2946976649ff0.js",
       "static/chunks/fd9d1056-b11b2651f33aae7f.js",
       "static/chunks/117-a17ddbafd442a3f9.js",
@@ -104,7 +104,7 @@
       "static/css/437af546035c708e.css",
       "static/chunks/879-82210cb739e68585.js",
       "static/chunks/904-c3313acdd3f4fad4.js",
-      "static/chunks/app/projects/intentional-locomotion/page-604860cd6eef33e4.js"
+      "static/chunks/app/projects/personifyai/page-f666567aa443e278.js"
     ],
     "/projects/lightless/page": [
       "static/chunks/webpack-d3a2946976649ff0.js",
@@ -116,7 +116,7 @@
       "static/chunks/904-c3313acdd3f4fad4.js",
       "static/chunks/app/projects/lightless/page-81c27bac189eebb9.js"
     ],
-    "/projects/personifyai/page": [
+    "/projects/intentional-locomotion/page": [
       "static/chunks/webpack-d3a2946976649ff0.js",
       "static/chunks/fd9d1056-b11b2651f33aae7f.js",
       "static/chunks/117-a17ddbafd442a3f9.js",
@@ -124,7 +124,7 @@
       "static/css/437af546035c708e.css",
       "static/chunks/879-82210cb739e68585.js",
       "static/chunks/904-c3313acdd3f4fad4.js",
-      "static/chunks/app/projects/personifyai/page-f666567aa443e278.js"
+      "static/chunks/app/projects/intentional-locomotion/page-604860cd6eef33e4.js"
     ]
   }
 }
