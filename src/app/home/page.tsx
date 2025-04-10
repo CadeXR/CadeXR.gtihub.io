@@ -9,6 +9,7 @@ import PortfolioWindow from '@/components/UI/PortfolioWindow'
 import AboutContent from '@/components/UI/AboutContent'
 import SocialContent from '@/components/UI/SocialContent'
 import { useState, useEffect } from 'react'
+import Image from 'next/image'
 
 const MARGIN = 100; // Increased margin for better spacing
 const NAVBAR_WIDTH = 64;
@@ -239,7 +240,37 @@ export default function HomePage() {
   return (
     <main className="relative w-screen h-screen overflow-hidden bg-black">
       <Scene />
-      <div className="fixed inset-0 pointer-events-none">
+      <div 
+        className="fixed inset-0 flex items-center justify-center pointer-events-none" 
+        style={{ 
+          zIndex: 2,
+          position: 'absolute',
+          width: '100vw',
+          height: '100vh',
+        }}
+      >
+        <div style={{
+          position: 'relative',
+          width: '400px',
+          height: '400px',
+          left: '50%',
+          top: '50%',
+          transform: 'translate(-50%, -50%)',
+        }}>
+          <Image
+            src="/media/VR_Knight_Transparent.png"
+            alt="VR Knight"
+            fill
+            priority
+            className="select-none object-contain"
+            sizes="400px"
+            style={{
+              filter: 'brightness(1.2) contrast(1.1)', // Makes the image slightly more visible
+            }}
+          />
+        </div>
+      </div>
+      <div className="fixed inset-0 pointer-events-none" style={{ zIndex: 3 }}>
         <div className="pointer-events-auto">
           <BackButton />
           <Header />
@@ -296,29 +327,3 @@ export default function HomePage() {
     </main>
   )
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

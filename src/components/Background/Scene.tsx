@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useCallback } from 'react'
+import { useEffect, useRef, useCallback, useState } from 'react'
 
 interface Particle {
   x: number
@@ -16,6 +16,15 @@ interface Particle {
   orbitRadius: number
   transitionProgress: number
   edgeIndex: number  // Remove optional flag
+}
+
+interface OrbitalParticle {
+  x: number
+  y: number
+  angle: number
+  speed: number
+  size: number
+  trail: Array<{ x: number, y: number }>
 }
 
 interface BoxBounds {
@@ -34,15 +43,15 @@ export default function Scene() {
     LARGE: 4,
     TRANSITION: 4  
   }
-  const PARTICLE_COUNT = 150
+  const PARTICLE_COUNT = 100
   const BASE_VELOCITY = 3
   const MAX_VELOCITY = 3
   const ORBIT_SPEED = 40
-  const FOLLOW_DISTANCE = 150
+  const FOLLOW_DISTANCE = 100
   const ORBIT_DISTANCE = 100
   const REPULSION_RADIUS = 80
   const REPULSION_STRENGTH = 1
-  const TRAIL_LENGTH = 200
+  const TRAIL_LENGTH = 100
   const TRAIL_OPACITY = 0.4
   const TRANSITION_DURATION = 3500
   const ORBIT_RADIUS_MIN = 30
@@ -51,6 +60,12 @@ export default function Scene() {
   const EDGE_DISTANCE = 20
   // Add new constant for shoot-off velocity
   const SHOOT_OFF_VELOCITY = 3
+  // Add new constants
+  const ORBITAL_PARTICLE_COUNT = 25
+  const ORBITAL_PARTICLE_SIZE = 1.5  // Reduced from 3 to 1.5 for smaller particles
+  const BASE_ORBITAL_SPEED = .007
+  const ORBIT_RADIUS = 190  // This is the single number you'll change to control the orbit radius
+
   // Refs
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const particlesRef = useRef<Particle[]>([])
@@ -65,6 +80,10 @@ export default function Scene() {
   const INDEPENDENT_PARTICLE_COUNT = 150
   // Add new ref for independent particles
   const independentParticlesRef = useRef<Particle[]>([])
+  // Add new ref for orbital particles
+  const orbitalParticlesRef = useRef<OrbitalParticle[]>([])
+  // Add new state for orbit radius
+  const [orbitRadius, setOrbitRadius] = useState(ORBIT_RADIUS)
 
   // Helper function for finding closest point on rectangle
   const findClosestPointOnRect = (px: number, py: number, rectX: number, rectY: number, rectW: number, rectH: number) => {
@@ -113,6 +132,26 @@ export default function Scene() {
         orbitRadius: ORBIT_RADIUS_MIN + Math.random() * (ORBIT_RADIUS_MAX - ORBIT_RADIUS_MIN),
         transitionProgress: 0,
         edgeIndex: Math.floor(Math.random() * 4)
+      }
+    })
+  }, [])
+
+  // Add initialization function for orbital particles
+  const initializeOrbitalParticles = useCallback((canvas: HTMLCanvasElement) => {
+    const centerX = window.innerWidth / 2
+    const centerY = window.innerHeight / 2
+
+    orbitalParticlesRef.current = Array.from({ length: ORBITAL_PARTICLE_COUNT }, (_, index) => {
+      const angle = (Math.PI * 2 * index) / ORBITAL_PARTICLE_COUNT
+      const speed = BASE_ORBITAL_SPEED * (0.8 + Math.random() * 0.4)
+      
+      return {
+        x: centerX + Math.cos(angle) * ORBIT_RADIUS,
+        y: centerY + Math.sin(angle) * ORBIT_RADIUS,
+        angle,
+        speed,
+        size: ORBITAL_PARTICLE_SIZE,
+        trail: []
       }
     })
   }, [])
@@ -271,6 +310,44 @@ export default function Scene() {
       ctx.beginPath()
       ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
       ctx.fillStyle = 'rgba(255, 255, 255, 0.68)'
+      ctx.fill()
+    })
+
+    // Add orbital particle updates after your existing particle updates
+    const centerX = window.innerWidth / 2
+    const centerY = window.innerHeight / 2
+
+    orbitalParticlesRef.current.forEach(particle => {
+      // Update angle with slower speed for visibility
+      particle.angle += particle.speed
+
+      // Calculate new position using viewport center
+      particle.x = centerX + Math.cos(particle.angle) * ORBIT_RADIUS
+      particle.y = centerY + Math.sin(particle.angle) * ORBIT_RADIUS
+
+      // Update trail
+      particle.trail.push({ x: particle.x, y: particle.y })
+      if (particle.trail.length > TRAIL_LENGTH) {
+        particle.trail.shift()
+      }
+
+      // Draw trail
+      if (particle.trail.length > 1) {
+        ctx.beginPath()
+        ctx.moveTo(particle.trail[0].x, particle.trail[0].y)
+        particle.trail.forEach((point, index) => {
+          if (index > 0) {
+            ctx.lineTo(point.x, point.y)
+          }
+        })
+        ctx.strokeStyle = `rgba(255, 255, 255, ${TRAIL_OPACITY})`
+        ctx.stroke()
+      }
+
+      // Draw particle
+      ctx.beginPath()
+      ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.8)'
       ctx.fill()
     })
   }, [])
@@ -436,9 +513,10 @@ export default function Scene() {
       canvas.width = window.innerWidth
       canvas.height = window.innerHeight
       
-      // Initialize both particle systems
+      // Initialize all particle systems
       initializeParticles(canvas)
       initializeIndependentParticles(canvas)
+      initializeOrbitalParticles(canvas)
     }
     updateCanvasSize()
 
@@ -454,7 +532,12 @@ export default function Scene() {
       }
       window.removeEventListener('resize', updateCanvasSize)
     }
-  }, [animate, initializeParticles, initializeIndependentParticles])
+  }, [animate, initializeParticles, initializeIndependentParticles, initializeOrbitalParticles])
+
+  // Add method to dynamically update orbit radius
+  const updateOrbitRadius = useCallback((newRadius: number) => {
+    setOrbitRadius(newRadius)
+  }, [])
 
   // Add debug logging
   useEffect(() => {
@@ -477,6 +560,14 @@ export default function Scene() {
     ctx.fillStyle = 'black'
     ctx.fillRect(0, 0, canvas.width, canvas.height)
   }, [])
+
+  // Add this useEffect after your other useEffects
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+    
+    initializeOrbitalParticles(canvas)
+  }, [initializeOrbitalParticles])
 
   return (
     <canvas
