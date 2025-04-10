@@ -12,22 +12,22 @@ interface GameCard {
 
 const games: GameCard[] = [
   {
-    title: 'Particle Attack',
-    description: 'Control a swarm of particles to defend against incoming threats.',
-    path: '/activities/attack',
+    title: 'Hex VR',
+    description: 'A VR Esport designed around zero gravity movement for VR.   \n\nMy role: Project Manager/Game Director',
+    path: 'https://www.meta.com/en-gb/experiences/hex-vr/7202337956544173/?srsltid=AfmBOooht_Qp_t4-_CTaj1WibBjmEkEM3FUKdZYWf9Rdgm7kzyo6CqQh',
     status: 'available'
   },
   {
-    title: 'Maze Runner',
-    description: 'Navigate through procedurally generated mazes.',
-    path: '/activities/maze',
-    status: 'coming-soon'
+    title: 'Battlegrounds',
+    description: 'A fantasy multiplayer sandbox game for VR.   \n\nMy role: Game Designer/Community Manager',
+    path: 'https://www.meta.com/en-gb/experiences/battlegrounds/24783420087971207/',
+    status: 'available'
   },
   {
-    title: 'Pattern Match',
-    description: 'Test your memory and pattern recognition skills.',
-    path: '/activities/pattern',
-    status: 'coming-soon'
+    title: 'Particle Attack',
+    description: 'Shoot particles for a high score! this game was just for fun, and runs right on this website :)',
+    path: '/activities/attack',
+    status: 'available'
   }
 ]
 
@@ -42,9 +42,9 @@ export default function ActivitiesPage() {
             <div 
               key={game.path}
               className={`
-                bg-white/10 rounded-lg p-6 backdrop-blur-sm
-                border border-white/20 transition-all duration-300
-                ${game.status === 'available' ? 'hover:bg-white/20 cursor-pointer' : 'opacity-50'}
+                bg-[rgba(255,102,0,0.3)] rounded-lg p-6 backdrop-blur-sm
+                border border-[rgba(255,102,0,0.6)] transition-all duration-300
+                ${game.status === 'available' ? 'hover:bg-[rgba(255,102,0,0.4)] cursor-pointer' : 'opacity-50'}
               `}
             >
               {game.status === 'available' ? (
@@ -66,12 +66,12 @@ function GameCardContent({ game }: { game: GameCard }) {
   return (
     <>
       <h2 className="text-2xl font-semibold mb-2">{game.title}</h2>
-      <p className="text-gray-300 mb-4">{game.description}</p>
+      <p className="text-gray-300 mb-4 whitespace-pre-line">{game.description}</p>
       <div className="flex items-center justify-between">
         <span className={`
           text-sm px-3 py-1 rounded-full
           ${game.status === 'available' 
-            ? 'bg-green-500/20 text-green-300' 
+            ? 'bg-[rgba(255,102,0,0.3)] text-[rgba(255,102,0,1)] border border-[rgba(255,102,0,0.6)]' 
             : 'bg-yellow-500/20 text-yellow-300'}
         `}>
           {game.status === 'available' ? 'Play Now' : 'Coming Soon'}
@@ -80,3 +80,11 @@ function GameCardContent({ game }: { game: GameCard }) {
     </>
   )
 }
+
+
+
+
+
+
+
+

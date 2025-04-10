@@ -36,10 +36,10 @@ export default function NavBar({
     justifyContent: 'center',
   }
 
-  const attackButtonStyle = {
+  const gamesButtonStyle = {
     ...buttonStyle,
-    backgroundColor: 'rgba(255, 102, 0, 0.3)',
-    border: '1px solid rgba(255, 102, 0, 0.6)',
+    backgroundColor: 'rgba(147, 51, 234, 0.3)',
+    border: '1px solid rgba(147, 51, 234, 0.6)',
   }
 
   const updateParticles = useCallback(() => {
@@ -113,9 +113,9 @@ export default function NavBar({
           }))
 
           setTimeout(() => {
-            router.push('/activities/attack')
+            router.push('/activities')  // Changed from '/site/activities' to '/activities'
             
-            // Create fade-out overlay for attack scene
+            // Create fade-out overlay for games scene
             const exitOverlay = document.createElement('div')
             exitOverlay.className = 'scene-transition-shrink'
             document.body.appendChild(exitOverlay)
@@ -125,18 +125,18 @@ export default function NavBar({
               overlay.remove()
               exitOverlay.remove()
             }, 500)
-          }, 3500) // Increased to match the slower fade-in animation
+          }, 3500)
         }}
         className={conthrax.className}
-        style={attackButtonStyle}
+        style={gamesButtonStyle}
         onMouseEnter={(e) => {
-          e.currentTarget.style.backgroundColor = 'rgba(255, 102, 0, 0.4)'
+          e.currentTarget.style.backgroundColor = 'rgba(147, 51, 234, 0.4)'
         }}
         onMouseLeave={(e) => {
-          e.currentTarget.style.backgroundColor = 'rgba(255, 102, 0, 0.3)'
+          e.currentTarget.style.backgroundColor = 'rgba(147, 51, 234, 0.3)'
         }}
       >
-        Attack
+        Games
       </button>
       <button 
         onClick={onOpenAbout}

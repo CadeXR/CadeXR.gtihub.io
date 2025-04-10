@@ -1,7 +1,8 @@
 'use client'
 
-import { useEffect, useRef, useCallback } from 'react'
+import { useEffect, useRef, useCallback, useState } from 'react'
 import BackButton from '@/components/UI/BackButton'
+import ScoreWindow from '@/components/UI/ScoreWindow'
 
 interface Props {
   onScoreChange?: (score: number) => void
@@ -43,6 +44,7 @@ export default function AttackScene({ onScoreChange }: Props) {
   const lastMousePositionRef = useRef({ x: 0, y: 0 })
   const animationFrameIdRef = useRef<number>()
   const scoreRef = useRef(0)
+  const [displayScore, setDisplayScore] = useState(0)
   const mouseVelocityRef = useRef({ x: 0, y: 0 })
   const lastTimeRef = useRef(Date.now())
   const currentAngleRef = useRef(0) // Initial angle (up)
@@ -51,6 +53,18 @@ export default function AttackScene({ onScoreChange }: Props) {
   const rotationDirectionRef = useRef(1) // 1 for clockwise, -1 for counter-clockwise
   const centerPositionRef = useRef({ x: 0, y: 0 })
   const backgroundParticlesRef = useRef<BackgroundParticle[]>([])
+  const [isScoreVisible, setIsScoreVisible] = useState(false)
+
+  // Add this useEffect to update the displayed score
+  useEffect(() => {
+    const updateScore = () => {
+      setDisplayScore(scoreRef.current)
+    }
+    
+    // Update display score every 100ms
+    const intervalId = setInterval(updateScore, 100)
+    return () => clearInterval(intervalId)
+  }, [])
 
   // Constants
   const PARTICLE_COUNT = 50
@@ -253,7 +267,7 @@ export default function AttackScene({ onScoreChange }: Props) {
       arrowEndX - Math.cos(currentAngleRef.current - Math.PI * 0.8) * (arrowheadSize + 2),
       arrowEndY - Math.sin(currentAngleRef.current - Math.PI * 0.8) * (arrowheadSize + 2)
     )
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)'
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)'
     ctx.lineWidth = 4
     ctx.stroke()
 
@@ -531,34 +545,13 @@ export default function AttackScene({ onScoreChange }: Props) {
   return (
     <>
       <BackButton />
-      <canvas ref={canvasRef} className="fixed top-0 left-0 w-full h-full -z-10" />
+      <ScoreWindow score={displayScore} isVisible={isScoreVisible} />
+      <canvas
+        ref={canvasRef}
+        className="fixed top-0 left-0 w-full h-full bg-black"
+        style={{ zIndex: -1 }}
+      />
     </>
   )
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

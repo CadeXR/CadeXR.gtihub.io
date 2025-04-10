@@ -270,7 +270,7 @@ export default function Scene() {
       // Draw particle with full opacity
       ctx.beginPath()
       ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
-      ctx.fillStyle = 'rgba(255, 255, 255, 1)'
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.68)'
       ctx.fill()
     })
   }, [])
