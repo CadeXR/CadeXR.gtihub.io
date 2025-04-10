@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useCallback, useState } from 'react'
+import { usePathname } from 'next/navigation'
 
 interface Particle {
   x: number
@@ -37,6 +38,10 @@ interface BoxBounds {
 }
 
 export default function Scene() {
+  const pathname = usePathname()
+  // Change this line - we want it to be true when we're IN /home
+  const isHomePage = pathname.includes('home')  // This will match /home and any path containing home
+
   // Refined constants for smoother behavior
   const PARTICLE_SIZE = {
     NORMAL: 4,
@@ -138,6 +143,11 @@ export default function Scene() {
 
   // Add initialization function for orbital particles
   const initializeOrbitalParticles = useCallback((canvas: HTMLCanvasElement) => {
+    if (!isHomePage) {
+      orbitalParticlesRef.current = []  // Clear orbital particles if not on home page
+      return
+    }
+
     const centerX = window.innerWidth / 2
     const centerY = window.innerHeight / 2
 
@@ -154,7 +164,7 @@ export default function Scene() {
         trail: []
       }
     })
-  }, [])
+  }, [isHomePage])
 
   // Update particle positions
   const updateParticles = useCallback((canvas: HTMLCanvasElement) => {
@@ -314,43 +324,45 @@ export default function Scene() {
     })
 
     // Add orbital particle updates after your existing particle updates
-    const centerX = window.innerWidth / 2
-    const centerY = window.innerHeight / 2
+    if (isHomePage) {
+      const centerX = window.innerWidth / 2
+      const centerY = window.innerHeight / 2
 
-    orbitalParticlesRef.current.forEach(particle => {
-      // Update angle with slower speed for visibility
-      particle.angle += particle.speed
+      orbitalParticlesRef.current.forEach(particle => {
+        // Update angle with slower speed for visibility
+        particle.angle += particle.speed
 
-      // Calculate new position using viewport center
-      particle.x = centerX + Math.cos(particle.angle) * ORBIT_RADIUS
-      particle.y = centerY + Math.sin(particle.angle) * ORBIT_RADIUS
+        // Calculate new position using viewport center
+        particle.x = centerX + Math.cos(particle.angle) * ORBIT_RADIUS
+        particle.y = centerY + Math.sin(particle.angle) * ORBIT_RADIUS
 
-      // Update trail
-      particle.trail.push({ x: particle.x, y: particle.y })
-      if (particle.trail.length > TRAIL_LENGTH) {
-        particle.trail.shift()
-      }
+        // Update trail
+        particle.trail.push({ x: particle.x, y: particle.y })
+        if (particle.trail.length > TRAIL_LENGTH) {
+          particle.trail.shift()
+        }
 
-      // Draw trail
-      if (particle.trail.length > 1) {
+        // Draw trail
+        if (particle.trail.length > 1) {
+          ctx.beginPath()
+          ctx.moveTo(particle.trail[0].x, particle.trail[0].y)
+          particle.trail.forEach((point, index) => {
+            if (index > 0) {
+              ctx.lineTo(point.x, point.y)
+            }
+          })
+          ctx.strokeStyle = `rgba(255, 255, 255, ${TRAIL_OPACITY})`
+          ctx.stroke()
+        }
+
+        // Draw particle
         ctx.beginPath()
-        ctx.moveTo(particle.trail[0].x, particle.trail[0].y)
-        particle.trail.forEach((point, index) => {
-          if (index > 0) {
-            ctx.lineTo(point.x, point.y)
-          }
-        })
-        ctx.strokeStyle = `rgba(255, 255, 255, ${TRAIL_OPACITY})`
-        ctx.stroke()
-      }
-
-      // Draw particle
-      ctx.beginPath()
-      ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.8)'
-      ctx.fill()
-    })
-  }, [])
+        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)'
+        ctx.fill()
+      })
+    }
+  }, [isHomePage])
 
   // Add new update function for independent particles
   const updateIndependentParticles = useCallback((canvas: HTMLCanvasElement) => {
@@ -567,7 +579,7 @@ export default function Scene() {
     if (!canvas) return
     
     initializeOrbitalParticles(canvas)
-  }, [initializeOrbitalParticles])
+  }, [initializeOrbitalParticles, isHomePage])
 
   return (
     <canvas

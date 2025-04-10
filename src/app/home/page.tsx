@@ -258,7 +258,7 @@ export default function HomePage() {
           transform: 'translate(-50%, -50%)',
         }}>
           <Image
-            src="/media/VR_Knight_Transparent.png"
+            src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/media/VR_Knight_Transparent.png`}
             alt="VR Knight"
             fill
             priority
