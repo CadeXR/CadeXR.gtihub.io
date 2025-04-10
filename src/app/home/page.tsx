@@ -258,14 +258,14 @@ export default function HomePage() {
           transform: 'translate(-50%, -50%)',
         }}>
           <Image
-            src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/media/VR_Knight_Transparent.png`}
+            src={`/media/VR_Knight_Transparent.png`}
             alt="VR Knight"
             fill
             priority
             className="select-none object-contain"
             sizes="400px"
             style={{
-              filter: 'brightness(1.2) contrast(1.1)', // Makes the image slightly more visible
+              filter: 'brightness(1.2) contrast(1.1)',
             }}
           />
         </div>
