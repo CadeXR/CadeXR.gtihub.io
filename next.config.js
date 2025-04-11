@@ -1,17 +1,16 @@
 /** @type {import('next').NextConfig} */
 const isGithubActions = process.env.GITHUB_ACTIONS || false
+const isProduction = process.env.NODE_ENV === 'production'
 
 let assetPrefix = ''
 let basePath = ''
 
-if (isGithubActions) {
-  // Get the full repository name from GitHub Actions environment
+// Only use custom domain settings in production, not GitHub Actions
+if (isProduction && !isGithubActions) {
+  assetPrefix = ''  // Empty for custom domain
+  basePath = ''     // Empty for custom domain
+} else if (isGithubActions) {
   const repo = process.env.GITHUB_REPOSITORY.replace(/.*?\//, '')
-  
-  // Log the repository name for debugging during build
-  console.log('Repository name:', repo)
-  
-  // Set the asset prefix and base path to include the repository name
   assetPrefix = `/${repo}`
   basePath = `/${repo}`
 }
@@ -26,7 +25,6 @@ const nextConfig = {
     loaderFile: './image-loader.js'
   },
   env: {
-    // Make sure the base path is available to the client
     NEXT_PUBLIC_BASE_PATH: basePath
   },
   trailingSlash: true,
@@ -36,11 +34,10 @@ const nextConfig = {
 console.log('Next.js config:', {
   basePath,
   assetPrefix,
-  env: nextConfig.env
+  env: nextConfig.env,
+  isProduction,
+  isGithubActions
 })
 
 module.exports = nextConfig
-
-
-
 
