@@ -2,13 +2,13 @@
   "/_not-found/page": "app/_not-found/page.js",
   "/activities/attack/page": "app/activities/attack/page.js",
   "/activities/page": "app/activities/page.js",
-  "/projects/deskbuddy/page": "app/projects/deskbuddy/page.js",
-  "/home/page": "app/home/page.js",
-  "/projects/flexvr-wellness/page": "app/projects/flexvr-wellness/page.js",
-  "/projects/lightless/page": "app/projects/lightless/page.js",
-  "/page": "app/page.js",
   "/projects/battlegrounds/page": "app/projects/battlegrounds/page.js",
-  "/projects/personifyai/page": "app/projects/personifyai/page.js",
+  "/page": "app/page.js",
+  "/home/page": "app/home/page.js",
+  "/projects/deskbuddy/page": "app/projects/deskbuddy/page.js",
+  "/projects/flexvr-wellness/page": "app/projects/flexvr-wellness/page.js",
   "/projects/hex-vr/page": "app/projects/hex-vr/page.js",
-  "/projects/intentional-locomotion/page": "app/projects/intentional-locomotion/page.js"
+  "/projects/intentional-locomotion/page": "app/projects/intentional-locomotion/page.js",
+  "/projects/lightless/page": "app/projects/lightless/page.js",
+  "/projects/personifyai/page": "app/projects/personifyai/page.js"
 }
