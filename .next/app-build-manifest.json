@@ -25,17 +25,6 @@
       "static/chunks/618-2dfd05cc5837eabf.js",
       "static/chunks/app/activities/attack/page-4791345f92dd51a5.js"
     ],
-    "/activities/page": [
-      "static/chunks/webpack-d3a2946976649ff0.js",
-      "static/chunks/fd9d1056-b11b2651f33aae7f.js",
-      "static/chunks/117-a17ddbafd442a3f9.js",
-      "static/chunks/main-app-a4efe02a0e91ebc7.js",
-      "static/css/437af546035c708e.css",
-      "static/chunks/879-82210cb739e68585.js",
-      "static/chunks/618-2dfd05cc5837eabf.js",
-      "static/chunks/904-71644ea9151952db.js",
-      "static/chunks/app/activities/page-52b55c66b2effe59.js"
-    ],
     "/home/page": [
       "static/chunks/webpack-d3a2946976649ff0.js",
       "static/chunks/fd9d1056-b11b2651f33aae7f.js",
@@ -47,6 +36,26 @@
       "static/chunks/904-71644ea9151952db.js",
       "static/chunks/app/home/page-e1ea8b1e55a11571.js"
     ],
+    "/page": [
+      "static/chunks/webpack-d3a2946976649ff0.js",
+      "static/chunks/fd9d1056-b11b2651f33aae7f.js",
+      "static/chunks/117-a17ddbafd442a3f9.js",
+      "static/chunks/main-app-a4efe02a0e91ebc7.js",
+      "static/chunks/879-82210cb739e68585.js",
+      "static/chunks/904-71644ea9151952db.js",
+      "static/chunks/app/page-29f9bf328ff9558e.js"
+    ],
+    "/activities/page": [
+      "static/chunks/webpack-d3a2946976649ff0.js",
+      "static/chunks/fd9d1056-b11b2651f33aae7f.js",
+      "static/chunks/117-a17ddbafd442a3f9.js",
+      "static/chunks/main-app-a4efe02a0e91ebc7.js",
+      "static/css/437af546035c708e.css",
+      "static/chunks/879-82210cb739e68585.js",
+      "static/chunks/618-2dfd05cc5837eabf.js",
+      "static/chunks/904-71644ea9151952db.js",
+      "static/chunks/app/activities/page-52b55c66b2effe59.js"
+    ],
     "/projects/battlegrounds/page": [
       "static/chunks/webpack-d3a2946976649ff0.js",
       "static/chunks/fd9d1056-b11b2651f33aae7f.js",
@@ -56,6 +65,16 @@
       "static/chunks/879-82210cb739e68585.js",
       "static/chunks/904-71644ea9151952db.js",
       "static/chunks/app/projects/battlegrounds/page-c90e4847ba9789c3.js"
+    ],
+    "/projects/hex-vr/page": [
+      "static/chunks/webpack-d3a2946976649ff0.js",
+      "static/chunks/fd9d1056-b11b2651f33aae7f.js",
+      "static/chunks/117-a17ddbafd442a3f9.js",
+      "static/chunks/main-app-a4efe02a0e91ebc7.js",
+      "static/css/437af546035c708e.css",
+      "static/chunks/879-82210cb739e68585.js",
+      "static/chunks/904-71644ea9151952db.js",
+      "static/chunks/app/projects/hex-vr/page-6a1275bad558a49f.js"
     ],
     "/projects/deskbuddy/page": [
       "static/chunks/webpack-d3a2946976649ff0.js",
@@ -67,25 +86,6 @@
       "static/chunks/904-71644ea9151952db.js",
       "static/chunks/app/projects/deskbuddy/page-b6cecaa30001bbd7.js"
     ],
-    "/page": [
-      "static/chunks/webpack-d3a2946976649ff0.js",
-      "static/chunks/fd9d1056-b11b2651f33aae7f.js",
-      "static/chunks/117-a17ddbafd442a3f9.js",
-      "static/chunks/main-app-a4efe02a0e91ebc7.js",
-      "static/chunks/879-82210cb739e68585.js",
-      "static/chunks/904-71644ea9151952db.js",
-      "static/chunks/app/page-29f9bf328ff9558e.js"
-    ],
-    "/projects/flexvr-wellness/page": [
-      "static/chunks/webpack-d3a2946976649ff0.js",
-      "static/chunks/fd9d1056-b11b2651f33aae7f.js",
-      "static/chunks/117-a17ddbafd442a3f9.js",
-      "static/chunks/main-app-a4efe02a0e91ebc7.js",
-      "static/css/437af546035c708e.css",
-      "static/chunks/879-82210cb739e68585.js",
-      "static/chunks/904-71644ea9151952db.js",
-      "static/chunks/app/projects/flexvr-wellness/page-5628c2a5d7a24871.js"
-    ],
     "/projects/intentional-locomotion/page": [
       "static/chunks/webpack-d3a2946976649ff0.js",
       "static/chunks/fd9d1056-b11b2651f33aae7f.js",
@@ -96,7 +96,7 @@
       "static/chunks/904-71644ea9151952db.js",
       "static/chunks/app/projects/intentional-locomotion/page-604860cd6eef33e4.js"
     ],
-    "/projects/hex-vr/page": [
+    "/projects/flexvr-wellness/page": [
       "static/chunks/webpack-d3a2946976649ff0.js",
       "static/chunks/fd9d1056-b11b2651f33aae7f.js",
       "static/chunks/117-a17ddbafd442a3f9.js",
@@ -104,7 +104,7 @@
       "static/css/437af546035c708e.css",
       "static/chunks/879-82210cb739e68585.js",
       "static/chunks/904-71644ea9151952db.js",
-      "static/chunks/app/projects/hex-vr/page-6a1275bad558a49f.js"
+      "static/chunks/app/projects/flexvr-wellness/page-5628c2a5d7a24871.js"
     ],
     "/projects/lightless/page": [
       "static/chunks/webpack-d3a2946976649ff0.js",
