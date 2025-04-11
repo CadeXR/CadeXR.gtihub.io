@@ -2,18 +2,10 @@
 const isGithubActions = process.env.GITHUB_ACTIONS || false
 const isProduction = process.env.NODE_ENV === 'production'
 
+// For custom domain, we don't need basePath or assetPrefix
+// But we'll keep the configuration structure for maintainability
 let assetPrefix = ''
 let basePath = ''
-
-// Only use custom domain settings in production, not GitHub Actions
-if (isProduction && !isGithubActions) {
-  assetPrefix = ''  // Empty for custom domain
-  basePath = ''     // Empty for custom domain
-} else if (isGithubActions) {
-  const repo = process.env.GITHUB_REPOSITORY.replace(/.*?\//, '')
-  assetPrefix = `/${repo}`
-  basePath = `/${repo}`
-}
 
 const nextConfig = {
   output: 'export',
@@ -30,7 +22,7 @@ const nextConfig = {
   trailingSlash: true,
 }
 
-// Log the configuration for debugging
+// Keep logging for debugging purposes
 console.log('Next.js config:', {
   basePath,
   assetPrefix,
@@ -40,4 +32,6 @@ console.log('Next.js config:', {
 })
 
 module.exports = nextConfig
+
+
 

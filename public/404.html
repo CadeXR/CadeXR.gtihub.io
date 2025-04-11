@@ -4,25 +4,21 @@
     <meta charset="utf-8">
     <title>Redirecting...</title>
     <script>
-        // Single source of truth for the repository name
-        const REPO_NAME = 'CadeXR.github.io';
-        
-        // Get the current path
+        // Get the current path without any repository name assumptions
         const location = window.location;
         const currentPath = location.pathname;
         
-        // Remove the repository name from the path if it exists
-        const cleanPath = currentPath.replace(new RegExp(`^/${REPO_NAME}`), '');
+        // Store the path for the app to use
+        sessionStorage.setItem('redirect', currentPath);
         
-        // Store the clean path for the app to use
-        sessionStorage.setItem('redirect', cleanPath);
-        
-        // Redirect to the main app
-        window.location.href = `${location.origin}/${REPO_NAME}`;
+        // Redirect to the root
+        window.location.href = location.origin;
     </script>
 </head>
 <body>
     <p>Redirecting...</p>
 </body>
 </html>
+
+
 
