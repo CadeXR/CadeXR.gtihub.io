@@ -3,8 +3,8 @@ import type { Metadata } from 'next'
 import { conthrax } from './fonts'
 
 export const metadata: Metadata = {
-  title: 'XR Developer Portfolio',
-  description: 'Portfolio showcasing XR development projects and skills',
+  title: 'Cade Gilbert',
+  description: 'XR Design, XR Software Dev, Game Design, and AI',
 }
 
 export default function RootLayout({
@@ -18,6 +18,7 @@ export default function RootLayout({
     </html>
   )
 }
+
 
 
 
