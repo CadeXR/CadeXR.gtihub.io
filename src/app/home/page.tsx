@@ -45,34 +45,61 @@ interface SpawnNode {
   height: number;
 }
 
-// Define window dimensions more accurately
-const WINDOW_DIMENSIONS = {
-  about: { 
-    width: typeof window !== 'undefined' && window.innerWidth <= 768 ? window.innerWidth : 450, 
-    height: 400 
-  },
-  portfolio: { width: 350, height: 600 },
-  socials: { width: 350, height: 115 }
+// Define window dimensions more accurately with responsive scaling
+const getWindowDimensions = () => {
+  if (typeof window === 'undefined') return {
+    about: { width: 450, height: 400 },
+    portfolio: { width: 350, height: 600 },
+    socials: { width: 350, height: 115 }
+  };
+  
+  const viewportWidth = window.innerWidth;
+  const isMobile = viewportWidth <= 768;
+  const isVerySmall = viewportWidth <= 480;
+  
+  // Scale down window sizes as screen gets smaller
+  const scaleFactor = isVerySmall ? 0.95 : (isMobile ? 0.9 : 1);
+  const availableWidth = viewportWidth * scaleFactor;
+  
+  return {
+    about: { 
+      width: isMobile ? Math.min(availableWidth - 16, 450) : 450, 
+      height: 400 
+    },
+    portfolio: { 
+      width: isMobile ? Math.min(availableWidth - 16, 350) : 350, 
+      height: 600 
+    },
+    socials: { 
+      width: isMobile ? Math.min(availableWidth - 16, 350) : 350, 
+      height: 115 
+    }
+  };
 };
 
-// Improved center position calculation with debug logging
+// Use this function instead of the static WINDOW_DIMENSIONS
+const WINDOW_DIMENSIONS = getWindowDimensions();
+
+// Improved center position calculation with mobile awareness
 const calculateExactCenter = (windowType: 'about' | 'portfolio' | 'socials') => {
   if (typeof window === 'undefined') return { x: 0, y: 0 };
   
-  const windowWidth = WINDOW_DIMENSIONS[windowType].width;
-  const windowHeight = WINDOW_DIMENSIONS[windowType].height;
+  const isMobile = window.innerWidth <= 768;
+  const safeMargin = isMobile ? 8 : 16;
   const viewportWidth = window.innerWidth;
   const viewportHeight = window.innerHeight;
   
-  // Calculate exact center
-  const centerX = Math.max(0, (viewportWidth - windowWidth) / 2);
-  const centerY = Math.max(0, (viewportHeight - windowHeight) / 2);
+  // On mobile, position at the bottom with margin
+  if (isMobile) {
+    return { x: safeMargin, y: viewportHeight - WINDOW_DIMENSIONS[windowType].height - safeMargin };
+  }
   
-  console.log(`Centering ${windowType}:`, {
-    windowDimensions: { width: windowWidth, height: windowHeight },
-    viewport: { width: viewportWidth, height: viewportHeight },
-    center: { x: centerX, y: centerY }
-  });
+  // On desktop, calculate exact center
+  const windowWidth = Math.min(WINDOW_DIMENSIONS[windowType].width, viewportWidth - (safeMargin * 2));
+  const windowHeight = Math.min(WINDOW_DIMENSIONS[windowType].height, viewportHeight - (safeMargin * 2));
+  
+  const centerX = Math.max(safeMargin, (viewportWidth - windowWidth) / 2);
+  const centerY = Math.max(safeMargin, (viewportHeight - windowHeight) / 2);
   
   return { x: centerX, y: centerY };
 };
@@ -360,12 +387,17 @@ export default function HomePage() {
             className="md:max-w-[33.333vw] w-screen"
             style={{
               height: typeof window !== 'undefined' && window.innerWidth <= 768 
-                ? '100vh' 
+                ? 'auto' 
                 : 'auto',
-              maxHeight: '80vh',
+              maxHeight: typeof window !== 'undefined' && window.innerWidth <= 768
+                ? '90vh'
+                : '80vh',
               width: typeof window !== 'undefined' && window.innerWidth <= 768
-                ? '100%'
+                ? 'calc(100% - 16px)'
                 : '33.333vw',
+              minWidth: typeof window !== 'undefined' && window.innerWidth <= 768
+                ? 'calc(100% - 16px)'
+                : '300px',
             }}
           >
             <AboutContent />
@@ -378,8 +410,12 @@ export default function HomePage() {
             defaultPosition={socialsPosition}
             onMove={() => {}} // Disable moving
             style={{
-              width: '350px',
-              minWidth: '350px',
+              width: typeof window !== 'undefined' && window.innerWidth <= 768
+                ? 'calc(100% - 16px)'
+                : '350px',
+              minWidth: typeof window !== 'undefined' && window.innerWidth <= 768
+                ? 'calc(100% - 16px)'
+                : '350px',
             }}
           >
             <SocialContent />

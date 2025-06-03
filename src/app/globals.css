@@ -207,28 +207,35 @@ body:has(.scene-transition-shrink) {
 
 /* Safe area margins to prevent content from being cut off */
 :root {
-  --safe-margin: 8px; /* Reduced from 16px */
+  --safe-margin: 8px;
 }
 
-@media (max-width: 768px) {
-  :root {
-    --safe-margin: 4px; /* Reduced from 8px */
+/* Ensure windows scale properly on all screen sizes */
+.frosted-window {
+  max-width: calc(100vw - var(--safe-margin) * 2) !important;
+  max-height: calc(100vh - var(--safe-margin) * 2) !important;
+  overflow: auto !important;
+}
+
+/* Responsive scaling for very small screens */
+@media (max-width: 480px) {
+  .frosted-window {
+    width: calc(95vw) !important;
+    left: calc(2.5vw) !important;
+    padding: 0.75rem !important;
   }
-  
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
   /* Ensure windows don't get cut off at edges */
   .frosted-window {
-    width: calc(100% - var(--safe-margin) * 2) !important;
-    max-width: calc(100% - var(--safe-margin) * 2) !important;
-    left: var(--safe-margin) !important;
-    right: var(--safe-margin) !important;
-    margin-bottom: var(--safe-margin) !important;
-    border-radius: 0.75rem !important;
-  }
-  
-  /* Position windows with safe margins */
-  .frosted-window {
+    width: calc(90vw) !important;
+    left: calc(5vw) !important;
     bottom: var(--safe-margin) !important;
     top: auto !important;
+    margin-bottom: var(--safe-margin) !important;
+    border-radius: 0.75rem !important;
   }
   
   /* Ensure the navbar respects safe margins */
@@ -252,15 +259,18 @@ body:has(.scene-transition-shrink) {
 
 /* Prevent content from being cut off */
 .overflow-y-auto {
-  max-height: calc(90vh - var(--safe-margin) * 2);
+  max-height: calc(100vh - var(--safe-margin) * 2 - 48px);
   overflow-y: auto;
 }
 
 /* Ensure windows are visible on all devices with safe margins */
 .frosted-window {
   max-width: calc(100vw - var(--safe-margin) * 2);
-  max-height: calc(90vh - var(--safe-margin) * 2);
+  max-height: calc(100vh - var(--safe-margin) * 2);
 }
+
+
+
 
 
 

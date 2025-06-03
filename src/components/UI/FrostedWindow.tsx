@@ -27,8 +27,19 @@ export default function FrostedWindow({
   showCloseButton = true
 }: FrostedWindowProps) {
   const [isActive, setIsActive] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
   const x = useMotionValue(defaultPosition?.x ?? 0)
   const y = useMotionValue(defaultPosition?.y ?? 0)
+
+  // Check if we're on mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768)
+    }
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
 
   // Set position from props when it changes
   useEffect(() => {
@@ -177,6 +188,59 @@ export default function FrostedWindow({
     return () => window.removeEventListener('resize', ensureWithinViewport);
   }, [defaultPosition, x, y, style]);
 
+  // Calculate window styles based on device size
+  const getWindowStyles = () => {
+    const safeMargin = 8; // Consistent margin for all screen sizes
+    const viewportWidth = typeof window !== 'undefined' ? window.innerWidth : 1200;
+    const viewportHeight = typeof window !== 'undefined' ? window.innerHeight : 800;
+    
+    // Calculate available space
+    const availableWidth = viewportWidth - (safeMargin * 2);
+    const availableHeight = viewportHeight - (safeMargin * 2);
+    
+    // Base styles common to all screen sizes
+    const baseStyles: any = {
+      padding: viewportWidth < 480 ? '0.75rem' : (isMobile ? '1rem' : '2rem'),
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      backdropFilter: 'blur(10px)',
+      WebkitBackdropFilter: 'blur(10px)',
+      borderRadius: '0.75rem',
+      border: '1px solid rgba(255, 255, 255, 0.15)',
+      boxShadow: '0 4px 20px rgba(0, 0, 0, 0.5)',
+      color: 'white',
+      overflowY: 'auto',
+      x,
+      y,
+      zIndex: 50,
+      // Ensure windows never exceed available space
+      maxWidth: `${availableWidth}px`,
+      maxHeight: `${availableHeight}px`,
+      ...style
+    };
+
+    // Mobile-specific styles
+    if (isMobile) {
+      // For very small screens, use even smaller width
+      const widthPercentage = viewportWidth < 480 ? 95 : 90;
+      const calculatedWidth = Math.min(availableWidth, (viewportWidth * widthPercentage) / 100);
+      
+      return {
+        ...baseStyles,
+        width: `${calculatedWidth}px`,
+        left: (viewportWidth - calculatedWidth) / 2,
+        bottom: safeMargin,
+        top: 'auto',
+      };
+    }
+
+    // Desktop styles
+    baseStyles.minWidth = Math.min(300, availableWidth);
+    baseStyles.top = 0;
+    baseStyles.left = 0;
+    
+    return baseStyles;
+  };
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -188,58 +252,34 @@ export default function FrostedWindow({
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.9 }}
           transition={{ duration: 0.2 }}
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            padding: '2rem',
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-            backdropFilter: 'blur(10px)',
-            WebkitBackdropFilter: 'blur(10px)',
-            borderRadius: '0.75rem',
-            border: '1px solid rgba(255, 255, 255, 0.15)',
-            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.5)',
-            color: 'white',
-            minWidth: typeof window !== 'undefined' && window.innerWidth <= 768 
-              ? '100%' 
-              : '300px',
-            maxWidth: typeof window !== 'undefined' && window.innerWidth <= 768 
-              ? '100%' 
-              : '80vw',
-            maxHeight: typeof window !== 'undefined' && window.innerWidth <= 768 
-              ? '90vh' 
-              : '80vh',
-            overflowY: 'auto',
-            x,
-            y,
-            zIndex: 50,
-            ...style
-          }}
+          style={getWindowStyles()}
           onMouseEnter={() => setIsActive(true)}
           onMouseLeave={() => setIsActive(false)}
-          // Removed: drag, dragMomentum, onDragStart, onDragEnd, dragElastic, dragTransition
         >
-          <div className="window-header" style={{ position: 'relative' }}>
+          <div className="window-header" style={{ 
+            display: 'flex', 
+            justifyContent: 'flex-end',
+            marginBottom: '1rem'
+          }}>
             {showCloseButton && (
               <button
                 onClick={onClose}
                 style={{
-                  position: 'absolute',
-                  top: '-1rem',
-                  right: '-1rem',
                   width: '24px',
                   height: '24px',
+                  borderRadius: '50%',
+                  backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                  color: 'white',
+                  border: 'none',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  backgroundColor: 'rgba(0, 0, 0, 0.6)', // Darker button
-                  border: '1px solid rgba(255, 255, 255, 0.2)', // Subtler border
-                  borderRadius: '4px',
-                  color: 'white',
-                  fontSize: '16px',
                   cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                  boxShadow: '0 2px 5px rgba(0, 0, 0, 0.3)', // Subtle shadow
+                  fontSize: '16px',
+                  fontWeight: 'bold',
+                  padding: 0,
+                  marginLeft: 'auto',
+                  transition: 'background-color 0.2s ease',
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.backgroundColor = 'rgba(40, 40, 40, 0.8)'; // Darker hover state
