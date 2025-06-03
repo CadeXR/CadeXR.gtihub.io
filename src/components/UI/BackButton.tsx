@@ -12,8 +12,8 @@ export default function BackButton() {
 
   const containerStyle = {
     position: 'fixed' as const,
-    top: '1rem',
-    left: '1rem',
+    top: 'var(--safe-margin-sm)',
+    left: 'var(--safe-margin-sm)',
     zIndex: 50,
     padding: '0.5rem',
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
@@ -43,8 +43,9 @@ export default function BackButton() {
     transition: 'all 0.2s ease',
   }
 
-  const updateParticles = useCallback(() => {
-    const buttonElement = buttonRef.current
+  // Update particle system when button state changes
+  const updateParticleSystem = useCallback(() => {
+    const buttonElement = document.querySelector('[data-frosted-box="backbutton"]')
     if (!buttonElement) return
 
     const bounds = buttonElement.getBoundingClientRect()
@@ -66,13 +67,13 @@ export default function BackButton() {
   }, [isActive])
 
   useEffect(() => {
-    updateParticles()
-  }, [isActive, updateParticles])
+    updateParticleSystem()
+  }, [isActive, updateParticleSystem])
 
   useEffect(() => {
-    window.addEventListener('resize', updateParticles)
-    return () => window.removeEventListener('resize', updateParticles)
-  }, [updateParticles])
+    window.addEventListener('resize', updateParticleSystem)
+    return () => window.removeEventListener('resize', updateParticleSystem)
+  }, [updateParticleSystem])
 
   const handleClick = () => {
     // First transition: fade to white
@@ -128,6 +129,8 @@ export default function BackButton() {
     </div>
   )
 }
+
+
 
 
 

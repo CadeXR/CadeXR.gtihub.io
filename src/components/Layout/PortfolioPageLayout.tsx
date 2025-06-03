@@ -7,6 +7,7 @@ import Scene from '../Background/Scene'
 import StyledLink from '../UI/StyledLink'
 import SocialContent from '@/components/UI/SocialContent'
 import { conthrax } from '@/app/fonts'
+import { useMediaQuery } from 'react-responsive'
 
 interface PortfolioPageLayoutProps {
   children: React.ReactNode
@@ -33,6 +34,10 @@ export default function PortfolioPageLayout({ children }: PortfolioPageLayoutPro
   const [isContentOpen, setIsContentOpen] = useState(true)
   const [isBackButtonActive, setIsBackButtonActive] = useState(false)
   const [isNavButtonActive, setIsNavButtonActive] = useState(false)
+
+  // Use react-responsive for consistent media queries
+  const isMobile = useMediaQuery({ maxWidth: 768 });
+  const isVerySmall = useMediaQuery({ maxWidth: 480 });
 
   const updateBackButtonParticles = useCallback(() => {
     const buttonElement = document.querySelector('[data-frosted-box="back-button"]')
@@ -112,11 +117,21 @@ export default function PortfolioPageLayout({ children }: PortfolioPageLayoutPro
     }, 1750) // Half of the full transition time to ensure we're at peak white
   }
 
-  // Center all windows by default
-  const [contentPosition, setContentPosition] = useState({ 
-    x: typeof window !== 'undefined' ? (window.innerWidth - 650) / 2 : 0, // Adjusted for new width
-    y: typeof window !== 'undefined' ? (window.innerHeight - 600) / 2 - 100 : 0 // 100px higher
-  })
+  // Center all windows by default with responsive sizing
+  const [contentPosition, setContentPosition] = useState(() => {
+    if (typeof window === 'undefined') return { x: 0, y: 0 };
+    
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    
+    // Adjust content width based on screen size
+    const contentWidth = isMobile ? Math.min(viewportWidth - 32, 650) : 650;
+    
+    return { 
+      x: (viewportWidth - contentWidth) / 2, 
+      y: isMobile ? 80 : ((viewportHeight - 600) / 2 - 100)
+    };
+  });
   const [linksPosition, setLinksPosition] = useState(() => {
     if (typeof window === 'undefined') return { x: 0, y: 0 };
     
@@ -126,26 +141,33 @@ export default function PortfolioPageLayout({ children }: PortfolioPageLayoutPro
       x: navbarRight - 350 - 16, // Keeping the same X position
       y: 99, // Moved 5px up (was 104)
     };
-  })
+  });
 
   useEffect(() => {
     const handleResize = () => {
+      const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
+      
+      // Adjust content width based on screen size
+      const contentWidth = isMobile ? Math.min(viewportWidth - 32, 650) : 650;
+      
       // Keep content window centered
       setContentPosition({
-        x: (window.innerWidth - 650) / 2, // Increased from 450px
-        y: (window.innerHeight - 600) / 2 - 100 // 100px higher
-      })
+        x: (viewportWidth - contentWidth) / 2,
+        y: isMobile ? 80 : ((viewportHeight - 600) / 2 - 100)
+      });
       
       // Keep links window positioned relative to navbar
       setLinksPosition({
-        x: (window.innerWidth - 16) - 350 - 16, // Consistent with initial position
-        y: 99 // Consistent with initial position
-      })
-    }
+        x: isMobile ? 16 : ((viewportWidth - 16) - 350 - 16),
+        y: isMobile ? (viewportHeight - 150) : 99
+      });
+    };
 
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [isMobile, isVerySmall]);
 
   useEffect(() => {
     // Clean up any existing overlays first
@@ -244,6 +266,13 @@ export default function PortfolioPageLayout({ children }: PortfolioPageLayoutPro
     )
   }
 
+  // Responsive content window style
+  const contentWindowStyle = {
+    width: isMobile ? (isVerySmall ? '95%' : '90%') : '650px',
+    maxWidth: isMobile ? '100%' : '650px',
+    maxHeight: isMobile ? '70vh' : '80vh',
+  };
+
   return (
     <main className="relative w-full h-screen overflow-hidden">
       {/* Background Scene - lowest layer */}
@@ -258,8 +287,8 @@ export default function PortfolioPageLayout({ children }: PortfolioPageLayoutPro
         onMouseLeave={() => setIsBackButtonActive(false)}
         style={{
           position: 'fixed',
-          top: '1rem',
-          left: '1rem',
+          top: 'var(--safe-margin-sm)',
+          left: 'var(--safe-margin-sm)',
           zIndex: 50,
           padding: '0.5rem',
           backgroundColor: 'rgba(255, 255, 255, 0.1)',
@@ -267,6 +296,11 @@ export default function PortfolioPageLayout({ children }: PortfolioPageLayoutPro
           WebkitBackdropFilter: 'blur(10px)',
           borderRadius: '0.75rem',
           border: '1px solid rgba(255, 255, 255, 0.2)',
+          height: '48px',
+          width: '48px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
         }}
       >
         <button 
@@ -286,23 +320,25 @@ export default function PortfolioPageLayout({ children }: PortfolioPageLayoutPro
 
       {/* Navbar - top right */}
       <nav
-        data-frosted-box="nav-button"
+        data-frosted-box="navbar"
         onMouseEnter={() => setIsNavButtonActive(true)}
         onMouseLeave={() => setIsNavButtonActive(false)}
         style={{
           position: 'fixed',
-          top: '1rem',
-          right: '1rem',
+          top: 'var(--safe-margin-sm)',
+          right: 'var(--safe-margin-sm)',
           zIndex: 50,
           display: 'flex',
           flexDirection: 'row',
-          gap: '1rem',
-          padding: '0.5rem',
+          gap: isMobile ? '0.5rem' : '1rem',
+          padding: isMobile ? '0.25rem' : '0.5rem',
           backgroundColor: 'rgba(255, 255, 255, 0.1)',
           backdropFilter: 'blur(10px)',
           WebkitBackdropFilter: 'blur(10px)',
           borderRadius: '0.75rem',
           border: '1px solid rgba(255, 255, 255, 0.2)',
+          height: isMobile ? '40px' : '48px',
+          alignItems: 'center',
         }}
       >
         <button 
@@ -370,6 +406,8 @@ export default function PortfolioPageLayout({ children }: PortfolioPageLayoutPro
     </main>
   )
 }
+
+
 
 
 

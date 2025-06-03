@@ -1,4 +1,5 @@
 'use client'
+import { useMediaQuery } from 'react-responsive';
 
 const buttonStyle = {
   backgroundColor: 'rgba(255, 255, 255, 0.2)',
@@ -15,6 +16,23 @@ const buttonStyle = {
 };
 
 export default function SocialContent() {
+  const isMobile = useMediaQuery({ maxWidth: 768 });
+  const isVerySmall = useMediaQuery({ maxWidth: 480 });
+
+  const buttonStyle = {
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    color: 'white',
+    padding: isMobile ? '0.5rem' : '0.75rem',
+    borderRadius: '0.5rem',
+    border: '1px solid rgba(255, 255, 255, 0.4)',
+    cursor: 'pointer',
+    fontSize: isMobile ? '0.7rem' : '0.75rem',
+    transition: 'all 0.2s ease',
+    textAlign: 'center' as const,
+    textDecoration: 'none',
+    whiteSpace: 'nowrap' as const,
+  };
+
   return (
     <div style={{ 
       width: '100%',
@@ -27,7 +45,7 @@ export default function SocialContent() {
     }}>
       <h2 style={{ 
         color: 'white', 
-        fontSize: '1rem',
+        fontSize: isMobile ? '0.9rem' : '1rem',
         fontWeight: 'bold',
         textAlign: 'center'
       }}>
@@ -88,6 +106,7 @@ export default function SocialContent() {
     </div>
   )
 }
+
 
 
 

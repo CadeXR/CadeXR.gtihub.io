@@ -10,6 +10,7 @@ import AboutContent from '@/components/UI/AboutContent'
 import SocialContent from '@/components/UI/SocialContent'
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
+import { useMediaQuery } from 'react-responsive';
 
 const MARGIN = 100; // Increased margin for better spacing
 const NAVBAR_WIDTH = 64;
@@ -85,28 +86,34 @@ export default function HomePage() {
   const [isSocialsOpen, setIsSocialsOpen] = useState(false)
   const [isPortfolioOpen, setIsPortfolioOpen] = useState(false)
   
+  // Use react-responsive for consistent media queries
+  const isMobile = useMediaQuery({ maxWidth: 768 });
+  const isVerySmall = useMediaQuery({ maxWidth: 480 });
+  
   // Improved center position calculation with mobile awareness
   const calculateExactCenter = (windowType: 'about' | 'portfolio' | 'socials') => {
     if (typeof window === 'undefined') return { x: 0, y: 0 };
     
-    const isMobile = window.innerWidth <= 768;
-    const safeMargin = isMobile ? 8 : 16;
+    const safeMargin = isVerySmall ? 8 : (isMobile ? 12 : 16);
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
     
-    // On mobile, position at the bottom with margin
+    // On mobile, position windows at the bottom
     if (isMobile) {
-      return { x: safeMargin, y: viewportHeight - WINDOW_DIMENSIONS[windowType].height - safeMargin };
+      return { 
+        x: isVerySmall ? 8 : 16, 
+        y: viewportHeight - WINDOW_DIMENSIONS[windowType].height - safeMargin 
+      };
     }
     
-    // On desktop, calculate exact center
-    const windowWidth = Math.min(WINDOW_DIMENSIONS[windowType].width, viewportWidth - (safeMargin * 2));
-    const windowHeight = Math.min(WINDOW_DIMENSIONS[windowType].height, viewportHeight - (safeMargin * 2));
+    // On desktop, center windows
+    const windowWidth = WINDOW_DIMENSIONS[windowType].width;
+    const windowHeight = WINDOW_DIMENSIONS[windowType].height;
     
-    const centerX = Math.max(safeMargin, (viewportWidth - windowWidth) / 2);
-    const centerY = Math.max(safeMargin, (viewportHeight - windowHeight) / 2);
-    
-    return { x: centerX, y: centerY };
+    return { 
+      x: (viewportWidth - windowWidth) / 2, 
+      y: (viewportHeight - windowHeight) / 2 
+    };
   };
   
   // Individual center positions for each window
@@ -114,17 +121,12 @@ export default function HomePage() {
   const [portfolioPosition, setPortfolioPosition] = useState(() => calculateExactCenter('portfolio'));
   const [socialsPosition, setSocialsPosition] = useState(() => calculateExactCenter('socials'));
 
-  // Update dimensions when window resizes
+  // Update positions when screen size changes
   useEffect(() => {
-    const handleResize = () => {
-      // Update window dimensions for responsive sizing
-      const dimensions = getWindowDimensions();
-      Object.assign(WINDOW_DIMENSIONS, dimensions);
-    };
-    
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+    setAboutPosition(calculateExactCenter('about'));
+    setPortfolioPosition(calculateExactCenter('portfolio'));
+    setSocialsPosition(calculateExactCenter('socials'));
+  }, [isMobile, isVerySmall]);
 
   // Force center a window after it's opened
   const forceCenter = (windowType: 'about' | 'portfolio' | 'socials') => {

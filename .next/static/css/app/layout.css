@@ -5,6 +5,17 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Add these CSS variables at the top of your globals.css file */
+:root {
+  --safe-margin-sm: 8px;
+  --safe-margin-md: 16px;
+  --window-padding-sm: 0.75rem;
+  --window-padding-md: 1rem;
+  --window-padding-lg: 2rem;
+  --mobile-width-percentage: 90%;
+  --small-width-percentage: 95%;
+}
+
 /* Base styles */
 html, body {
   margin: 0;
@@ -223,9 +234,22 @@ body:has(.scene-transition-shrink) {
 /* Responsive scaling for very small screens */
 @media (max-width: 480px) {
   .frosted-window {
-    width: calc(95vw) !important;
-    left: calc(2.5vw) !important;
-    padding: 0.75rem !important;
+    width: calc(var(--small-width-percentage)) !important;
+    left: calc((100% - var(--small-width-percentage)) / 2) !important;
+    padding: var(--window-padding-sm) !important;
+  }
+  
+  /* Adjust font sizes for very small screens */
+  h1 {
+    font-size: 1.5rem !important;
+  }
+  
+  h2 {
+    font-size: 1.25rem !important;
+  }
+  
+  p {
+    font-size: 0.875rem !important;
   }
 }
 
@@ -233,31 +257,43 @@ body:has(.scene-transition-shrink) {
 @media (max-width: 768px) {
   /* Ensure windows don't get cut off at edges */
   .frosted-window {
-    width: calc(90vw) !important;
-    left: calc(5vw) !important;
-    bottom: var(--safe-margin) !important;
+    width: calc(var(--mobile-width-percentage)) !important;
+    left: calc((100% - var(--mobile-width-percentage)) / 2) !important;
+    bottom: var(--safe-margin-sm) !important;
     top: auto !important;
-    margin-bottom: var(--safe-margin) !important;
+    margin-bottom: var(--safe-margin-sm) !important;
     border-radius: 0.75rem !important;
   }
   
   /* Ensure the navbar respects safe margins */
   [data-frosted-box="navbar"] {
-    right: var(--safe-margin) !important;
-    top: var(--safe-margin) !important;
+    right: var(--safe-margin-sm) !important;
+    top: var(--safe-margin-sm) !important;
   }
   
   /* Ensure back button respects safe margins */
-  [data-frosted-box="backbutton"] {
-    top: var(--safe-margin) !important;
-    left: var(--safe-margin) !important;
+  [data-frosted-box="backbutton"],
+  [data-frosted-box="back-button"] {
+    top: var(--safe-margin-sm) !important;
+    left: var(--safe-margin-sm) !important;
   }
   
-  /* Ensure header respects safe margins */
+  /* Ensure header respects safe margins and doesn't overlap */
   [data-frosted-box="header"] {
-    top: var(--safe-margin) !important;
-    left: calc(48px + var(--safe-margin) * 2) !important;
+    top: var(--safe-margin-sm) !important;
+    left: calc(48px + var(--safe-margin-sm) * 2) !important;
+    max-width: calc(100vw - 48px - var(--safe-margin-sm) * 4 - 80px) !important;
   }
+}
+
+/* Fix for header and back button alignment */
+[data-frosted-box="header"] {
+  margin-left: 8px;
+}
+
+[data-frosted-box="backbutton"],
+[data-frosted-box="back-button"] {
+  margin-right: 8px;
 }
 
 /* Prevent content from being cut off */
@@ -271,6 +307,9 @@ body:has(.scene-transition-shrink) {
   max-width: calc(100vw - var(--safe-margin) * 2);
   max-height: calc(100vh - var(--safe-margin) * 2);
 }
+
+
+
 
 
 

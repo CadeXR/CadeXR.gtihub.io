@@ -1,31 +1,28 @@
 'use client'
 
 import { useState, useCallback, useEffect } from 'react'
+import { useMediaQuery } from 'react-responsive'
 
 export default function Header() {
   const [isActive, setIsActive] = useState(false)
   const [isVisible, setIsVisible] = useState(true)
-  const [isMobile, setIsMobile] = useState(false)
   const [headerText, setHeaderText] = useState('Cade Gilbert - XR Design, XR Software Dev, Game Design, and AI')
 
-  // Check if we're on mobile and adjust text accordingly
+  // Use react-responsive for consistent media queries
+  const isMobile = useMediaQuery({ maxWidth: 768 });
+  const isVerySmall = useMediaQuery({ maxWidth: 480 });
+
+  // Set header text based on screen size
   useEffect(() => {
-    const checkMobile = () => {
-      const mobile = window.innerWidth <= 768
-      setIsMobile(mobile)
-      
-      // Use shorter text on smaller screens
-      if (mobile) {
-        setHeaderText('Cade Gilbert - XR Dev')
-      } else {
-        setHeaderText('Cade Gilbert - XR Design, XR Software Dev, Game Design, and AI')
-      }
+    // Use shorter text on smaller screens
+    if (isVerySmall) {
+      setHeaderText('Cade Gilbert');
+    } else if (isMobile) {
+      setHeaderText('Cade Gilbert - XR Dev');
+    } else {
+      setHeaderText('Cade Gilbert - XR Design, XR Software Dev, Game Design, and AI');
     }
-    
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
-    return () => window.removeEventListener('resize', checkMobile)
-  }, [])
+  }, [isMobile, isVerySmall]);
 
   const updateParticleSystem = useCallback(() => {
     const headerElement = document.querySelector('[data-frosted-box="header"]')
@@ -59,6 +56,10 @@ export default function Header() {
       const headerElement = document.querySelector('[data-frosted-box="header"]')
       const navbarElement = document.querySelector('[data-frosted-box="navbar"]')
       const backButtonElement = document.querySelector('[data-frosted-box="back-button"]')
+      const backButtonElement2 = document.querySelector('[data-frosted-box="backbutton"]')
+      
+      // Try both possible back button selectors
+      const actualBackButton = backButtonElement || backButtonElement2
       
       if (headerElement && navbarElement) {
         const headerRect = headerElement.getBoundingClientRect()
@@ -72,8 +73,8 @@ export default function Header() {
         
         // Check if there's enough space between back button and navbar
         let hasEnoughSpace = true
-        if (backButtonElement) {
-          const backButtonRect = backButtonElement.getBoundingClientRect()
+        if (actualBackButton) {
+          const backButtonRect = actualBackButton.getBoundingClientRect()
           const availableWidth = navbarRect.left - backButtonRect.right
           const requiredWidth = headerRect.width + 20 // Add some margin
           
@@ -96,30 +97,37 @@ export default function Header() {
 
   if (!isVisible) return null
 
+  // Responsive header style
+  const getHeaderStyle = () => {
+    return {
+      position: 'fixed',
+      top: 'var(--safe-margin-sm)',
+      left: isVerySmall 
+        ? 'calc(40px + var(--safe-margin-sm) * 2)' 
+        : 'calc(48px + var(--safe-margin-md))',
+      zIndex: 50,
+      padding: isMobile ? '0.25rem' : '0.5rem',
+      backgroundColor: 'rgba(255, 255, 255, 0.1)',
+      backdropFilter: 'blur(10px)',
+      WebkitBackdropFilter: 'blur(10px)',
+      borderRadius: '0.75rem',
+      border: '1px solid rgba(255, 255, 255, 0.2)',
+      width: 'fit-content',
+      maxWidth: isMobile ? 'calc(100vw - 48px - 4rem - 80px)' : 'none', // Reduce width to avoid overlap
+      height: isMobile ? '40px' : '48px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      overflow: 'hidden',
+    };
+  };
+
   return (
     <div
       data-frosted-box="header"
       onMouseEnter={() => setIsActive(true)}
       onMouseLeave={() => setIsActive(false)}
-      style={{
-        position: 'fixed',
-        top: '1rem',
-        left: 'calc(1rem + 48px + 1rem)', // Reduced right margin
-        zIndex: 50,
-        padding: isMobile ? '0.25rem' : '0.5rem',
-        backgroundColor: 'rgba(255, 255, 255, 0.1)',
-        backdropFilter: 'blur(10px)',
-        WebkitBackdropFilter: 'blur(10px)',
-        borderRadius: '0.75rem',
-        border: '1px solid rgba(255, 255, 255, 0.2)',
-        width: 'fit-content',
-        maxWidth: isMobile ? 'calc(100vw - 48px - 4rem)' : 'none',
-        height: '48px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        overflow: 'hidden',
-      }}
+      style={getHeaderStyle()}
     >
       <div 
         style={{
@@ -137,6 +145,8 @@ export default function Header() {
     </div>
   )
 }
+
+
 
 
 

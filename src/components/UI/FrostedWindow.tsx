@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence, useMotionValue } from 'framer-motion'
 import { useEffect, useCallback, useState } from 'react'
+import { useMediaQuery } from 'react-responsive'
 
 interface FrostedWindowProps {
   id?: string
@@ -27,19 +28,10 @@ export default function FrostedWindow({
   showCloseButton = true
 }: FrostedWindowProps) {
   const [isActive, setIsActive] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
+  const isMobile = useMediaQuery({ maxWidth: 768 });
+  const isVerySmall = useMediaQuery({ maxWidth: 480 });
   const x = useMotionValue(defaultPosition?.x ?? 0)
   const y = useMotionValue(defaultPosition?.y ?? 0)
-
-  // Check if we're on mobile
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768)
-    }
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
-    return () => window.removeEventListener('resize', checkMobile)
-  }, [])
 
   // Set position from props when it changes
   useEffect(() => {
@@ -190,7 +182,8 @@ export default function FrostedWindow({
 
   // Calculate window styles based on device size
   const getWindowStyles = () => {
-    const safeMargin = 8; // Consistent margin for all screen sizes
+    // Use CSS variables for consistent spacing
+    const safeMargin = isVerySmall ? 8 : (isMobile ? 12 : 16);
     const viewportWidth = typeof window !== 'undefined' ? window.innerWidth : 1200;
     const viewportHeight = typeof window !== 'undefined' ? window.innerHeight : 800;
     
@@ -200,7 +193,7 @@ export default function FrostedWindow({
     
     // Base styles common to all screen sizes
     const baseStyles: any = {
-      padding: viewportWidth < 480 ? '0.75rem' : (isMobile ? '1rem' : '2rem'),
+      padding: isVerySmall ? 'var(--window-padding-sm)' : (isMobile ? 'var(--window-padding-md)' : 'var(--window-padding-lg)'),
       backgroundColor: 'rgba(0, 0, 0, 0.5)',
       backdropFilter: 'blur(10px)',
       WebkitBackdropFilter: 'blur(10px)',
@@ -211,7 +204,7 @@ export default function FrostedWindow({
       overflowY: 'auto',
       x,
       y,
-      zIndex: 50,
+      zIndex: isActive ? 50 : 40,
       // Ensure windows never exceed available space
       maxWidth: `${availableWidth}px`,
       maxHeight: `${availableHeight}px`,
@@ -221,7 +214,7 @@ export default function FrostedWindow({
     // Mobile-specific styles
     if (isMobile) {
       // For very small screens, use even smaller width
-      const widthPercentage = viewportWidth < 480 ? 95 : 90;
+      const widthPercentage = isVerySmall ? 95 : 90;
       const calculatedWidth = Math.min(availableWidth, (viewportWidth * widthPercentage) / 100);
       
       return {
@@ -234,11 +227,12 @@ export default function FrostedWindow({
     }
 
     // Desktop styles
-    baseStyles.minWidth = Math.min(300, availableWidth);
-    baseStyles.top = 0;
-    baseStyles.left = 0;
-    
-    return baseStyles;
+    return {
+      ...baseStyles,
+      minWidth: Math.min(300, availableWidth),
+      top: 0,
+      left: 0,
+    };
   };
 
   return (

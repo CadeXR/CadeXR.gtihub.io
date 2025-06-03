@@ -1,9 +1,12 @@
 'use client'
+import { useMediaQuery } from 'react-responsive';
 
 export default function AboutContent() {
+  const isMobile = useMediaQuery({ maxWidth: 768 });
+  
   return (
     <div className="text-white space-y-6 p-4 max-w-full overflow-y-auto">
-      <h2 className="text-2xl font-semibold mb-6">About Cade</h2>
+      <h2 className={`${isMobile ? 'text-xl' : 'text-2xl'} font-semibold mb-6`}>About Cade</h2>
       
       <section>
         <p className="mb-4 text-sm md:text-base">
@@ -25,4 +28,5 @@ export default function AboutContent() {
     </div>
   )
 }
+
 

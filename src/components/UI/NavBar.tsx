@@ -3,6 +3,7 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
 import { conthrax } from '@/app/fonts'
 import { useRouter } from 'next/navigation'
+import { useMediaQuery } from 'react-responsive'
 
 interface NavBarProps {
   onOpenAbout: () => void
@@ -20,17 +21,8 @@ export default function NavBar({
   const router = useRouter()
   const [isActive, setIsActive] = useState(false)
   const navRef = useRef<HTMLElement>(null)
-  const [isMobile, setIsMobile] = useState(false)
-
-  // Check if we're on mobile
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 640)
-    }
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
-    return () => window.removeEventListener('resize', checkMobile)
-  }, [])
+  const isMobile = useMediaQuery({ maxWidth: 768 })
+  const isVerySmall = useMediaQuery({ maxWidth: 480 })
 
   // Responsive button styles
   const buttonStyle = {
@@ -91,12 +83,14 @@ export default function NavBar({
 
   // Calculate navbar width based on screen size
   const getNavbarStyle = () => {
+    const safeMargin = isVerySmall ? 8 : 16;
+    
     if (!isMobile) {
-      // Desktop style - unchanged
+      // Desktop style
       return {
         position: 'fixed',
-        top: '1rem',
-        right: '1rem',
+        top: 'var(--safe-margin-md)',
+        right: 'var(--safe-margin-md)',
         zIndex: 50,
         display: 'flex',
         flexDirection: 'row',
@@ -109,35 +103,32 @@ export default function NavBar({
         border: '1px solid rgba(255, 255, 255, 0.2)',
         height: '48px',
         alignItems: 'center',
-      } as const
+      } as const;
     } else {
       // Mobile style - calculate width to fit between back button and right edge
-      const backButtonWidth = 48 // Width of back button
-      const safeMargin = 4 // From CSS variables
-      const screenWidth = window.innerWidth
-      
-      // Calculate available width
-      const availableWidth = screenWidth - backButtonWidth - (safeMargin * 4)
+      const backButtonWidth = 48; // Width of back button
+      const screenWidth = window.innerWidth;
+      const availableWidth = screenWidth - backButtonWidth - (safeMargin * 3);
       
       return {
         position: 'fixed',
-        top: '1rem',
-        right: '1rem',
+        top: 'var(--safe-margin-sm)',
+        right: 'var(--safe-margin-sm)',
         zIndex: 50,
         display: 'flex',
         flexDirection: 'row',
-        gap: '0.5rem',
-        padding: '0.5rem',
+        gap: isVerySmall ? '0.5rem' : '0.75rem',
+        padding: isVerySmall ? '0.25rem' : '0.5rem',
         backgroundColor: 'rgba(255, 255, 255, 0.1)',
         backdropFilter: 'blur(10px)',
         WebkitBackdropFilter: 'blur(10px)',
         borderRadius: '0.75rem',
         border: '1px solid rgba(255, 255, 255, 0.2)',
-        height: '48px',
+        height: '40px',
         alignItems: 'center',
         maxWidth: `${availableWidth}px`,
-        overflow: 'hidden',
-      } as const
+        overflowX: 'auto',
+      } as const;
     }
   }
 
