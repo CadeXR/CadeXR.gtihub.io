@@ -77,104 +77,53 @@ const getWindowDimensions = () => {
   };
 };
 
-// Use this function instead of the static WINDOW_DIMENSIONS
+// Initial window dimensions
 const WINDOW_DIMENSIONS = getWindowDimensions();
-
-// Improved center position calculation with mobile awareness
-const calculateExactCenter = (windowType: 'about' | 'portfolio' | 'socials') => {
-  if (typeof window === 'undefined') return { x: 0, y: 0 };
-  
-  const isMobile = window.innerWidth <= 768;
-  const safeMargin = isMobile ? 8 : 16;
-  const viewportWidth = window.innerWidth;
-  const viewportHeight = window.innerHeight;
-  
-  // On mobile, position at the bottom with margin
-  if (isMobile) {
-    return { x: safeMargin, y: viewportHeight - WINDOW_DIMENSIONS[windowType].height - safeMargin };
-  }
-  
-  // On desktop, calculate exact center
-  const windowWidth = Math.min(WINDOW_DIMENSIONS[windowType].width, viewportWidth - (safeMargin * 2));
-  const windowHeight = Math.min(WINDOW_DIMENSIONS[windowType].height, viewportHeight - (safeMargin * 2));
-  
-  const centerX = Math.max(safeMargin, (viewportWidth - windowWidth) / 2);
-  const centerY = Math.max(safeMargin, (viewportHeight - windowHeight) / 2);
-  
-  return { x: centerX, y: centerY };
-};
 
 export default function HomePage() {
   const [isAboutOpen, setIsAboutOpen] = useState(false)
   const [isSocialsOpen, setIsSocialsOpen] = useState(false)
   const [isPortfolioOpen, setIsPortfolioOpen] = useState(false)
   
+  // Improved center position calculation with mobile awareness
+  const calculateExactCenter = (windowType: 'about' | 'portfolio' | 'socials') => {
+    if (typeof window === 'undefined') return { x: 0, y: 0 };
+    
+    const isMobile = window.innerWidth <= 768;
+    const safeMargin = isMobile ? 8 : 16;
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    
+    // On mobile, position at the bottom with margin
+    if (isMobile) {
+      return { x: safeMargin, y: viewportHeight - WINDOW_DIMENSIONS[windowType].height - safeMargin };
+    }
+    
+    // On desktop, calculate exact center
+    const windowWidth = Math.min(WINDOW_DIMENSIONS[windowType].width, viewportWidth - (safeMargin * 2));
+    const windowHeight = Math.min(WINDOW_DIMENSIONS[windowType].height, viewportHeight - (safeMargin * 2));
+    
+    const centerX = Math.max(safeMargin, (viewportWidth - windowWidth) / 2);
+    const centerY = Math.max(safeMargin, (viewportHeight - windowHeight) / 2);
+    
+    return { x: centerX, y: centerY };
+  };
+  
   // Individual center positions for each window
   const [aboutPosition, setAboutPosition] = useState(() => calculateExactCenter('about'));
   const [portfolioPosition, setPortfolioPosition] = useState(() => calculateExactCenter('portfolio'));
   const [socialsPosition, setSocialsPosition] = useState(() => calculateExactCenter('socials'));
 
-  // Update positions on window resize - single consolidated handler
+  // Update dimensions when window resizes
   useEffect(() => {
     const handleResize = () => {
       // Update window dimensions for responsive sizing
-      if (typeof window !== 'undefined') {
-        WINDOW_DIMENSIONS.about.width = window.innerWidth <= 768 ? window.innerWidth : 450;
-        
-        const isMobile = window.innerWidth <= 768;
-        
-        if (isMobile) {
-          // On mobile, position at top with margin
-          setAboutPosition({ x: 0, y: MARGIN });
-          setSocialsPosition({ x: 0, y: MARGIN });
-          setPortfolioPosition({ x: 0, y: MARGIN });
-        } else {
-          // On desktop, center precisely
-          setAboutPosition(calculateExactCenter('about'));
-          setPortfolioPosition(calculateExactCenter('portfolio'));
-          setSocialsPosition(calculateExactCenter('socials'));
-        }
-        
-        // Log positions for debugging
-        console.log('Window positions updated:', {
-          about: isMobile ? { x: 0, y: MARGIN } : calculateExactCenter('about'),
-          portfolio: isMobile ? { x: 0, y: MARGIN } : calculateExactCenter('portfolio'),
-          socials: isMobile ? { x: 0, y: MARGIN } : calculateExactCenter('socials')
-        });
-      }
+      const dimensions = getWindowDimensions();
+      Object.assign(WINDOW_DIMENSIONS, dimensions);
     };
     
-    // Initial positioning
-    handleResize();
-    
-    // Add resize listener
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  useEffect(() => {
-    const handleResize = () => {
-      const isMobile = window.innerWidth <= 768;
-
-      if (isMobile) {
-        setAboutPosition({ x: 0, y: MARGIN });
-        setSocialsPosition({ x: 0, y: MARGIN });
-        setPortfolioPosition({ x: 0, y: MARGIN });
-      } else {
-        setAboutPosition(calculateExactCenter('about'));
-        setPortfolioPosition(calculateExactCenter('portfolio'));
-        setSocialsPosition(calculateExactCenter('socials'));
-      }
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  useEffect(() => {
-    setAboutPosition(calculateExactCenter('about'));
-    setPortfolioPosition(calculateExactCenter('portfolio'));
-    setSocialsPosition(calculateExactCenter('socials'));
   }, []);
 
   // Force center a window after it's opened
