@@ -185,9 +185,23 @@ export default function FrostedWindow({
     const viewportWidth = typeof window !== 'undefined' ? window.innerWidth : 1200;
     const viewportHeight = typeof window !== 'undefined' ? window.innerHeight : 800;
     
-    // Calculate available space
-    const availableWidth = viewportWidth - (2 * (isMobile ? 8 : 16));
-    const availableHeight = viewportHeight - (2 * (isMobile ? 8 : 16));
+    // Calculate available space with safe margins
+    const safeMargin = isMobile ? 8 : 16;
+    const availableWidth = viewportWidth - (2 * safeMargin);
+    const availableHeight = viewportHeight - (2 * safeMargin);
+    
+    // Get window width from style or use default
+    let windowWidth = 400; // Default width
+    if (style?.width) {
+      if (typeof style.width === 'string') {
+        windowWidth = parseInt(style.width);
+      } else if (typeof style.width === 'number') {
+        windowWidth = style.width;
+      }
+    }
+    
+    // Ensure window width never exceeds available space
+    const finalWidth = Math.min(windowWidth, availableWidth);
     
     // Base styles common to all screen sizes
     const baseStyles: React.CSSProperties = {
@@ -201,11 +215,15 @@ export default function FrostedWindow({
       color: 'white',
       overflowY: 'auto',
       zIndex: isActive ? 50 : 40,
-      // Ensure windows never exceed available space
       maxWidth: `${availableWidth}px`,
       maxHeight: `${availableHeight}px`,
-      ...style
+      ...style,
+      // Override any width from style with our calculated width
+      width: `${finalWidth}px`,
     };
+
+    // Calculate horizontal centering
+    const leftPosition = (viewportWidth - finalWidth) / 2;
 
     // Mobile-specific styles
     if (isMobile) {
@@ -213,6 +231,8 @@ export default function FrostedWindow({
         ...baseStyles,
         bottom: 'var(--spacing-sm)',
         top: 'auto',
+        left: `${leftPosition}px`,
+        position: 'fixed',
       };
     }
 
@@ -220,8 +240,7 @@ export default function FrostedWindow({
     return {
       ...baseStyles,
       minWidth: Math.min(300, availableWidth),
-      top: 0,
-      left: 0,
+      position: 'absolute',
     };
   };
 
@@ -236,11 +255,14 @@ export default function FrostedWindow({
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.9 }}
           transition={{ duration: 0.2 }}
-          style={{
-            ...getWindowStyles(),
-            x: isMobile ? undefined : x,
-            y: isMobile ? undefined : y
-          }}
+          style={isMobile ? 
+            getWindowStyles() : 
+            {
+              ...getWindowStyles(),
+              x, 
+              y
+            }
+          }
           onMouseEnter={() => setIsActive(true)}
           onMouseLeave={() => setIsActive(false)}
         >

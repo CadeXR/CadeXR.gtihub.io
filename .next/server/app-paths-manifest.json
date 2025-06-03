@@ -1,5 +1,6 @@
 {
   "/page": "app/page.js",
   "/home/page": "app/home/page.js",
-  "/projects/flexvr-wellness/page": "app/projects/flexvr-wellness/page.js"
+  "/projects/flexvr-wellness/page": "app/projects/flexvr-wellness/page.js",
+  "/activities/page": "app/activities/page.js"
 }

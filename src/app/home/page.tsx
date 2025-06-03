@@ -344,12 +344,11 @@ export default function HomePage() {
             onClose={() => setIsAboutOpen(false)}
             defaultPosition={aboutPosition}
             onMove={() => {}} // Disable moving
-            className="max-w-[400px]" // Removed md: prefix to apply max width on all screen sizes
+            className="frosted-window-about"
             style={{
+              width: 400, // Fixed width in pixels
               height: 'auto',
               maxHeight: '80vh',
-              width: '400px', // Fixed width regardless of screen size
-              minWidth: '300px',
               overflowY: 'auto',
             }}
           >

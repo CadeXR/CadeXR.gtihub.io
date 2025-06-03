@@ -446,6 +446,20 @@ body:has(.scene-transition-shrink) {
   }
 }
 
+/* Ensure windows maintain their dimensions */
+.frosted-window {
+  box-sizing: border-box !important;
+}
+
+/* Override any responsive width settings */
+@media (max-width: 768px) {
+  .frosted-window {
+    width: auto !important; /* Let the inline style control width */
+    left: auto !important; /* Let the component handle positioning */
+  }
+}
+
+
 
 
 
