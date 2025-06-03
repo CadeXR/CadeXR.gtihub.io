@@ -4,6 +4,7 @@ import { useState, useCallback, useEffect } from 'react'
 
 export default function Header() {
   const [isActive, setIsActive] = useState(false)
+  const [isVisible, setIsVisible] = useState(true)
 
   const updateParticleSystem = useCallback(() => {
     const headerElement = document.querySelector('[data-frosted-box="header"]')
@@ -30,6 +31,38 @@ export default function Header() {
   useEffect(() => {
     updateParticleSystem()
   }, [isActive, updateParticleSystem])
+
+  // Check for overlap with NavBar
+  useEffect(() => {
+    const checkOverlap = () => {
+      const headerElement = document.querySelector('[data-frosted-box="header"]')
+      const navbarElement = document.querySelector('[data-frosted-box="navbar"]')
+      
+      if (headerElement && navbarElement) {
+        const headerRect = headerElement.getBoundingClientRect()
+        const navbarRect = navbarElement.getBoundingClientRect()
+        
+        // Check if there's horizontal overlap
+        const overlap = !(
+          headerRect.right < navbarRect.left || 
+          headerRect.left > navbarRect.right
+        )
+        
+        // Also hide on very small screens
+        const isSmallScreen = window.innerWidth < 768
+        
+        setIsVisible(!overlap && !isSmallScreen)
+      }
+    }
+    
+    // Check on mount and when window resizes
+    checkOverlap()
+    window.addEventListener('resize', checkOverlap)
+    
+    return () => window.removeEventListener('resize', checkOverlap)
+  }, [])
+
+  if (!isVisible) return null
 
   return (
     <div
@@ -67,5 +100,6 @@ export default function Header() {
     </div>
   )
 }
+
 
 

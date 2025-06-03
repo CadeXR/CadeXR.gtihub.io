@@ -199,6 +199,14 @@ body:has(.scene-transition-shrink) {
   }
 }
 
+/* Add these styles to your globals.css */
+.backdrop-blur-md {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+
+
 
 
 

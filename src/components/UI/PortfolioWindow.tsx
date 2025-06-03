@@ -85,7 +85,9 @@ export default function PortfolioWindow({
       defaultPosition={defaultPosition}
       onMove={onMove}
       style={{
-        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.5)',
+        border: '1px solid rgba(255, 255, 255, 0.15)',
         ...style
       }}
       className={className}
@@ -129,6 +131,7 @@ export default function PortfolioWindow({
     </FrostedWindow>
   )
 }
+
 
 
 

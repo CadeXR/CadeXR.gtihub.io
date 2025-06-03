@@ -30,6 +30,14 @@ export default function FrostedWindow({
   const x = useMotionValue(defaultPosition?.x ?? 0)
   const y = useMotionValue(defaultPosition?.y ?? 0)
 
+  // Set position from props when it changes
+  useEffect(() => {
+    if (defaultPosition) {
+      x.set(defaultPosition.x);
+      y.set(defaultPosition.y);
+    }
+  }, [defaultPosition, x, y]);
+
   // Add debug logging
   useEffect(() => {
     console.log(`FrostedWindow ${id} isOpen:`, isOpen)
@@ -92,6 +100,26 @@ export default function FrostedWindow({
     updateParticleSystem()
   }, [isActive, updateParticleSystem])
 
+  useEffect(() => {
+    if (isOpen && id) {
+      // Log actual dimensions after render
+      const windowElement = document.getElementById(id);
+      if (windowElement) {
+        const rect = windowElement.getBoundingClientRect();
+        console.log(`FrostedWindow ${id} actual dimensions:`, {
+          width: rect.width,
+          height: rect.height,
+          position: { x: x.get(), y: y.get() },
+          viewport: { width: window.innerWidth, height: window.innerHeight },
+          expectedCenter: {
+            x: (window.innerWidth - rect.width) / 2,
+            y: (window.innerHeight - rect.height) / 2
+          }
+        });
+      }
+    }
+  }, [isOpen, id, x, y]);
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -108,11 +136,12 @@ export default function FrostedWindow({
             top: 0,
             left: 0,
             padding: '2rem',
-            backgroundColor: 'rgba(255, 255, 255, 0.1)',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)', // Darker background
             backdropFilter: 'blur(10px)',
             WebkitBackdropFilter: 'blur(10px)',
             borderRadius: '0.75rem',
-            border: '1px solid rgba(255, 255, 255, 0.2)',
+            border: '1px solid rgba(255, 255, 255, 0.15)', // Subtler border
+            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.5)', // Add shadow for depth
             color: 'white',
             minWidth: '300px',
             maxHeight: '80vh',
@@ -124,19 +153,7 @@ export default function FrostedWindow({
           }}
           onMouseEnter={() => setIsActive(true)}
           onMouseLeave={() => setIsActive(false)}
-          drag
-          dragMomentum={false}
-          onDragStart={() => setIsActive(true)}
-          onDragEnd={(event, info) => {
-            if (onMove) {
-              onMove({
-                x: x.get(),
-                y: y.get()
-              })
-            }
-          }}
-          dragElastic={0}
-          dragTransition={{ power: 0, timeConstant: 0 }}
+          // Removed: drag, dragMomentum, onDragStart, onDragEnd, dragElastic, dragTransition
         >
           <div className="window-header" style={{ position: 'relative' }}>
             {showCloseButton && (
@@ -151,19 +168,20 @@ export default function FrostedWindow({
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                  border: '1px solid rgba(255, 255, 255, 0.4)',
+                  backgroundColor: 'rgba(0, 0, 0, 0.6)', // Darker button
+                  border: '1px solid rgba(255, 255, 255, 0.2)', // Subtler border
                   borderRadius: '4px',
                   color: 'white',
                   fontSize: '16px',
                   cursor: 'pointer',
                   transition: 'all 0.2s ease',
+                  boxShadow: '0 2px 5px rgba(0, 0, 0, 0.3)', // Subtle shadow
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.3)';
+                  e.currentTarget.style.backgroundColor = 'rgba(40, 40, 40, 0.8)'; // Darker hover state
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
+                  e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.6)'; // Return to original
                 }}
               >
                 ×

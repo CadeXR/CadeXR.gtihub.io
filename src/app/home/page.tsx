@@ -45,94 +45,163 @@ interface SpawnNode {
   height: number;
 }
 
-// Define window dimensions
+// Define window dimensions more accurately
 const WINDOW_DIMENSIONS = {
-  about: { width: 450, height: 400 },
+  about: { 
+    width: typeof window !== 'undefined' && window.innerWidth <= 768 ? window.innerWidth : 450, 
+    height: 400 
+  },
   portfolio: { width: 350, height: 600 },
-  socials: { width: 300, height: 115 }  // Reduced from 130 to 115
+  socials: { width: 350, height: 115 }
 };
 
-const calculateSpawnNodes = () => {
-  if (typeof window === 'undefined') return {
-    about: { x: 0, y: 0, width: 0, height: 0 },
-    portfolio: { x: 0, y: 0, width: 0, height: 0 },
-    socials: { x: 0, y: 0, width: 0, height: 0 }
-  };
-
-  // Get navbar element for reference
-  const navbar = document.querySelector('[data-frosted-box="navbar"]');
-  if (!navbar) return null;
-
-  const navbarBounds = navbar.getBoundingClientRect();
+// Improved center position calculation with debug logging
+const calculateExactCenter = (windowType: 'about' | 'portfolio' | 'socials') => {
+  if (typeof window === 'undefined') return { x: 0, y: 0 };
   
-  // Calculate spawn nodes
-  const aboutNode: SpawnNode = {
-    x: navbarBounds.right - 284, // 284 pixels left of the navbar's right edge
-    y: navbarBounds.top + 100, // 100 pixels below the navbar's top
-    ...WINDOW_DIMENSIONS.about
-  };
-
-  const portfolioNode: SpawnNode = {
-    x: aboutNode.x - 525, // Changed from 515 to 525 to move 10px more to the left
-    y: aboutNode.y,
-    ...WINDOW_DIMENSIONS.portfolio
-  };
-
-  const socialsNode: SpawnNode = {
-    x: aboutNode.x - (WINDOW_DIMENSIONS.socials.width / 2),
-    y: aboutNode.y + WINDOW_DIMENSIONS.about.height + SPACING + 185, // Added 25 more pixels (from 160 to 185)
-    ...WINDOW_DIMENSIONS.socials
-  };
-
-  return { about: aboutNode, portfolio: portfolioNode, socials: socialsNode };
-};
-
-const calculateInitialPositions = () => {
-  const spawnNodes = calculateSpawnNodes();
-  if (!spawnNodes) return {
-    about: { x: 151, y: 98 },  // Rounded from x: 151.28750610351562, y: 97.5999984741211
-    portfolio: { x: 200, y: 200 },
-    socials: { x: 364, y: 598 }
-  };
-
-  // Calculate window positions based on spawn nodes
-  // Note: Subtracting the width to position from top-right corner
-  return {
-    about: { 
-      x: spawnNodes.about.x - WINDOW_DIMENSIONS.about.width, 
-      y: spawnNodes.about.y 
-    },
-    portfolio: { 
-      x: spawnNodes.portfolio.x - WINDOW_DIMENSIONS.portfolio.width, 
-      y: spawnNodes.portfolio.y 
-    },
-    socials: { 
-      x: spawnNodes.socials.x - WINDOW_DIMENSIONS.socials.width, 
-      y: spawnNodes.socials.y 
-    }
-  };
+  const windowWidth = WINDOW_DIMENSIONS[windowType].width;
+  const windowHeight = WINDOW_DIMENSIONS[windowType].height;
+  const viewportWidth = window.innerWidth;
+  const viewportHeight = window.innerHeight;
+  
+  // Calculate exact center
+  const centerX = Math.max(0, (viewportWidth - windowWidth) / 2);
+  const centerY = Math.max(0, (viewportHeight - windowHeight) / 2);
+  
+  console.log(`Centering ${windowType}:`, {
+    windowDimensions: { width: windowWidth, height: windowHeight },
+    viewport: { width: viewportWidth, height: viewportHeight },
+    center: { x: centerX, y: centerY }
+  });
+  
+  return { x: centerX, y: centerY };
 };
 
 export default function HomePage() {
   const [isAboutOpen, setIsAboutOpen] = useState(false)
   const [isSocialsOpen, setIsSocialsOpen] = useState(false)
   const [isPortfolioOpen, setIsPortfolioOpen] = useState(false)
+  
+  // Individual center positions for each window
+  const [aboutPosition, setAboutPosition] = useState(() => calculateExactCenter('about'));
+  const [portfolioPosition, setPortfolioPosition] = useState(() => calculateExactCenter('portfolio'));
+  const [socialsPosition, setSocialsPosition] = useState(() => calculateExactCenter('socials'));
+
+  // Update positions on window resize - single consolidated handler
+  useEffect(() => {
+    const handleResize = () => {
+      // Update window dimensions for responsive sizing
+      if (typeof window !== 'undefined') {
+        WINDOW_DIMENSIONS.about.width = window.innerWidth <= 768 ? window.innerWidth : 450;
+        
+        const isMobile = window.innerWidth <= 768;
+        
+        if (isMobile) {
+          // On mobile, position at top with margin
+          setAboutPosition({ x: 0, y: MARGIN });
+          setSocialsPosition({ x: 0, y: MARGIN });
+          setPortfolioPosition({ x: 0, y: MARGIN });
+        } else {
+          // On desktop, center precisely
+          setAboutPosition(calculateExactCenter('about'));
+          setPortfolioPosition(calculateExactCenter('portfolio'));
+          setSocialsPosition(calculateExactCenter('socials'));
+        }
+        
+        // Log positions for debugging
+        console.log('Window positions updated:', {
+          about: isMobile ? { x: 0, y: MARGIN } : calculateExactCenter('about'),
+          portfolio: isMobile ? { x: 0, y: MARGIN } : calculateExactCenter('portfolio'),
+          socials: isMobile ? { x: 0, y: MARGIN } : calculateExactCenter('socials')
+        });
+      }
+    };
+    
+    // Initial positioning
+    handleResize();
+    
+    // Add resize listener
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const isMobile = window.innerWidth <= 768;
+
+      if (isMobile) {
+        setAboutPosition({ x: 0, y: MARGIN });
+        setSocialsPosition({ x: 0, y: MARGIN });
+        setPortfolioPosition({ x: 0, y: MARGIN });
+      } else {
+        setAboutPosition(calculateExactCenter('about'));
+        setPortfolioPosition(calculateExactCenter('portfolio'));
+        setSocialsPosition(calculateExactCenter('socials'));
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
+    setAboutPosition(calculateExactCenter('about'));
+    setPortfolioPosition(calculateExactCenter('portfolio'));
+    setSocialsPosition(calculateExactCenter('socials'));
+  }, []);
+
+  // Force center a window after it's opened
+  const forceCenter = (windowType: 'about' | 'portfolio' | 'socials') => {
+    // Short delay to ensure the window is rendered
+    setTimeout(() => {
+      const windowId = `${windowType}-window`;
+      const windowElement = document.getElementById(windowId);
+      
+      if (windowElement) {
+        const rect = windowElement.getBoundingClientRect();
+        const centerX = (window.innerWidth - rect.width) / 2;
+        const centerY = (window.innerHeight - rect.height) / 2;
+        
+        console.log(`Force centering ${windowType}:`, { centerX, centerY });
+        
+        switch (windowType) {
+          case 'about':
+            setAboutPosition({ x: centerX, y: centerY });
+            break;
+          case 'portfolio':
+            setPortfolioPosition({ x: centerX, y: centerY });
+            break;
+          case 'socials':
+            setSocialsPosition({ x: centerX, y: centerY });
+            break;
+        }
+      }
+    }, 100);
+  };
+
+  // Ensure only one window is open at a time and center it
+  const handleOpenAbout = () => {
+    setIsAboutOpen(true);
+    setIsSocialsOpen(false);
+    setIsPortfolioOpen(false);
+    forceCenter('about');
+  };
+
+  const handleOpenSocials = () => {
+    setIsAboutOpen(false);
+    setIsSocialsOpen(true);
+    setIsPortfolioOpen(false);
+    forceCenter('socials');
+  };
+
+  const handleOpenPortfolio = () => {
+    setIsAboutOpen(false);
+    setIsSocialsOpen(false);
+    setIsPortfolioOpen(true);
+    forceCenter('portfolio');
+  };
 
   const [windowScale, setWindowScale] = useState(1)
-  const [aboutPosition, setAboutPosition] = useState(() => {
-    const positions = calculateInitialPositions();
-    return positions.about;
-  });
-
-  const [portfolioPosition, setPortfolioPosition] = useState(() => {
-    const positions = calculateInitialPositions();
-    return positions.portfolio;
-  });
-
-  const [socialsPosition, setSocialsPosition] = useState(() => {
-    const positions = calculateInitialPositions();
-    return positions.socials;
-  });
 
   useEffect(() => {
     console.log('Window states:', {
@@ -179,14 +248,9 @@ export default function HomePage() {
     })
   }, [])
 
+  // Handle window movement (we'll keep this for reference but disable actual movement)
   const handleWindowMove = (position: { x: number, y: number }, windowType: 'about' | 'socials' | 'portfolio') => {
     const windowDimensions = WINDOW_DIMENSIONS[windowType];
-    const spawnNodes = calculateSpawnNodes();
-    
-    if (!spawnNodes) return;
-
-    // Calculate position relative to spawn node
-    const spawnNode = spawnNodes[windowType];
     
     // Apply margin constraints
     const safePosition = calculateSafePosition(
@@ -219,10 +283,9 @@ export default function HomePage() {
         setSocialsPosition({ x: 0, y: MARGIN });
         setPortfolioPosition({ x: 0, y: MARGIN });
       } else {
-        const positions = calculateInitialPositions();
-        setAboutPosition(positions.about);
-        setPortfolioPosition(positions.portfolio);
-        setSocialsPosition(positions.socials);
+        setAboutPosition(calculateExactCenter('about'));
+        setPortfolioPosition(calculateExactCenter('portfolio'));
+        setSocialsPosition(calculateExactCenter('socials'));
       }
     };
 
@@ -231,10 +294,9 @@ export default function HomePage() {
   }, []);
 
   useEffect(() => {
-    const positions = calculateInitialPositions();
-    setAboutPosition(positions.about);
-    setPortfolioPosition(positions.portfolio);
-    setSocialsPosition(positions.socials);
+    setAboutPosition(calculateExactCenter('about'));
+    setPortfolioPosition(calculateExactCenter('portfolio'));
+    setSocialsPosition(calculateExactCenter('socials'));
   }, []);
 
   return (
@@ -275,9 +337,9 @@ export default function HomePage() {
           <BackButton />
           <Header />
           <NavBar 
-            onOpenAbout={() => setIsAboutOpen(true)}
-            onOpenSocials={() => setIsSocialsOpen(true)}
-            onOpenPortfolio={() => setIsPortfolioOpen(true)}
+            onOpenAbout={handleOpenAbout}
+            onOpenSocials={handleOpenSocials}
+            onOpenPortfolio={handleOpenPortfolio}
           />
         </div>
         <div className="pointer-events-auto">
@@ -286,7 +348,7 @@ export default function HomePage() {
             isOpen={isPortfolioOpen}
             onClose={() => setIsPortfolioOpen(false)}
             defaultPosition={portfolioPosition}
-            onMove={(pos) => handleWindowMove(pos, 'portfolio')}
+            onMove={() => {}} // Disable moving
           />
 
           <FrostedWindow 
@@ -294,7 +356,7 @@ export default function HomePage() {
             isOpen={isAboutOpen}
             onClose={() => setIsAboutOpen(false)}
             defaultPosition={aboutPosition}
-            onMove={(pos) => handleWindowMove(pos, 'about')}
+            onMove={() => {}} // Disable moving
             className="md:max-w-[33.333vw] w-screen"
             style={{
               height: typeof window !== 'undefined' && window.innerWidth <= 768 
@@ -314,10 +376,10 @@ export default function HomePage() {
             isOpen={isSocialsOpen}
             onClose={() => setIsSocialsOpen(false)}
             defaultPosition={socialsPosition}
-            onMove={(pos) => handleWindowMove(pos, 'socials')}
+            onMove={() => {}} // Disable moving
             style={{
-              width: '350px',  // Increased from 300px to 350px
-              minWidth: '350px', // Increased from 300px to 350px
+              width: '350px',
+              minWidth: '350px',
             }}
           >
             <SocialContent />
