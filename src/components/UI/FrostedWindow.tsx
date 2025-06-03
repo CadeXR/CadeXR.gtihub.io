@@ -120,6 +120,63 @@ export default function FrostedWindow({
     }
   }, [isOpen, id, x, y]);
 
+  useEffect(() => {
+    // Function to ensure window is within viewport bounds
+    const ensureWithinViewport = () => {
+      if (!defaultPosition) return;
+      
+      const safeMargin = typeof window !== 'undefined' && window.innerWidth <= 768 ? 8 : 16;
+      const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
+      
+      // Get window dimensions from style or use defaults
+      const windowWidth = style?.width ? 
+        (typeof style.width === 'string' ? parseInt(style.width) : style.width) : 
+        300;
+      const windowHeight = style?.height ? 
+        (typeof style.height === 'string' ? parseInt(style.height) : style.height) : 
+        400;
+      
+      // Calculate safe positions
+      let safeX = defaultPosition.x;
+      let safeY = defaultPosition.y;
+      
+      // Ensure window doesn't go off right edge
+      if (safeX + windowWidth > viewportWidth - safeMargin) {
+        safeX = viewportWidth - windowWidth - safeMargin;
+      }
+      
+      // Ensure window doesn't go off left edge
+      if (safeX < safeMargin) {
+        safeX = safeMargin;
+      }
+      
+      // Ensure window doesn't go off bottom edge
+      if (safeY + windowHeight > viewportHeight - safeMargin) {
+        safeY = viewportHeight - windowHeight - safeMargin;
+      }
+      
+      // Ensure window doesn't go off top edge
+      if (safeY < safeMargin) {
+        safeY = safeMargin;
+      }
+      
+      // Update position if needed
+      if (safeX !== defaultPosition.x || safeY !== defaultPosition.y) {
+        x.set(safeX);
+        y.set(safeY);
+      } else {
+        x.set(defaultPosition.x);
+        y.set(defaultPosition.y);
+      }
+    };
+    
+    ensureWithinViewport();
+    window.addEventListener('resize', ensureWithinViewport);
+    
+    return () => window.removeEventListener('resize', ensureWithinViewport);
+  }, [defaultPosition, x, y, style]);
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -136,15 +193,22 @@ export default function FrostedWindow({
             top: 0,
             left: 0,
             padding: '2rem',
-            backgroundColor: 'rgba(0, 0, 0, 0.5)', // Darker background
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
             backdropFilter: 'blur(10px)',
             WebkitBackdropFilter: 'blur(10px)',
             borderRadius: '0.75rem',
-            border: '1px solid rgba(255, 255, 255, 0.15)', // Subtler border
-            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.5)', // Add shadow for depth
+            border: '1px solid rgba(255, 255, 255, 0.15)',
+            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.5)',
             color: 'white',
-            minWidth: '300px',
-            maxHeight: '80vh',
+            minWidth: typeof window !== 'undefined' && window.innerWidth <= 768 
+              ? '100%' 
+              : '300px',
+            maxWidth: typeof window !== 'undefined' && window.innerWidth <= 768 
+              ? '100%' 
+              : '80vw',
+            maxHeight: typeof window !== 'undefined' && window.innerWidth <= 768 
+              ? '90vh' 
+              : '80vh',
             overflowY: 'auto',
             x,
             y,

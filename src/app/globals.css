@@ -205,6 +205,66 @@ body:has(.scene-transition-shrink) {
   -webkit-backdrop-filter: blur(12px);
 }
 
+/* Safe area margins to prevent content from being cut off */
+:root {
+  --safe-margin: 8px; /* Reduced from 16px */
+}
+
+@media (max-width: 768px) {
+  :root {
+    --safe-margin: 4px; /* Reduced from 8px */
+  }
+  
+  /* Ensure windows don't get cut off at edges */
+  .frosted-window {
+    width: calc(100% - var(--safe-margin) * 2) !important;
+    max-width: calc(100% - var(--safe-margin) * 2) !important;
+    left: var(--safe-margin) !important;
+    right: var(--safe-margin) !important;
+    margin-bottom: var(--safe-margin) !important;
+    border-radius: 0.75rem !important;
+  }
+  
+  /* Position windows with safe margins */
+  .frosted-window {
+    bottom: var(--safe-margin) !important;
+    top: auto !important;
+  }
+  
+  /* Ensure the navbar respects safe margins */
+  [data-frosted-box="navbar"] {
+    right: var(--safe-margin) !important;
+    top: var(--safe-margin) !important;
+  }
+  
+  /* Ensure back button respects safe margins */
+  [data-frosted-box="backbutton"] {
+    top: var(--safe-margin) !important;
+    left: var(--safe-margin) !important;
+  }
+  
+  /* Ensure header respects safe margins */
+  [data-frosted-box="header"] {
+    top: var(--safe-margin) !important;
+    left: calc(48px + var(--safe-margin) * 2) !important;
+  }
+}
+
+/* Prevent content from being cut off */
+.overflow-y-auto {
+  max-height: calc(90vh - var(--safe-margin) * 2);
+  overflow-y: auto;
+}
+
+/* Ensure windows are visible on all devices with safe margins */
+.frosted-window {
+  max-width: calc(100vw - var(--safe-margin) * 2);
+  max-height: calc(90vh - var(--safe-margin) * 2);
+}
+
+
+
+
 
 
 

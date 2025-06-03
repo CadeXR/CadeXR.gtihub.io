@@ -21,21 +21,26 @@ export default function NavBar({
   const [isActive, setIsActive] = useState(false)
   const navRef = useRef<HTMLElement>(null)
 
+  // Responsive button styles
   const buttonStyle = {
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
     color: 'white',
-    padding: '0.75rem 1.5rem',
+    padding: typeof window !== 'undefined' && window.innerWidth <= 640 
+      ? '0.5rem 0.75rem' 
+      : '0.75rem 1.5rem',
     borderRadius: '0.5rem',
     cursor: 'pointer',
     border: '1px solid rgba(255, 255, 255, 0.4)',
-    fontSize: '1rem',
+    fontSize: typeof window !== 'undefined' && window.innerWidth <= 640 ? '0.875rem' : '1rem',
     transition: 'all 0.2s ease',
     height: '32px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    whiteSpace: 'nowrap',
   }
 
+  // Responsive games button style
   const gamesButtonStyle = {
     ...buttonStyle,
     backgroundColor: 'rgba(147, 51, 234, 0.3)',
@@ -89,13 +94,13 @@ export default function NavBar({
         zIndex: 50,
         display: 'flex',
         flexDirection: 'row',
-        gap: '1rem',
+        gap: typeof window !== 'undefined' && window.innerWidth <= 640 ? '0.5rem' : '1rem',
         padding: '0.5rem',
-        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+        backgroundColor: 'rgba(255, 255, 255, 0.1)', // Restored to original lighter color
         backdropFilter: 'blur(10px)',
         WebkitBackdropFilter: 'blur(10px)',
         borderRadius: '0.75rem',
-        border: '1px solid rgba(255, 255, 255, 0.2)',
+        border: '1px solid rgba(255, 255, 255, 0.2)', // Restored to original border
         height: '48px',
         alignItems: 'center',
       }}
