@@ -101,10 +101,8 @@ export default function Header() {
   const getHeaderStyle = (): React.CSSProperties => {
     return {
       position: 'fixed' as const,
-      top: 'var(--safe-margin-sm)',
-      left: isVerySmall 
-        ? 'calc(40px + var(--safe-margin-sm) * 2)' 
-        : 'calc(48px + var(--safe-margin-md))',
+      top: 'var(--spacing-sm)',
+      left: `calc(var(--back-button-size) + var(--spacing-sm) * 2)`,
       zIndex: 50,
       padding: isMobile ? '0.25rem' : '0.5rem',
       backgroundColor: 'rgba(255, 255, 255, 0.1)',
@@ -113,8 +111,10 @@ export default function Header() {
       borderRadius: '0.75rem',
       border: '1px solid rgba(255, 255, 255, 0.2)',
       width: 'fit-content',
-      maxWidth: isMobile ? 'calc(100vw - 48px - 4rem - 80px)' : 'none', // Reduce width to avoid overlap
-      height: isMobile ? '40px' : '48px',
+      maxWidth: isMobile 
+        ? `calc(100vw - var(--back-button-size) - var(--spacing-sm) * 4 - 80px)` 
+        : 'none',
+      height: 'var(--header-height)',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -145,6 +145,8 @@ export default function Header() {
     </div>
   )
 }
+
+
 
 
 

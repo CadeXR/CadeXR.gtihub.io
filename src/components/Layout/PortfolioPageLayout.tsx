@@ -139,7 +139,7 @@ export default function PortfolioPageLayout({ children }: PortfolioPageLayoutPro
     const navbarRight = window.innerWidth - 16; // 1rem from right
     return {
       x: navbarRight - 350 - 16, // Keeping the same X position
-      y: 99, // Moved 5px up (was 104)
+      y: 60, // Moved higher up (was 99)
     };
   });
 
@@ -160,7 +160,7 @@ export default function PortfolioPageLayout({ children }: PortfolioPageLayoutPro
       // Keep links window positioned relative to navbar
       setLinksPosition({
         x: isMobile ? 16 : ((viewportWidth - 16) - 350 - 16),
-        y: isMobile ? (viewportHeight - 150) : 99
+        y: isMobile ? (viewportHeight - 150) : 60 // Changed from 99 to 60
       });
     };
 
@@ -287,8 +287,8 @@ export default function PortfolioPageLayout({ children }: PortfolioPageLayoutPro
         onMouseLeave={() => setIsBackButtonActive(false)}
         style={{
           position: 'fixed',
-          top: 'var(--safe-margin-sm)',
-          left: 'var(--safe-margin-sm)',
+          top: 'var(--spacing-sm)',
+          left: 'var(--spacing-sm)',
           zIndex: 50,
           padding: '0.5rem',
           backgroundColor: 'rgba(255, 255, 255, 0.1)',
@@ -296,8 +296,8 @@ export default function PortfolioPageLayout({ children }: PortfolioPageLayoutPro
           WebkitBackdropFilter: 'blur(10px)',
           borderRadius: '0.75rem',
           border: '1px solid rgba(255, 255, 255, 0.2)',
-          height: '48px',
-          width: '48px',
+          height: 'var(--back-button-size)',
+          width: 'var(--back-button-size)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -325,8 +325,8 @@ export default function PortfolioPageLayout({ children }: PortfolioPageLayoutPro
         onMouseLeave={() => setIsNavButtonActive(false)}
         style={{
           position: 'fixed',
-          top: 'var(--safe-margin-sm)',
-          right: 'var(--safe-margin-sm)',
+          top: 'var(--spacing-sm)',
+          right: 'var(--spacing-sm)',
           zIndex: 50,
           display: 'flex',
           flexDirection: 'row',
@@ -337,7 +337,7 @@ export default function PortfolioPageLayout({ children }: PortfolioPageLayoutPro
           WebkitBackdropFilter: 'blur(10px)',
           borderRadius: '0.75rem',
           border: '1px solid rgba(255, 255, 255, 0.2)',
-          height: isMobile ? '40px' : '48px',
+          height: 'var(--navbar-height)',
           alignItems: 'center',
         }}
       >
@@ -406,8 +406,6 @@ export default function PortfolioPageLayout({ children }: PortfolioPageLayoutPro
     </main>
   )
 }
-
-
 
 
 

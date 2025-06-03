@@ -49,7 +49,7 @@ interface SpawnNode {
 // Define window dimensions more accurately with responsive scaling
 const getWindowDimensions = () => {
   if (typeof window === 'undefined') return {
-    about: { width: 450, height: 400 },
+    about: { width: 400, height: 400 }, // Reduced from 450 to 400
     portfolio: { width: 350, height: 600 },
     socials: { width: 350, height: 115 }
   };
@@ -64,16 +64,16 @@ const getWindowDimensions = () => {
   
   return {
     about: { 
-      width: isMobile ? Math.min(availableWidth - 16, 450) : 450, 
-      height: 400 
+      width: isMobile ? Math.min(availableWidth - 16, 400) : 400, // Reduced from 450 to 400
+      height: isMobile ? 350 : 400 
     },
     portfolio: { 
       width: isMobile ? Math.min(availableWidth - 16, 350) : 350, 
-      height: 600 
+      height: isMobile ? 500 : 600 
     },
     socials: { 
       width: isMobile ? Math.min(availableWidth - 16, 350) : 350, 
-      height: 115 
+      height: isMobile ? 100 : 115 
     }
   };
 };
@@ -90,7 +90,7 @@ export default function HomePage() {
   const isMobile = useMediaQuery({ maxWidth: 768 });
   const isVerySmall = useMediaQuery({ maxWidth: 480 });
   
-  // Improved center position calculation with mobile awareness
+  // Center all windows by default with responsive sizing
   const calculateExactCenter = (windowType: 'about' | 'portfolio' | 'socials') => {
     if (typeof window === 'undefined') return { x: 0, y: 0 };
     
@@ -119,7 +119,16 @@ export default function HomePage() {
   // Individual center positions for each window
   const [aboutPosition, setAboutPosition] = useState(() => calculateExactCenter('about'));
   const [portfolioPosition, setPortfolioPosition] = useState(() => calculateExactCenter('portfolio'));
-  const [socialsPosition, setSocialsPosition] = useState(() => calculateExactCenter('socials'));
+  const [socialsPosition, setSocialsPosition] = useState(() => {
+    if (typeof window === 'undefined') return { x: 0, y: 0 };
+    
+    // Position socials window higher up
+    const centerPos = calculateExactCenter('socials');
+    return { 
+      x: centerPos.x, 
+      y: isMobile ? centerPos.y : Math.max(60, centerPos.y - 100) // Position higher up on desktop
+    };
+  });
 
   // Update positions when screen size changes
   useEffect(() => {
@@ -335,20 +344,13 @@ export default function HomePage() {
             onClose={() => setIsAboutOpen(false)}
             defaultPosition={aboutPosition}
             onMove={() => {}} // Disable moving
-            className="md:max-w-[33.333vw] w-screen"
+            className="max-w-[400px]" // Removed md: prefix to apply max width on all screen sizes
             style={{
-              height: typeof window !== 'undefined' && window.innerWidth <= 768 
-                ? 'auto' 
-                : 'auto',
-              maxHeight: typeof window !== 'undefined' && window.innerWidth <= 768
-                ? '90vh'
-                : '80vh',
-              width: typeof window !== 'undefined' && window.innerWidth <= 768
-                ? 'calc(100% - 16px)'
-                : '33.333vw',
-              minWidth: typeof window !== 'undefined' && window.innerWidth <= 768
-                ? 'calc(100% - 16px)'
-                : '300px',
+              height: 'auto',
+              maxHeight: '80vh',
+              width: '400px', // Fixed width regardless of screen size
+              minWidth: '300px',
+              overflowY: 'auto',
             }}
           >
             <AboutContent />

@@ -11,6 +11,12 @@
   --window-padding-lg: 2rem;
   --mobile-width-percentage: 90%;
   --small-width-percentage: 95%;
+  --header-height-mobile: 40px;
+  --header-height-desktop: 48px;
+  --back-button-size-mobile: 40px;
+  --back-button-size-desktop: 48px;
+  --navbar-height-mobile: 40px;
+  --navbar-height-desktop: 48px;
 }
 
 /* Base styles */
@@ -250,22 +256,30 @@ body:has(.scene-transition-shrink) {
   }
 }
 
-/* Mobile styles */
+/* Standardized mobile styles */
 @media (max-width: 768px) {
   /* Ensure windows don't get cut off at edges */
   .frosted-window {
-    width: calc(var(--mobile-width-percentage)) !important;
-    left: calc((100% - var(--mobile-width-percentage)) / 2) !important;
     bottom: var(--safe-margin-sm) !important;
     top: auto !important;
     margin-bottom: var(--safe-margin-sm) !important;
     border-radius: 0.75rem !important;
+    padding: var(--window-padding-sm) !important;
+  }
+  
+  /* Very small screens */
+  @media (max-width: 480px) {
+    .frosted-window {
+      width: var(--small-width-percentage) !important;
+      left: calc((100% - var(--small-width-percentage)) / 2) !important;
+    }
   }
   
   /* Ensure the navbar respects safe margins */
   [data-frosted-box="navbar"] {
     right: var(--safe-margin-sm) !important;
     top: var(--safe-margin-sm) !important;
+    height: var(--navbar-height-mobile) !important;
   }
   
   /* Ensure back button respects safe margins */
@@ -273,13 +287,16 @@ body:has(.scene-transition-shrink) {
   [data-frosted-box="back-button"] {
     top: var(--safe-margin-sm) !important;
     left: var(--safe-margin-sm) !important;
+    height: var(--back-button-size-mobile) !important;
+    width: var(--back-button-size-mobile) !important;
   }
   
   /* Ensure header respects safe margins and doesn't overlap */
   [data-frosted-box="header"] {
     top: var(--safe-margin-sm) !important;
-    left: calc(48px + var(--safe-margin-sm) * 2) !important;
-    max-width: calc(100vw - 48px - var(--safe-margin-sm) * 4 - 80px) !important;
+    left: calc(var(--back-button-size-mobile) + var(--safe-margin-sm) * 2) !important;
+    height: var(--header-height-mobile) !important;
+    max-width: calc(100vw - var(--back-button-size-mobile) - var(--safe-margin-sm) * 4 - 80px) !important;
   }
 }
 
@@ -305,10 +322,129 @@ body:has(.scene-transition-shrink) {
   max-height: calc(100vh - var(--safe-margin) * 2);
 }
 
+/* Reset and standardize scaling variables */
+:root {
+  /* Base spacing units */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  
+  /* UI element dimensions */
+  --header-height: 48px;
+  --back-button-size: 48px;
+  --navbar-height: 48px;
+  
+  /* Window dimensions */
+  --window-width-standard: 450px;
+  --window-width-small: 350px;
+  --window-height-standard: 400px;
+  --window-height-small: 300px;
+  
+  /* Window padding */
+  --window-padding: 16px;
+  
+  /* Mobile scaling */
+  --mobile-width-ratio: 0.9; /* 90% of screen width */
+  --small-width-ratio: 0.95; /* 95% of screen width */
+}
 
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  :root {
+    /* Reduce spacing on mobile */
+    --spacing-md: 12px;
+    --spacing-lg: 16px;
+    --spacing-xl: 24px;
+    
+    /* Smaller UI elements on mobile */
+    --header-height: 40px;
+    --back-button-size: 40px;
+    --navbar-height: 40px;
+    
+    /* Smaller window padding */
+    --window-padding: 12px;
+  }
+}
 
+/* Very small screens */
+@media (max-width: 480px) {
+  :root {
+    /* Further reduce spacing */
+    --spacing-sm: 6px;
+    --spacing-md: 8px;
+    --spacing-lg: 12px;
+    
+    /* Even smaller UI elements */
+    --header-height: 36px;
+    --back-button-size: 36px;
+    --navbar-height: 36px;
+    
+    /* Minimal window padding */
+    --window-padding: 8px;
+  }
+}
 
+/* Base styles for all frosted UI elements */
+.frosted-ui {
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
 
+/* Standardized window styles */
+.frosted-window {
+  max-width: calc(100vw - var(--spacing-md) * 2);
+  max-height: calc(100vh - var(--spacing-md) * 2);
+  overflow: auto;
+  padding: var(--window-padding);
+}
+
+/* Mobile window positioning */
+@media (max-width: 768px) {
+  .frosted-window {
+    width: calc(100vw * var(--mobile-width-ratio)) !important;
+    left: calc((100vw - (100vw * var(--mobile-width-ratio))) / 2) !important;
+    bottom: var(--spacing-sm) !important;
+    top: auto !important;
+    margin-bottom: var(--spacing-sm) !important;
+  }
+  
+  /* Header positioning */
+  [data-frosted-box="header"] {
+    top: var(--spacing-sm) !important;
+    left: calc(var(--back-button-size) + var(--spacing-sm) * 2) !important;
+    height: var(--header-height) !important;
+    max-width: calc(100vw - var(--back-button-size) - var(--spacing-sm) * 4 - 80px) !important;
+  }
+  
+  /* Back button positioning */
+  [data-frosted-box="backbutton"],
+  [data-frosted-box="back-button"] {
+    top: var(--spacing-sm) !important;
+    left: var(--spacing-sm) !important;
+    height: var(--back-button-size) !important;
+    width: var(--back-button-size) !important;
+  }
+  
+  /* Navbar positioning */
+  [data-frosted-box="navbar"] {
+    top: var(--spacing-sm) !important;
+    right: var(--spacing-sm) !important;
+    height: var(--navbar-height) !important;
+  }
+}
+
+/* Very small screens */
+@media (max-width: 480px) {
+  .frosted-window {
+    width: calc(100vw * var(--small-width-ratio)) !important;
+    left: calc((100vw - (100vw * var(--small-width-ratio))) / 2) !important;
+  }
+}
 
 
 

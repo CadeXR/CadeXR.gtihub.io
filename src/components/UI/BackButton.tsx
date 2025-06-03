@@ -10,10 +10,10 @@ export default function BackButton() {
   const [isActive, setIsActive] = useState(false)
   const buttonRef = useRef<HTMLButtonElement>(null)
 
-  const containerStyle = {
-    position: 'fixed' as const,
-    top: 'var(--safe-margin-sm)',
-    left: 'var(--safe-margin-sm)',
+  const containerStyle: React.CSSProperties = {
+    position: 'fixed',
+    top: 'var(--spacing-sm)',
+    left: 'var(--spacing-sm)',
     zIndex: 50,
     padding: '0.5rem',
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
@@ -21,8 +21,8 @@ export default function BackButton() {
     WebkitBackdropFilter: 'blur(10px)',
     borderRadius: '0.75rem',
     border: '1px solid rgba(255, 255, 255, 0.2)',
-    height: '48px',
-    width: '48px',
+    height: 'var(--back-button-size)',
+    width: 'var(--back-button-size)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -129,6 +129,7 @@ export default function BackButton() {
     </div>
   )
 }
+
 
 
 

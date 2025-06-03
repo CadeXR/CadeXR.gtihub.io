@@ -83,12 +83,10 @@ export default function NavBar({
 
   // Calculate navbar width based on screen size
   const getNavbarStyle = () => {
-    const safeMargin = isVerySmall ? 8 : 16;
-    
     if (!isMobile) {
       // Desktop style
       return {
-        position: 'fixed',
+        position: 'fixed' as const,
         top: 'var(--safe-margin-md)',
         right: 'var(--safe-margin-md)',
         zIndex: 50,
@@ -101,17 +99,18 @@ export default function NavBar({
         WebkitBackdropFilter: 'blur(10px)',
         borderRadius: '0.75rem',
         border: '1px solid rgba(255, 255, 255, 0.2)',
-        height: '48px',
+        height: 'var(--navbar-height-desktop)',
         alignItems: 'center',
       } as const;
     } else {
       // Mobile style - calculate width to fit between back button and right edge
-      const backButtonWidth = 48; // Width of back button
+      const backButtonWidth = isVerySmall ? 40 : 48; // Width of back button
+      const safeMargin = isVerySmall ? 8 : 16;
       const screenWidth = window.innerWidth;
       const availableWidth = screenWidth - backButtonWidth - (safeMargin * 3);
       
       return {
-        position: 'fixed',
+        position: 'fixed' as const,
         top: 'var(--safe-margin-sm)',
         right: 'var(--safe-margin-sm)',
         zIndex: 50,
@@ -124,7 +123,7 @@ export default function NavBar({
         WebkitBackdropFilter: 'blur(10px)',
         borderRadius: '0.75rem',
         border: '1px solid rgba(255, 255, 255, 0.2)',
-        height: '40px',
+        height: 'var(--navbar-height-mobile)',
         alignItems: 'center',
         maxWidth: `${availableWidth}px`,
         overflowX: 'auto',
