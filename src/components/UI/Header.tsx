@@ -98,9 +98,9 @@ export default function Header() {
   if (!isVisible) return null
 
   // Responsive header style
-  const getHeaderStyle = () => {
+  const getHeaderStyle = (): React.CSSProperties => {
     return {
-      position: 'fixed',
+      position: 'fixed' as const,
       top: 'var(--safe-margin-sm)',
       left: isVerySmall 
         ? 'calc(40px + var(--safe-margin-sm) * 2)' 
@@ -145,6 +145,7 @@ export default function Header() {
     </div>
   )
 }
+
 
 
 
