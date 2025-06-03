@@ -225,16 +225,37 @@ body:has(.scene-transition-shrink) {
   -webkit-backdrop-filter: blur(12px);
 }
 
-/* Safe area margins to prevent content from being cut off */
+/* Safe area margins to prevent content from being cut off or hidden behind headers */
 :root {
-  --safe-margin: 8px;
+  --header-safe-area-top: 56px; /* Header height + margin */
+  --safe-margin-bottom: 16px;
+  --safe-margin-sides: 16px;
 }
 
-/* Ensure windows scale properly on all screen sizes */
+@media (max-width: 768px) {
+  :root {
+    --header-safe-area-top: 48px; /* Smaller header on mobile */
+    --safe-margin-bottom: 8px;
+    --safe-margin-sides: 8px;
+  }
+}
+
+/* Ensure windows respect safe areas */
 .frosted-window {
-  max-width: calc(100vw - var(--safe-margin) * 2) !important;
-  max-height: calc(100vh - var(--safe-margin) * 2) !important;
+  max-width: calc(100vw - var(--safe-margin-sides) * 2) !important;
+  max-height: calc(100vh - var(--header-safe-area-top) - var(--safe-margin-bottom)) !important;
   overflow: auto !important;
+}
+
+/* Prevent windows from being positioned behind headers */
+.frosted-window {
+  min-top: var(--header-safe-area-top) !important;
+}
+
+/* Ensure content is scrollable when window is tall */
+.window-content {
+  max-height: calc(100vh - var(--header-safe-area-top) - var(--safe-margin-bottom) - 60px); /* 60px for window header and padding */
+  overflow-y: auto;
 }
 
 /* Responsive scaling for very small screens */
@@ -461,6 +482,7 @@ body:has(.scene-transition-shrink) {
     left: auto !important; /* Let the component handle positioning */
   }
 }
+
 
 
 

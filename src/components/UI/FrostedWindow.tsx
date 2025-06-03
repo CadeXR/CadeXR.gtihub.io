@@ -185,13 +185,20 @@ export default function FrostedWindow({
     const viewportWidth = typeof window !== 'undefined' ? window.innerWidth : 1200;
     const viewportHeight = typeof window !== 'undefined' ? window.innerHeight : 800;
     
-    // Calculate available space with safe margins
-    const safeMargin = isMobile ? 8 : 16;
-    const availableWidth = viewportWidth - (2 * safeMargin);
-    const availableHeight = viewportHeight - (2 * safeMargin);
+    // Define safe areas to avoid headers and other UI elements
+    const headerHeight = isMobile ? 40 : 48; // Height of header
+    const topSafeMargin = isMobile ? 8 + headerHeight : 16 + headerHeight;
+    const bottomSafeMargin = isMobile ? 8 : 16;
+    const sideSafeMargin = isMobile ? 8 : 16;
     
-    // Get window width from style or use default
+    // Calculate available space with safe margins
+    const availableWidth = viewportWidth - (2 * sideSafeMargin);
+    const availableHeight = viewportHeight - topSafeMargin - bottomSafeMargin;
+    
+    // Get window dimensions from style or use defaults
     let windowWidth = 400; // Default width
+    let windowHeight = 400; // Default height
+    
     if (style?.width) {
       if (typeof style.width === 'string') {
         windowWidth = parseInt(style.width);
@@ -200,8 +207,27 @@ export default function FrostedWindow({
       }
     }
     
-    // Ensure window width never exceeds available space
-    const finalWidth = Math.min(windowWidth, availableWidth);
+    if (style?.height && style.height !== 'auto') {
+      if (typeof style.height === 'string') {
+        windowHeight = parseInt(style.height);
+      } else if (typeof style.height === 'number') {
+        windowHeight = style.height;
+      }
+    }
+    
+    // Calculate scaling factor if window is too large
+    const widthScaleFactor = availableWidth / windowWidth;
+    const heightScaleFactor = availableHeight / windowHeight;
+    const scaleFactor = Math.min(widthScaleFactor, heightScaleFactor, 1);
+    
+    // Apply scaling if needed
+    const finalWidth = Math.min(windowWidth * scaleFactor, availableWidth);
+    const finalHeight = style?.height === 'auto' 
+      ? 'auto' 
+      : `${Math.min(windowHeight * scaleFactor, availableHeight)}px`;
+    
+    // Calculate horizontal centering
+    const leftPosition = (viewportWidth - finalWidth) / 2;
     
     // Base styles common to all screen sizes
     const baseStyles: React.CSSProperties = {
@@ -218,31 +244,158 @@ export default function FrostedWindow({
       maxWidth: `${availableWidth}px`,
       maxHeight: `${availableHeight}px`,
       ...style,
-      // Override any width from style with our calculated width
+      // Override dimensions with our calculated values
       width: `${finalWidth}px`,
+      height: finalHeight,
     };
-
-    // Calculate horizontal centering
-    const leftPosition = (viewportWidth - finalWidth) / 2;
 
     // Mobile-specific styles
     if (isMobile) {
       return {
         ...baseStyles,
-        bottom: 'var(--spacing-sm)',
+        bottom: `${bottomSafeMargin}px`,
         top: 'auto',
         left: `${leftPosition}px`,
         position: 'fixed',
       };
     }
 
-    // Desktop styles
+    // Desktop styles - ensure window doesn't go behind header
     return {
       ...baseStyles,
       minWidth: Math.min(300, availableWidth),
       position: 'absolute',
     };
   };
+
+  // Function to ensure window is within viewport bounds and not behind headers
+  const ensureWindowSafePlacement = useCallback(() => {
+    if (!defaultPosition || !isOpen) return;
+    
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    
+    // Define safe areas
+    const headerHeight = isMobile ? 40 : 48;
+    const topSafeMargin = isMobile ? 8 + headerHeight : 16 + headerHeight;
+    const bottomSafeMargin = isMobile ? 8 : 16;
+    const sideSafeMargin = isMobile ? 8 : 16;
+    
+    // Get window dimensions
+    const windowElement = document.getElementById(id || '');
+    if (!windowElement) return;
+    
+    const rect = windowElement.getBoundingClientRect();
+    const windowWidth = rect.width;
+    const windowHeight = rect.height;
+    
+    // Calculate safe positions
+    let safeX = x.get();
+    let safeY = y.get();
+    
+    // Ensure window doesn't go off right edge
+    if (safeX + windowWidth > viewportWidth - sideSafeMargin) {
+      safeX = viewportWidth - windowWidth - sideSafeMargin;
+    }
+    
+    // Ensure window doesn't go off left edge
+    if (safeX < sideSafeMargin) {
+      safeX = sideSafeMargin;
+    }
+    
+    // Ensure window doesn't go off bottom edge
+    if (safeY + windowHeight > viewportHeight - bottomSafeMargin) {
+      safeY = viewportHeight - windowHeight - bottomSafeMargin;
+    }
+    
+    // Ensure window doesn't go behind header
+    if (safeY < topSafeMargin) {
+      safeY = topSafeMargin;
+    }
+    
+    // Update position if needed
+    if (safeX !== x.get() || safeY !== y.get()) {
+      x.set(safeX);
+      y.set(safeY);
+    }
+  }, [defaultPosition, id, isOpen, isMobile, x, y]);
+
+  // Apply safe placement when window opens or resizes
+  useEffect(() => {
+    if (isOpen) {
+      // Short delay to ensure the window is rendered
+      const timer = setTimeout(() => {
+        ensureWindowSafePlacement();
+      }, 100);
+      
+      window.addEventListener('resize', ensureWindowSafePlacement);
+      
+      return () => {
+        clearTimeout(timer);
+        window.removeEventListener('resize', ensureWindowSafePlacement);
+      };
+    }
+  }, [isOpen, ensureWindowSafePlacement]);
+
+  // Initialize position state with centered coordinates
+  useEffect(() => {
+    if (!defaultPosition || !isOpen) return;
+    
+    // Get viewport dimensions
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    
+    // Define safe areas
+    const headerHeight = isMobile ? 40 : 48;
+    const topSafeMargin = isMobile ? 8 + headerHeight : 16 + headerHeight;
+    const bottomSafeMargin = isMobile ? 8 : 16;
+    
+    // Get window dimensions (estimate if not rendered yet)
+    let windowWidth = 400; // Default estimate
+    let windowHeight = 400; // Default estimate
+    
+    // Try to get actual dimensions if window is rendered
+    const windowElement = document.getElementById(id || '');
+    if (windowElement) {
+      const rect = windowElement.getBoundingClientRect();
+      windowWidth = rect.width;
+      windowHeight = rect.height;
+    } else {
+      // Estimate from style props
+      if (style?.width) {
+        if (typeof style.width === 'string') {
+          windowWidth = parseInt(style.width);
+        } else if (typeof style.width === 'number') {
+          windowWidth = style.width;
+        }
+      }
+      
+      if (style?.height && style.height !== 'auto') {
+        if (typeof style.height === 'string') {
+          windowHeight = parseInt(style.height);
+        } else if (typeof style.height === 'number') {
+          windowHeight = style.height;
+        }
+      }
+    }
+    
+    // Calculate center position
+    const centerX = (viewportWidth - windowWidth) / 2;
+    const centerY = (viewportHeight - windowHeight) / 2;
+    
+    // Ensure center position respects safe areas
+    const safeX = Math.max(centerX, 16);
+    const safeY = Math.max(centerY, topSafeMargin);
+    
+    // Set initial position to center
+    x.set(safeX);
+    y.set(safeY);
+    
+    // Schedule a check after rendering to ensure window is properly positioned
+    setTimeout(() => {
+      ensureWindowSafePlacement();
+    }, 100);
+  }, [defaultPosition, isOpen, id, isMobile, style, x, y, ensureWindowSafePlacement]);
 
   return (
     <AnimatePresence>

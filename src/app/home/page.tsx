@@ -17,22 +17,43 @@ const NAVBAR_WIDTH = 64;
 const WALL_MARGIN = '1rem'; // Match the margin used in NavBar/Header components
 const SPACING = 16; // Spacing between windows
 
+// Define media query functions at the top level
+const getIsMobile = () => {
+  if (typeof window === 'undefined') return false;
+  return window.innerWidth <= 768;
+};
+
+const getIsVerySmall = () => {
+  if (typeof window === 'undefined') return false;
+  return window.innerWidth <= 480;
+};
+
 const calculateSafePosition = (desiredX: number, desiredY: number, windowWidth: number, windowHeight: number) => {
   if (typeof window === 'undefined') return { x: MARGIN, y: MARGIN };
 
   const viewportWidth = window.innerWidth;
   const viewportHeight = window.innerHeight;
+  
+  // Use functions instead of variables
+  const isMobile = getIsMobile();
+  const isVerySmall = getIsVerySmall();
+  
+  // Define safe areas
+  const headerHeight = isMobile ? 40 : 48;
+  const topSafeMargin = isMobile ? 8 + headerHeight : 16 + headerHeight;
+  const bottomSafeMargin = isMobile ? 8 : 16;
+  const sideSafeMargin = isMobile ? 8 : 16;
 
   // Ensure x position stays within margins
   const safeX = Math.min(
-    Math.max(MARGIN, desiredX), 
-    viewportWidth - windowWidth - MARGIN
+    Math.max(sideSafeMargin, desiredX), 
+    viewportWidth - windowWidth - sideSafeMargin
   );
   
-  // Ensure y position stays within margins
+  // Ensure y position stays within margins and respects header
   const safeY = Math.min(
-    Math.max(MARGIN, desiredY), 
-    viewportHeight - windowHeight - MARGIN
+    Math.max(topSafeMargin, desiredY), 
+    viewportHeight - windowHeight - bottomSafeMargin
   );
 
   return { x: safeX, y: safeY };
@@ -55,8 +76,8 @@ const getWindowDimensions = () => {
   };
   
   const viewportWidth = window.innerWidth;
-  const isMobile = viewportWidth <= 768;
-  const isVerySmall = viewportWidth <= 480;
+  const isMobile = getIsMobile();
+  const isVerySmall = getIsVerySmall();
   
   // Scale down window sizes as screen gets smaller
   const scaleFactor = isVerySmall ? 0.95 : (isMobile ? 0.9 : 1);
@@ -98,21 +119,27 @@ export default function HomePage() {
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
     
-    // On mobile, position windows at the bottom
-    if (isMobile) {
-      return { 
-        x: isVerySmall ? 8 : 16, 
-        y: viewportHeight - WINDOW_DIMENSIONS[windowType].height - safeMargin 
-      };
-    }
+    // Define safe areas
+    const headerHeight = isMobile ? 40 : 48;
+    const topSafeMargin = isMobile ? 8 + headerHeight : 16 + headerHeight;
+    const bottomSafeMargin = isMobile ? 8 : 16;
     
-    // On desktop, center windows
+    // Get window dimensions
     const windowWidth = WINDOW_DIMENSIONS[windowType].width;
     const windowHeight = WINDOW_DIMENSIONS[windowType].height;
     
+    // On mobile, position windows at the bottom but centered horizontally
+    if (isMobile) {
+      return { 
+        x: Math.max((viewportWidth - windowWidth) / 2, safeMargin), 
+        y: Math.min(viewportHeight - windowHeight - safeMargin, viewportHeight - windowHeight - bottomSafeMargin)
+      };
+    }
+    
+    // On desktop, center windows both horizontally and vertically
     return { 
-      x: (viewportWidth - windowWidth) / 2, 
-      y: (viewportHeight - windowHeight) / 2 
+      x: Math.max((viewportWidth - windowWidth) / 2, safeMargin), 
+      y: Math.max((viewportHeight - windowHeight) / 2, topSafeMargin)
     };
   };
   
@@ -146,8 +173,18 @@ export default function HomePage() {
       
       if (windowElement) {
         const rect = windowElement.getBoundingClientRect();
-        const centerX = (window.innerWidth - rect.width) / 2;
-        const centerY = (window.innerHeight - rect.height) / 2;
+        
+        // Define safe areas
+        const headerHeight = isMobile ? 40 : 48;
+        const topSafeMargin = isMobile ? 8 + headerHeight : 16 + headerHeight;
+        const bottomSafeMargin = isMobile ? 8 : 16;
+        const safeMargin = isVerySmall ? 8 : (isMobile ? 12 : 16);
+        
+        // Calculate center position
+        const centerX = Math.max((window.innerWidth - rect.width) / 2, safeMargin);
+        const centerY = isMobile 
+          ? Math.min(window.innerHeight - rect.height - safeMargin, window.innerHeight - rect.height - bottomSafeMargin)
+          : Math.max((window.innerHeight - rect.height) / 2, topSafeMargin);
         
         console.log(`Force centering ${windowType}:`, { centerX, centerY });
         
@@ -348,11 +385,15 @@ export default function HomePage() {
             style={{
               width: 400, // Fixed width in pixels
               height: 'auto',
-              maxHeight: '80vh',
+              maxHeight: typeof window !== 'undefined' ? 
+                `${window.innerHeight - (isMobile ? 96 : 120)}px` : // Dynamic max height based on viewport
+                '80vh',
               overflowY: 'auto',
             }}
           >
-            <AboutContent />
+            <div className="window-content overflow-y-auto">
+              <AboutContent />
+            </div>
           </FrostedWindow>
 
           <FrostedWindow 
