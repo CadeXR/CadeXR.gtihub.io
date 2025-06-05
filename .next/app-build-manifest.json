@@ -11,6 +11,42 @@
       "static/chunks/main-app.js",
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
+    ],
+    "/projects/hex-vr/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/projects/hex-vr/page.css",
+      "static/chunks/app/projects/hex-vr/page.js"
+    ],
+    "/projects/battlegrounds/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/projects/battlegrounds/page.css",
+      "static/chunks/app/projects/battlegrounds/page.js"
+    ],
+    "/projects/intentional-locomotion/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/projects/intentional-locomotion/page.css",
+      "static/chunks/app/projects/intentional-locomotion/page.js"
+    ],
+    "/projects/deskbuddy/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/projects/deskbuddy/page.css",
+      "static/chunks/app/projects/deskbuddy/page.js"
+    ],
+    "/projects/lightless/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/projects/lightless/page.css",
+      "static/chunks/app/projects/lightless/page.js"
+    ],
+    "/projects/personifyai/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/projects/personifyai/page.css",
+      "static/chunks/app/projects/personifyai/page.js"
     ]
   }
 }

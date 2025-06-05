@@ -7,7 +7,7 @@ export default function FlexVRWellnessPage() {
   return (
     <PortfolioPageLayout>
       <div className="text-white">
-        <h1 className="text-4xl font-bold mb-8">FlexVR Wellness - MIT Reality Hack 2025</h1>
+        <h1 className="text-4xl font-bold mb-8">FlexVR Wellness - MIT Reality Hack 2024</h1>
         
         <section className="mb-12">
           <h2 className="text-2xl font-semibold mb-4">Synopsis</h2>
