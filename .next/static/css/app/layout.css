@@ -859,7 +859,7 @@ body:has(.scene-transition-shrink) {
 /* Mobile-specific window sizing - more balanced approach */
 @media (max-width: 768px) {
   :root {
-    --window-max-height: 95vh; /* Increased to 95% of viewport height */
+    --window-max-height: 90vh; /* Reduced to 90% of viewport height */
   }
   
   .frosted-window {
@@ -871,7 +871,7 @@ body:has(.scene-transition-shrink) {
     margin-left: 0 !important;
     margin-right: 0 !important;
     position: fixed !important;
-    /* Allow much taller windows on mobile */
+    /* Allow taller windows on mobile but avoid navbar clipping */
     max-height: var(--window-max-height) !important;
     height: auto !important;
     overflow-y: auto !important;
@@ -989,6 +989,7 @@ body:has(.scene-transition-shrink) {
     max-height: calc(85vh - 50px) !important; /* 50px for header and padding on mobile */
   }
 }
+
 
 
 
