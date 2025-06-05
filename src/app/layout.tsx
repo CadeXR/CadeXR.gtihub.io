@@ -43,11 +43,14 @@ export default function RootLayout({
         <title>Cade Gilbert - XR Design, XR Software Dev, Game Design, and AI</title>
         <meta name="description" content="Portfolio of Cade Gilbert, showcasing work in XR Design, XR Software Development, Game Design, and AI." />
         <link rel="icon" href="/media/VR_Knight_Transparent.ico" />
+        {/* Add canonical URL if needed */}
+        <link rel="canonical" href="https://cadedev.com" />
       </head>
       <body>{children}</body>
     </html>
   )
 }
+
 
 
 
