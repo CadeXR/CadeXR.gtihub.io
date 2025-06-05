@@ -16,7 +16,7 @@ interface PortfolioWindowProps {
 
 const projects = [
   { name: 'Battlegrounds', path: '/projects/battlegrounds' },
-  { name: 'FlexVR Wellness - RH25', path: '/projects/flexvr-wellness' },
+  { name: 'FlexVR Wellness - RH24', path: '/projects/flexvr-wellness' },
   { name: 'DeskBuddy - ImmerseGT', path: '/projects/deskbuddy' },
   { name: 'Intentional Locomotion - RH25', path: '/projects/intentional-locomotion' },
   { name: 'Hex VR', path: '/projects/hex-vr' },
