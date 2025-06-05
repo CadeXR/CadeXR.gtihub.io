@@ -387,7 +387,7 @@ export default function HomePage() {
             onMove={() => {}} // Disable moving
             className="frosted-window-about"
             style={{
-              width: isMobile ? '90%' : '400px',
+              width: isMobile ? (isVerySmall ? '94vw' : '92vw') : '400px',
               height: 'auto',
               maxHeight: isMobile ? '70vh' : '80vh',
               overflowY: 'auto',
@@ -405,8 +405,8 @@ export default function HomePage() {
             defaultPosition={socialsPosition}
             onMove={() => {}} // Disable moving
             style={{
-              width: isMobile ? '90%' : '350px',
-              minWidth: isMobile ? '90%' : '350px',
+              width: isMobile ? (isVerySmall ? '94vw' : '92vw') : '350px',
+              minWidth: isMobile ? 'unset' : '350px',
             }}
           >
             <SocialContent />

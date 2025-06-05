@@ -510,6 +510,54 @@ export default function FrostedWindow({
     return () => window.removeEventListener('resize', handleResize);
   }, [isOpen, ensurePerfectCentering]);
 
+  // Add a mobile-specific override for window positioning
+  useEffect(() => {
+    if (!isOpen) return;
+    
+    // Force mobile windows to be centered and properly sized
+    const forceMobileLayout = () => {
+      if (!isMobile) return;
+      
+      const windowElement = document.getElementById(id || '');
+      if (!windowElement) return;
+      
+      // Force mobile-specific styles
+      windowElement.style.position = 'fixed';
+      windowElement.style.top = '50%';
+      windowElement.style.left = '50%';
+      windowElement.style.transform = 'translate(-50%, -50%)';
+      
+      // Calculate safe width
+      const viewportWidth = window.innerWidth;
+      const safeWidth = isVerySmall ? 
+        Math.min(viewportWidth * 0.94, viewportWidth - 16) : 
+        Math.min(viewportWidth * 0.92, viewportWidth - 24);
+      
+      // Force width to be safe
+      windowElement.style.width = `${safeWidth}px`;
+      windowElement.style.maxWidth = `${safeWidth}px`;
+      windowElement.style.minWidth = 'unset';
+      
+      // Ensure window is within viewport vertically
+      const rect = windowElement.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      
+      if (rect.height > viewportHeight - 40) {
+        windowElement.style.height = `${viewportHeight - 40}px`;
+        windowElement.style.overflowY = 'auto';
+      }
+    };
+    
+    // Apply immediately and on resize
+    forceMobileLayout();
+    window.addEventListener('resize', forceMobileLayout);
+    
+    // Also apply after a short delay to ensure it works after animations
+    setTimeout(forceMobileLayout, 100);
+    
+    return () => window.removeEventListener('resize', forceMobileLayout);
+  }, [isOpen, id, isMobile, isVerySmall]);
+
   const handleWindowClick = (e: React.MouseEvent) => {
     setIsActive(true);
     // Prevent click from propagating to parent elements
