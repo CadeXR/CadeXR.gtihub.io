@@ -2,7 +2,7 @@
 
 import Scene from '@/components/Background/Scene'
 import FrostedWindow from '@/components/UI/FrostedWindow'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 export default function Home() {
@@ -12,42 +12,11 @@ export default function Home() {
     y: typeof window !== 'undefined' ? window.innerHeight / 2 - 100 : 0 
   })
 
-  useEffect(() => {
-    // Clean up any existing overlays first
-    document.querySelectorAll('.scene-transition-overlay').forEach(el => el.remove())
-    
-    // Create initial white overlay
-    const overlay = document.createElement('div')
-    overlay.className = 'scene-transition-overlay'
-    overlay.style.opacity = '1'
-    document.body.appendChild(overlay)
-
-    // Force reflow
-    overlay.getBoundingClientRect()
-
-    // Fade out the white overlay
-    requestAnimationFrame(() => {
-      overlay.style.opacity = '0'
-      
-      // Remove overlay after animation
-      setTimeout(() => {
-        overlay.remove()
-      }, 3500)
-    })
-  }, [])
+  // Remove the useEffect that creates and fades out the overlay
 
   const handleEnter = () => {
-    const overlay = document.createElement('div')
-    overlay.className = 'scene-transition-overlay'
-    overlay.style.opacity = '0'
-    document.body.appendChild(overlay)
-
-    overlay.getBoundingClientRect()
-    overlay.style.opacity = '1'
-    
-    setTimeout(() => {
-      router.push('/home')
-    }, 3500)
+    // Direct navigation without transition
+    router.push('/home')
   }
 
   return (
@@ -55,7 +24,7 @@ export default function Home() {
       <Scene />
       
       <FrostedWindow
-        id="main-window"
+        id="Welcome!"
         isOpen={true}
         onClose={() => {}}
         defaultPosition={windowPosition}

@@ -1,7 +1,7 @@
 {
-  "/projects/intentional-locomotion/page": "app/projects/intentional-locomotion/page.js",
-  "/projects/deskbuddy/page": "app/projects/deskbuddy/page.js",
-  "/projects/lightless/page": "app/projects/lightless/page.js",
   "/home/page": "app/home/page.js",
-  "/projects/personifyai/page": "app/projects/personifyai/page.js"
+  "/projects/personifyai/page": "app/projects/personifyai/page.js",
+  "/projects/battlegrounds/page": "app/projects/battlegrounds/page.js",
+  "/page": "app/page.js",
+  "/activities/page": "app/activities/page.js"
 }

@@ -195,28 +195,8 @@ export default function NavBar({
       {/* Games button */}
       <button 
         onClick={() => {
-          // Create and append transition overlay
-          const overlay = document.createElement('div')
-          overlay.className = 'scene-transition-grow'
-          document.body.appendChild(overlay)
-
-          const scene = document.querySelector('canvas[data-scene]')
-          scene?.dispatchEvent(new CustomEvent('startTransition', { 
-            detail: { direction: 'grow' } 
-          }))
-
-          setTimeout(() => {
-            router.push('/activities')
-            
-            const exitOverlay = document.createElement('div')
-            exitOverlay.className = 'scene-transition-shrink'
-            document.body.appendChild(exitOverlay)
-            
-            setTimeout(() => {
-              overlay.remove()
-              exitOverlay.remove()
-            }, 500)
-          }, 3500)
+          // Remove transition overlay and directly navigate
+          router.push('/activities')
         }}
         className={conthrax.className}
         style={gamesButtonStyle}

@@ -47,6 +47,17 @@
       "static/chunks/main-app.js",
       "static/css/app/projects/personifyai/page.css",
       "static/chunks/app/projects/personifyai/page.js"
+    ],
+    "/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/page.js"
+    ],
+    "/activities/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/activities/page.css",
+      "static/chunks/app/activities/page.js"
     ]
   }
 }

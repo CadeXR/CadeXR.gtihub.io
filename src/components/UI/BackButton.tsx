@@ -79,36 +79,12 @@ export default function BackButton() {
   }, [updateParticleSystem])
 
   const handleClick = () => {
-    // First transition: fade to white
-    const overlay = document.createElement('div')
-    overlay.className = 'scene-transition-grow'  // Start transparent and grow to white
-    document.body.appendChild(overlay)
-
-    const scene = document.querySelector('canvas[data-scene]')
-    scene?.dispatchEvent(new CustomEvent('startTransition', { 
-      detail: { direction: 'grow' } 
-    }))
-
-    // Wait for fade to white to complete, then navigate
-    setTimeout(() => {
-      // If we're on /home/, go to root ('/'), otherwise go to /home/
-      if (pathname === '/home/') {  // Updated to match exact path
-        router.push('/')  // This will go to the landing page
-      } else {
-        router.push('/home/')  // Updated to include trailing slash
-      }
-      
-      // After navigation, fade from white
-      const exitOverlay = document.createElement('div')
-      exitOverlay.className = 'scene-transition-shrink'  // Start white and fade out
-      document.body.appendChild(exitOverlay)
-      
-      // Remove overlays after transition completes
-      setTimeout(() => {
-        overlay.remove()
-        exitOverlay.remove()
-      }, 500)
-    }, 3500)  // Match this with your CSS transition duration
+    // Direct navigation without any transition
+    if (pathname === '/home/') {
+      router.push('/')
+    } else {
+      router.push('/home/')
+    }
   }
 
   return (
@@ -132,6 +108,8 @@ export default function BackButton() {
     </div>
   )
 }
+
+
 
 
 

@@ -171,16 +171,28 @@ html, body {
     opacity: 0;
   }
   to {
-    opacity: 1;
+    opacity: 0;
   }
 }
 
 @keyframes fadeOut {
   from {
-    opacity: 1;
+    opacity: 0;
   }
   to {
     opacity: 0;
+  }
+}
+
+@keyframes sceneTransitionGrow {
+  0%, 100% {
+    filter: brightness(1);
+  }
+}
+
+@keyframes sceneTransitionShrink {
+  0%, 100% {
+    filter: brightness(1);
   }
 }
 
@@ -193,30 +205,6 @@ body {
 body:has(.scene-transition-grow),
 body:has(.scene-transition-shrink) {
   background: black !important;
-}
-
-@keyframes sceneTransitionGrow {
-  0% {
-    filter: brightness(1);
-  }
-  40% {
-    filter: brightness(1.5);
-  }
-  45%, 100% {
-    filter: brightness(2);
-  }
-}
-
-@keyframes sceneTransitionShrink {
-  0%, 55% {
-    filter: brightness(2);
-  }
-  60% {
-    filter: brightness(1.5);
-  }
-  100% {
-    filter: brightness(1);
-  }
 }
 
 /* Add these styles to your globals.css */
@@ -963,6 +951,7 @@ body:has(.scene-transition-shrink) {
     transform: translate(-50%, -50%) !important;
   }
 }
+
 
 
 

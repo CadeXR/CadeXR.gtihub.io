@@ -13,20 +13,30 @@ interface PortfolioPageLayoutProps {
   children: React.ReactNode
 }
 
+// Update buttonStyle to match the main page buttons
 const buttonStyle = {
-  backgroundColor: 'rgba(255, 255, 255, 0.1)',
+  backgroundColor: 'rgba(255, 255, 255, 0.2)',
   color: 'white',
-  width: '80px', // Increased from 48px
-  height: '48px',
-  borderRadius: '0.75rem',
+  padding: '0.75rem 1.5rem',
+  borderRadius: '0.5rem',
   cursor: 'pointer',
-  border: '1px solid rgba(255, 255, 255, 0.2)',
-  fontSize: '0.875rem',
+  border: '1px solid rgba(255, 255, 255, 0.4)',
+  fontSize: '1rem',
   transition: 'all 0.2s ease',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
+  whiteSpace: 'nowrap',
+  height: '36px',
 }
+
+// For mobile responsiveness
+const getButtonStyle = (isMobile: boolean, isVerySmall: boolean) => ({
+  ...buttonStyle,
+  padding: isVerySmall ? '0.4rem 0.6rem' : (isMobile ? '0.5rem 0.75rem' : '0.75rem 1.5rem'),
+  fontSize: isVerySmall ? '0.7rem' : (isMobile ? '0.75rem' : '1rem'),
+  height: isVerySmall ? '28px' : (isMobile ? '32px' : '36px'),
+})
 
 export default function PortfolioPageLayout({ children }: PortfolioPageLayoutProps) {
   const router = useRouter()
@@ -38,6 +48,9 @@ export default function PortfolioPageLayout({ children }: PortfolioPageLayoutPro
   // Use react-responsive for consistent media queries
   const isMobile = useMediaQuery({ maxWidth: 768 });
   const isVerySmall = useMediaQuery({ maxWidth: 480 });
+  
+  // Get responsive button styles
+  const responsiveButtonStyle = getButtonStyle(isMobile, isVerySmall);
 
   const updateBackButtonParticles = useCallback(() => {
     const buttonElement = document.querySelector('[data-frosted-box="back-button"]')
@@ -92,29 +105,8 @@ export default function PortfolioPageLayout({ children }: PortfolioPageLayoutPro
   }, [isNavButtonActive, updateNavButtonParticles])
 
   const handleBack = () => {
-    // Create and append the overlay
-    const overlay = document.createElement('div')
-    overlay.className = 'scene-transition-overlay'
-    overlay.style.opacity = '0'
-    document.body.appendChild(overlay)
-
-    // Force reflow
-    overlay.getBoundingClientRect()
-    overlay.style.opacity = '1'
-    
-    // First trigger the shrink transition
-    const scene = document.querySelector('canvas[data-scene]')
-    if (scene) {
-      const transitionEvent = new CustomEvent('startTransition', {
-        detail: { direction: 'shrink' }
-      })
-      scene.dispatchEvent(transitionEvent)
-    }
-    
-    // Wait for the screen to go completely white before navigating
-    setTimeout(() => {
-      router.push('/home')
-    }, 1750) // Half of the full transition time to ensure we're at peak white
+    // Remove transition overlay and directly navigate
+    router.push('/home')
   }
 
   // Center all windows by default with responsive sizing
@@ -175,33 +167,7 @@ export default function PortfolioPageLayout({ children }: PortfolioPageLayoutPro
   }, [isMobile, isVerySmall]);
 
   useEffect(() => {
-    // Clean up any existing overlays first
-    document.querySelectorAll('.scene-transition-overlay').forEach(el => el.remove())
-
-    // Create initial white overlay
-    const overlay = document.createElement('div')
-    overlay.className = 'scene-transition-overlay'
-    overlay.style.opacity = '1' // Start fully opaque
-    document.body.appendChild(overlay)
-
-    // Force reflow
-    overlay.getBoundingClientRect()
-
-    // Fade out the white overlay after a brief delay
-    requestAnimationFrame(() => {
-      setTimeout(() => {
-        overlay.style.opacity = '0'
-        
-        // Remove overlay after animation completes
-        setTimeout(() => {
-          overlay.remove()
-        }, 3500) // Match the duration in globals.css
-      }, 100) // Small delay to ensure the page is ready
-    })
-
-    return () => {
-      overlay.remove()
-    }
+    // Remove transition overlay code - no longer needed
   }, [])
 
   const ContentWithStyledLinks = ({ children }: { children: React.ReactNode }) => {
@@ -295,7 +261,7 @@ export default function PortfolioPageLayout({ children }: PortfolioPageLayoutPro
           top: 'var(--spacing-sm)',
           left: 'var(--spacing-sm)',
           zIndex: 50,
-          padding: '0.5rem',
+          padding: isVerySmall ? '0.25rem' : '0.5rem',
           backgroundColor: 'rgba(255, 255, 255, 0.1)',
           backdropFilter: 'blur(10px)',
           WebkitBackdropFilter: 'blur(10px)',
@@ -311,12 +277,25 @@ export default function PortfolioPageLayout({ children }: PortfolioPageLayoutPro
         <button 
           onClick={handleBack}
           className={conthrax.className}
-          style={buttonStyle}
+          style={{
+            backgroundColor: 'rgba(255, 255, 255, 0.2)',
+            color: 'white',
+            width: isVerySmall ? '32px' : '40px',
+            height: isVerySmall ? '32px' : '40px',
+            borderRadius: '0.5rem',
+            cursor: 'pointer',
+            border: '1px solid rgba(255, 255, 255, 0.4)',
+            fontSize: isVerySmall ? '1rem' : '1.25rem',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            transition: 'all 0.2s ease',
+          }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)'
+            e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.3)'
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)'
+            e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)'
           }}
         >
           ←
@@ -349,12 +328,12 @@ export default function PortfolioPageLayout({ children }: PortfolioPageLayoutPro
         <button 
           onClick={() => setIsLinksOpen(true)}
           className={conthrax.className}
-          style={buttonStyle}
+          style={responsiveButtonStyle}
           onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)'
+            e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.3)'
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)'
+            e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)'
           }}
         >
           Links
@@ -403,6 +382,12 @@ export default function PortfolioPageLayout({ children }: PortfolioPageLayoutPro
     </main>
   )
 }
+
+
+
+
+
+
 
 
 

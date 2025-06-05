@@ -247,33 +247,7 @@ export default function HomePage() {
   }, [isAboutOpen, isSocialsOpen, isPortfolioOpen, portfolioPosition, aboutPosition, socialsPosition])
 
   useEffect(() => {
-    // Clean up any existing overlays first
-    document.querySelectorAll('.scene-transition-overlay').forEach(el => el.remove())
-
-    // Create initial white overlay
-    const overlay = document.createElement('div')
-    overlay.className = 'scene-transition-overlay'
-    overlay.style.opacity = '1'
-    document.body.appendChild(overlay)
-
-    // Force reflow
-    overlay.getBoundingClientRect()
-
-    // Fade out the white overlay
-    requestAnimationFrame(() => {
-      overlay.style.opacity = '0'
-      
-      // Remove overlay after animation
-      const timeoutId = setTimeout(() => {
-        overlay.remove()
-      }, 3500)
-
-      // Cleanup function
-      return () => {
-        clearTimeout(timeoutId)
-        overlay.remove()
-      }
-    })
+    // Remove transition overlay code - no longer needed
   }, [])
 
   // Handle window movement (we'll keep this for reference but disable actual movement)

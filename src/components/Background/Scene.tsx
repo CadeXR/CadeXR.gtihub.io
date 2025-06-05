@@ -446,30 +446,13 @@ export default function Scene() {
     animationFrameIdRef.current = requestAnimationFrame(animate)
   }, [updateParticles, updateIndependentParticles])
 
-  // Handle transitions
+  // Handle transitions - simplified to do nothing
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
 
     const handleTransition = (event: CustomEvent) => {
-      const direction = event.detail.direction
-      isTransitioningRef.current = true
-      transitionStartTimeRef.current = performance.now()
-      transitionDirectionRef.current = direction === 'grow' ? 'in' : 'out'
-
-      // Remove any existing transition overlays
-      document.querySelectorAll('.scene-transition-grow, .scene-transition-shrink')
-        .forEach(el => el.remove())
-
-      // Create and append transition overlay
-      const overlay = document.createElement('div')
-      overlay.className = `scene-transition-${direction}`
-      document.body.appendChild(overlay)
-
-      // Remove overlay after animation
-      setTimeout(() => {
-        overlay.remove()
-      }, TRANSITION_DURATION)
+      // Do nothing - transitions removed
     }
 
     canvas.addEventListener('startTransition', handleTransition as EventListener)

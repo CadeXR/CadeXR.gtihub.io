@@ -50,31 +50,8 @@ export default function PortfolioWindow({
   const router = useRouter()
   
   const handleProjectClick = (path: string) => {
-    // Create and append the overlay
-    const overlay = document.createElement('div')
-    overlay.className = 'scene-transition-overlay'
-    overlay.style.opacity = '0'
-    document.body.appendChild(overlay)
-
-    // Force reflow
-    overlay.getBoundingClientRect()
-    
-    // Fade to white
-    overlay.style.opacity = '1'
-    
-    // First trigger the grow transition (particles to white)
-    const scene = document.querySelector('canvas[data-scene]')
-    if (scene) {
-      const transitionEvent = new CustomEvent('startTransition', {
-        detail: { direction: 'grow' }
-      })
-      scene.dispatchEvent(transitionEvent)
-    }
-    
-    // Navigate after transition starts
-    setTimeout(() => {
-      router.push(path)
-    }, 1500) // Shorter delay to ensure smooth transition
+    // Remove transition overlay and directly navigate
+    router.push(path)
   }
   
   return (
@@ -131,6 +108,7 @@ export default function PortfolioWindow({
     </FrostedWindow>
   )
 }
+
 
 
 
