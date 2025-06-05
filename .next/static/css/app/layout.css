@@ -859,7 +859,7 @@ body:has(.scene-transition-shrink) {
 /* Mobile-specific window sizing - more balanced approach */
 @media (max-width: 768px) {
   :root {
-    --window-max-height: 90vh; /* Reduced to 90% of viewport height */
+    --window-max-height: 80vh; /* Reduced to 80% of viewport height */
   }
   
   .frosted-window {
@@ -989,6 +989,8 @@ body:has(.scene-transition-shrink) {
     max-height: calc(85vh - 50px) !important; /* 50px for header and padding on mobile */
   }
 }
+
+
 
 
 

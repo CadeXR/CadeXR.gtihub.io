@@ -514,9 +514,8 @@ export default function FrostedWindow({
       (windowElement as HTMLElement).style.maxWidth = `${safeWidth}px`;
       (windowElement as HTMLElement).style.minWidth = 'unset';
       
-      // CRITICAL: Allow MUCH taller windows on mobile
-      // Use a significantly higher percentage of viewport height
-      const maxHeight = viewportHeight * 0.95; // Increased to 95% of viewport height
+      // Allow taller windows on mobile but avoid navbar clipping
+      const maxHeight = viewportHeight * 0.8; // Reduced to 80% of viewport height
       (windowElement as HTMLElement).style.maxHeight = `${maxHeight}px`;
       (windowElement as HTMLElement).style.height = 'auto';
       (windowElement as HTMLElement).style.overflowY = 'auto';
@@ -695,15 +694,25 @@ export default function FrostedWindow({
           <button
             onClick={onClose}
             style={{
-              backgroundColor: 'transparent',
-              border: 'none',
+              backgroundColor: 'rgba(255, 255, 255, 0.1)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
               color: 'white',
-              fontSize: '1rem',
-              cursor: 'pointer',
-              padding: '0.25rem',
+              width: '24px',
+              height: '24px',
+              borderRadius: '50%',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
+              cursor: 'pointer',
+              fontSize: '1rem',
+              padding: 0,
+              transition: 'all 0.2s ease',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
             }}
           >
             ×
