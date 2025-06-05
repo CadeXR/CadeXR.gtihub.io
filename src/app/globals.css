@@ -255,95 +255,7 @@ body:has(.scene-transition-shrink) {
   overflow-y: auto;
 }
 
-/* Responsive scaling for very small screens */
-@media (max-width: 480px) {
-  .frosted-window {
-    width: calc(var(--small-width-percentage)) !important;
-    left: calc((100% - var(--small-width-percentage)) / 2) !important;
-    padding: var(--window-padding-sm) !important;
-  }
-  
-  /* Adjust font sizes for very small screens */
-  h1 {
-    font-size: 1.5rem !important;
-  }
-  
-  h2 {
-    font-size: 1.25rem !important;
-  }
-  
-  p {
-    font-size: 0.875rem !important;
-  }
-}
-
-/* Standardized mobile styles */
-@media (max-width: 768px) {
-  /* Ensure windows don't get cut off at edges */
-  .frosted-window {
-    bottom: var(--safe-margin-sm) !important;
-    top: auto !important;
-    margin-bottom: var(--safe-margin-sm) !important;
-    border-radius: 0.75rem !important;
-    padding: var(--window-padding-sm) !important;
-  }
-  
-  /* Very small screens */
-  @media (max-width: 480px) {
-    .frosted-window {
-      width: var(--small-width-percentage) !important;
-      left: calc((100% - var(--small-width-percentage)) / 2) !important;
-    }
-  }
-  
-  /* Ensure the navbar respects safe margins */
-  [data-frosted-box="navbar"] {
-    right: var(--safe-margin-sm) !important;
-    top: var(--safe-margin-sm) !important;
-    height: var(--navbar-height-mobile) !important;
-  }
-  
-  /* Ensure back button respects safe margins */
-  [data-frosted-box="backbutton"],
-  [data-frosted-box="back-button"] {
-    top: var(--safe-margin-sm) !important;
-    left: var(--safe-margin-sm) !important;
-    height: var(--back-button-size-mobile) !important;
-    width: var(--back-button-size-mobile) !important;
-  }
-  
-  /* Ensure header respects safe margins and doesn't overlap */
-  [data-frosted-box="header"] {
-    top: var(--safe-margin-sm) !important;
-    left: calc(var(--back-button-size-mobile) + var(--safe-margin-sm) * 2) !important;
-    height: var(--header-height-mobile) !important;
-    max-width: calc(100vw - var(--back-button-size-mobile) - var(--safe-margin-sm) * 4 - 80px) !important;
-  }
-}
-
-/* Fix for header and back button alignment */
-[data-frosted-box="header"] {
-  margin-left: 8px;
-}
-
-[data-frosted-box="backbutton"],
-[data-frosted-box="back-button"] {
-  margin-right: 8px;
-}
-
-/* Prevent content from being cut off */
-.overflow-y-auto {
-  max-height: calc(100vh - var(--safe-margin) * 2 - 48px);
-  overflow-y: auto;
-}
-
-/* Ensure windows are visible on all devices with safe margins */
-.frosted-window {
-  max-width: calc(100vw - var(--safe-margin) * 2);
-  max-height: calc(100vh - var(--safe-margin) * 2);
-}
-
-/* Reset and standardize scaling variables */
+/* Responsive scaling for different screen sizes */
 :root {
   /* Base spacing units */
   --spacing-xs: 4px;
@@ -358,12 +270,6 @@ body:has(.scene-transition-shrink) {
   --navbar-height: 48px;
   
   /* Window dimensions */
-  --window-width-standard: 450px;
-  --window-width-small: 350px;
-  --window-height-standard: 400px;
-  --window-height-small: 300px;
-  
-  /* Window padding */
   --window-padding: 16px;
   
   /* Mobile scaling */
@@ -404,6 +310,63 @@ body:has(.scene-transition-shrink) {
     
     /* Minimal window padding */
     --window-padding: 8px;
+  }
+  
+  /* Adjust font sizes for very small screens */
+  .frosted-window h1 {
+    font-size: 1.5rem !important;
+  }
+  
+  .frosted-window h2 {
+    font-size: 1.25rem !important;
+  }
+  
+  .frosted-window p {
+    font-size: 0.875rem !important;
+  }
+}
+
+/* Very narrow screens */
+@media (max-width: 360px) {
+  :root {
+    /* Minimal spacing for very narrow screens */
+    --spacing-sm: 4px;
+    --spacing-md: 6px;
+    --spacing-lg: 8px;
+    
+    /* Smallest UI elements */
+    --header-height: 32px;
+    --back-button-size: 32px;
+    --navbar-height: 32px;
+    
+    /* Minimal window padding */
+    --window-padding: 6px;
+  }
+  
+  /* Adjust window dimensions for very narrow screens */
+  .frosted-window {
+    min-width: 280px !important;
+    width: 98% !important;
+    padding: 6px !important;
+  }
+  
+  /* Adjust font sizes for very narrow screens */
+  .frosted-window h1 {
+    font-size: 1.25rem !important;
+  }
+  
+  .frosted-window h2 {
+    font-size: 1.1rem !important;
+  }
+  
+  .frosted-window p {
+    font-size: 0.8rem !important;
+  }
+  
+  /* Ensure UI elements don't overlap */
+  [data-frosted-box="header"] {
+    max-width: calc(100vw - var(--back-button-size) - var(--spacing-sm) * 4 - 60px) !important;
+    font-size: 0.8rem !important;
   }
 }
 
@@ -833,6 +796,8 @@ body:has(.scene-transition-shrink) {
 .overflow-y-auto::-webkit-scrollbar-corner {
   background: transparent;
 }
+
+
 
 
 

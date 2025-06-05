@@ -228,8 +228,18 @@ export default function FrostedWindow({
     const availableWidth = viewportWidth - (2 * sideSafeMargin);
     const availableHeight = viewportHeight - topSafeMargin - bottomSafeMargin;
     
-    // Default to much wider windows - use 95% of available width on mobile, 900px on desktop
-    let defaultWidth = isMobile ? availableWidth * 0.95 : Math.min(900, availableWidth * 0.9);
+    // Adjust window dimensions based on screen size
+    const isVeryNarrow = viewportWidth < 360;
+    
+    // Default width based on screen size
+    let defaultWidth;
+    if (isVeryNarrow) {
+      defaultWidth = availableWidth * 0.98; // Almost full width for very narrow screens
+    } else if (isMobile) {
+      defaultWidth = availableWidth * 0.95; // 95% for mobile
+    } else {
+      defaultWidth = Math.min(900, availableWidth * 0.9); // 900px or 90% for desktop
+    }
     
     // Get window dimensions from style or use defaults
     let windowWidth = style?.width || defaultWidth;
@@ -247,9 +257,12 @@ export default function FrostedWindow({
       }
     }
     
+    // Adjust minimum width based on screen size
+    const minWidth = isVeryNarrow ? '280px' : (isMobile ? '320px' : '550px');
+    
     // Base styles common to all screen sizes
     const baseStyles: React.CSSProperties = {
-      padding: isMobile ? 'var(--window-padding-sm)' : 'var(--window-padding)',
+      padding: isVeryNarrow ? '8px' : (isMobile ? 'var(--window-padding-sm)' : 'var(--window-padding)'),
       backgroundColor: 'rgba(0, 0, 0, 0.5)',
       backdropFilter: 'blur(10px)',
       WebkitBackdropFilter: 'blur(10px)',
@@ -265,8 +278,8 @@ export default function FrostedWindow({
       width: typeof windowWidth === 'number' ? `${windowWidth}px` : windowWidth,
       // Allow height to be determined by content, up to maxHeight
       height: 'auto',
-      minWidth: isMobile ? '350px' : '550px',
-      minHeight: '200px',
+      minWidth: minWidth,
+      minHeight: isVeryNarrow ? '150px' : '200px',
       boxSizing: 'border-box',
       // Use absolute positioning with transform for perfect centering
       position: 'fixed',

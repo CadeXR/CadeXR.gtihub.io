@@ -99,12 +99,15 @@ export default function Header() {
 
   // Responsive header style
   const getHeaderStyle = (): React.CSSProperties => {
+    const viewportWidth = typeof window !== 'undefined' ? window.innerWidth : 1200;
+    const isVeryNarrow = viewportWidth < 360;
+    
     return {
       position: 'fixed' as const,
       top: 'var(--spacing-sm)',
       left: `calc(var(--back-button-size) + var(--spacing-sm) * 2)`,
       zIndex: 50,
-      padding: isMobile ? '0.25rem' : '0.5rem',
+      padding: isVeryNarrow ? '0.2rem' : (isMobile ? '0.25rem' : '0.5rem'),
       backgroundColor: 'rgba(255, 255, 255, 0.1)',
       backdropFilter: 'blur(10px)',
       WebkitBackdropFilter: 'blur(10px)',
@@ -119,6 +122,7 @@ export default function Header() {
       alignItems: 'center',
       justifyContent: 'center',
       overflow: 'hidden',
+      fontSize: isVeryNarrow ? '0.8rem' : 'inherit',
     };
   };
 
@@ -145,6 +149,7 @@ export default function Header() {
     </div>
   )
 }
+
 
 
 
