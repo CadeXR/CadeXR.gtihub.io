@@ -89,49 +89,7 @@ export default function GamesMenu() {
         </div>
         <div style={roleStyle}>Role: Game Designer/Community Manager</div>
       </button>
-
-      <button 
-        onClick={() => {
-          const overlay = document.createElement('div')
-          overlay.className = 'scene-transition-grow'
-          document.body.appendChild(overlay)
-
-          const scene = document.querySelector('canvas[data-scene]')
-          scene?.dispatchEvent(new CustomEvent('startTransition', { 
-            detail: { direction: 'grow' } 
-          }))
-
-          setTimeout(() => {
-            router.push('/activities')
-            
-            const exitOverlay = document.createElement('div')
-            exitOverlay.className = 'scene-transition-shrink'
-            document.body.appendChild(exitOverlay)
-            
-            setTimeout(() => {
-              overlay.remove()
-              exitOverlay.remove()
-            }, 500)
-          }, 3500)
-        }}
-        className={conthrax.className}
-        style={{
-          ...buttonBaseStyle,
-          backgroundColor: 'rgba(147, 51, 234, 0.3)',
-          border: '1px solid rgba(147, 51, 234, 0.6)',
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.backgroundColor = 'rgba(147, 51, 234, 0.4)'
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.backgroundColor = 'rgba(147, 51, 234, 0.3)'
-        }}
-      >
-        <div>Particle Attack</div>
-        <div style={gameDescriptionStyle}>
-          Shoot particles for a high score! (this game was just for fun, and runs right on this website)
-        </div>
-      </button>
     </div>
   )
 }
+

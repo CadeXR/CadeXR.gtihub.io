@@ -21,6 +21,7 @@ export default function NavBar({
   const router = useRouter()
   const [isActive, setIsActive] = useState(false)
   const navRef = useRef<HTMLElement>(null)
+  const [buttonsToShow, setButtonsToShow] = useState<number>(3) // Default show all buttons
   const isMobile = useMediaQuery({ maxWidth: 768 })
   const isVerySmall = useMediaQuery({ maxWidth: 480 })
 
@@ -81,14 +82,65 @@ export default function NavBar({
     return () => window.removeEventListener('resize', updateParticles)
   }, [updateParticles])
 
+  // Add this useEffect to handle overlap detection and button scaling
+  useEffect(() => {
+    const checkOverlap = () => {
+      const backButtonElement = document.querySelector('[data-frosted-box="back-button"]')
+      const navbarElement = navRef.current
+      
+      if (!backButtonElement || !navbarElement) return
+      
+      const backButtonRect = backButtonElement.getBoundingClientRect()
+      const navbarRect = navbarElement.getBoundingClientRect()
+      
+      // Calculate available width
+      const screenWidth = window.innerWidth
+      const safeMargin = isVerySmall ? 8 : 16
+      
+      // Check if there's enough space between back button and right edge
+      const availableWidth = screenWidth - backButtonRect.right - (safeMargin * 2)
+      
+      // Get all buttons
+      const buttons = navbarElement.querySelectorAll('button')
+      const buttonCount = buttons.length
+      
+      // Calculate how many buttons can fit
+      // Start with all buttons
+      let buttonsToFit = buttonCount
+      
+      // If space is tight, reduce buttons one by one
+      if (availableWidth < navbarRect.width) {
+        // Calculate average button width (including gap)
+        const avgButtonWidth = navbarRect.width / buttonCount
+        
+        // Calculate how many buttons can fit
+        buttonsToFit = Math.floor(availableWidth / avgButtonWidth)
+        
+        // Ensure at least one button is shown
+        buttonsToFit = Math.max(1, buttonsToFit)
+      }
+      
+      // Update state if needed
+      if (buttonsToFit !== buttonsToShow) {
+        setButtonsToShow(buttonsToFit)
+      }
+    }
+    
+    // Check on mount and when window resizes
+    checkOverlap()
+    window.addEventListener('resize', checkOverlap)
+    
+    return () => window.removeEventListener('resize', checkOverlap)
+  }, [isVerySmall, buttonsToShow])
+
   // Calculate navbar width based on screen size
   const getNavbarStyle = () => {
     if (!isMobile) {
-      // Desktop style
+      // Desktop style - align with back button height
       return {
         position: 'fixed' as const,
-        top: 'var(--safe-margin-md)',
-        right: 'var(--safe-margin-md)',
+        top: 'var(--spacing-sm)',  // Same top position as back button
+        right: 'var(--spacing-md)',
         zIndex: 50,
         display: 'flex',
         flexDirection: 'row',
@@ -99,7 +151,7 @@ export default function NavBar({
         WebkitBackdropFilter: 'blur(10px)',
         borderRadius: '0.75rem',
         border: '1px solid rgba(255, 255, 255, 0.2)',
-        height: 'var(--navbar-height-desktop)',
+        height: 'var(--back-button-size)',  // Match back button height
         alignItems: 'center',
       } as const;
     } else {
@@ -111,8 +163,8 @@ export default function NavBar({
       
       return {
         position: 'fixed' as const,
-        top: 'var(--safe-margin-sm)',
-        right: 'var(--safe-margin-sm)',
+        top: 'var(--spacing-sm)',  // Same top position as back button
+        right: 'var(--spacing-sm)',
         zIndex: 50,
         display: 'flex',
         flexDirection: 'row',
@@ -123,7 +175,7 @@ export default function NavBar({
         WebkitBackdropFilter: 'blur(10px)',
         borderRadius: '0.75rem',
         border: '1px solid rgba(255, 255, 255, 0.2)',
-        height: 'var(--navbar-height-mobile)',
+        height: 'var(--back-button-size)',  // Match back button height
         alignItems: 'center',
         maxWidth: `${availableWidth}px`,
         overflowX: 'auto',
@@ -140,9 +192,10 @@ export default function NavBar({
       className={className}
       style={getNavbarStyle()}
     >
+      {/* Games button */}
       <button 
         onClick={() => {
-          // Create and append transition overlay for current scene (home)
+          // Create and append transition overlay
           const overlay = document.createElement('div')
           overlay.className = 'scene-transition-grow'
           document.body.appendChild(overlay)
@@ -155,12 +208,10 @@ export default function NavBar({
           setTimeout(() => {
             router.push('/activities')
             
-            // Create fade-out overlay for games scene
             const exitOverlay = document.createElement('div')
             exitOverlay.className = 'scene-transition-shrink'
             document.body.appendChild(exitOverlay)
             
-            // Remove both overlays after complete transition
             setTimeout(() => {
               overlay.remove()
               exitOverlay.remove()
@@ -178,6 +229,8 @@ export default function NavBar({
       >
         Games
       </button>
+      
+      {/* About button */}
       <button 
         onClick={onOpenAbout}
         className={conthrax.className}
@@ -191,6 +244,8 @@ export default function NavBar({
       >
         About
       </button>
+      
+      {/* Links button */}
       <button 
         onClick={onOpenSocials}
         className={conthrax.className}
@@ -204,6 +259,8 @@ export default function NavBar({
       >
         Links
       </button>
+      
+      {/* Portfolio button */}
       <button 
         onClick={onOpenPortfolio}
         className={conthrax.className}
@@ -215,7 +272,7 @@ export default function NavBar({
           e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)'
         }}
       >
-        Portfolio
+        {isMobile ? 'Work' : 'Portfolio'}
       </button>
     </nav>
   )

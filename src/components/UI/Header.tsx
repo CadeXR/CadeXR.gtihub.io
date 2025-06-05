@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useEffect } from 'react'
 import { useMediaQuery } from 'react-responsive'
+import { conthrax } from '@/app/fonts'
 
 export default function Header() {
   const [isActive, setIsActive] = useState(false)
@@ -97,38 +98,43 @@ export default function Header() {
 
   if (!isVisible) return null
 
-  // Responsive header style with improved readability
+  // Restore the original header style while keeping the overlap detection
   const getHeaderStyle = (): React.CSSProperties => {
     const viewportWidth = typeof window !== 'undefined' ? window.innerWidth : 1200;
     const isVeryNarrow = viewportWidth < 360;
     
+    // Calculate proper spacing between back button and header
+    const backButtonWidth = isVerySmall ? 40 : 48;
+    const spacingBetween = isVerySmall ? 12 : 20; // Increased spacing between back button and header
+    
     return {
       position: 'fixed' as const,
-      top: 'var(--spacing-sm)',
-      left: `calc(var(--back-button-size) + var(--spacing-sm) * 2)`,
+      top: 'var(--spacing-sm)', // Align with back button
+      left: `calc(var(--back-button-size) + var(--spacing-sm) * 2 + ${spacingBetween}px)`, // Add extra spacing
       zIndex: 50,
       padding: isVeryNarrow ? '0.2rem 0.4rem' : (isMobile ? '0.25rem 0.5rem' : '0.5rem 0.75rem'),
-      backgroundColor: 'rgba(0, 0, 0, 0.6)', // Darker background for better contrast
+      backgroundColor: 'rgba(255, 255, 255, 0.1)',
       backdropFilter: 'blur(10px)',
       WebkitBackdropFilter: 'blur(10px)',
       borderRadius: '0.75rem',
       border: '1px solid rgba(255, 255, 255, 0.2)',
       width: 'fit-content',
       maxWidth: isMobile 
-        ? `calc(100vw - var(--back-button-size) - var(--spacing-sm) * 4 - 80px)` 
+        ? `calc(100vw - var(--back-button-size) - var(--spacing-sm) * 4 - ${spacingBetween}px - 80px)` 
         : 'none',
-      height: 'var(--header-height)',
+      height: 'var(--back-button-size)', // Match back button height for vertical alignment
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
       overflow: 'hidden',
       fontSize: isVeryNarrow ? '0.85rem' : (isMobile ? '0.9rem' : 'inherit'),
-      fontWeight: 'bold', // Make text bold for better readability
-      color: 'white', // Ensure high contrast
-      textShadow: '0 1px 2px rgba(0, 0, 0, 0.5)', // Add text shadow for better readability
+      fontWeight: 'bold',
+      color: 'white',
+      textShadow: '0 1px 2px rgba(0, 0, 0, 0.5)',
     };
   };
 
+  // Restore the original header text rendering
   return (
     <div
       data-frosted-box="header"
@@ -137,6 +143,7 @@ export default function Header() {
       style={getHeaderStyle()}
     >
       <div 
+        className={conthrax.className}
         style={{
           color: 'white',
           fontSize: isMobile ? '0.875rem' : '1rem',
@@ -152,6 +159,9 @@ export default function Header() {
     </div>
   )
 }
+
+
+
 
 
 
