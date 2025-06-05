@@ -228,8 +228,8 @@ export default function FrostedWindow({
     const availableWidth = viewportWidth - (2 * sideSafeMargin);
     const availableHeight = viewportHeight - topSafeMargin - bottomSafeMargin;
     
-    // Default to wider windows - use 80% of available width on mobile, 650px on desktop
-    let defaultWidth = isMobile ? availableWidth * 0.9 : Math.min(650, availableWidth * 0.8);
+    // Default to much wider windows - use 95% of available width on mobile, 900px on desktop
+    let defaultWidth = isMobile ? availableWidth * 0.95 : Math.min(900, availableWidth * 0.9);
     
     // Get window dimensions from style or use defaults
     let windowWidth = style?.width || defaultWidth;
@@ -263,9 +263,10 @@ export default function FrostedWindow({
       ...style,
       // Set width to our calculated value or style width
       width: typeof windowWidth === 'number' ? `${windowWidth}px` : windowWidth,
-      // Allow height to be determined by content
-      height: style?.height || 'auto',
-      minWidth: isMobile ? '300px' : '400px',
+      // Allow height to be determined by content, up to maxHeight
+      height: 'auto',
+      minWidth: isMobile ? '350px' : '550px',
+      minHeight: '200px',
       boxSizing: 'border-box',
       // Use absolute positioning with transform for perfect centering
       position: 'fixed',
@@ -274,8 +275,9 @@ export default function FrostedWindow({
       transform: 'translate(-50%, -50%)',
       // Adjust for header to ensure equidistant from top and bottom
       marginTop: `${(headerHeight / 2)}px`,
-      // Ensure content doesn't overflow
-      overflow: 'visible',
+      // Only show overflow on y-axis if needed
+      overflowY: 'auto',
+      overflowX: 'hidden',
     };
 
     return baseStyles;
@@ -536,7 +538,13 @@ export default function FrostedWindow({
           </button>
         )}
       </div>
-      <div className="window-content">
+      <div className="window-content" style={{ 
+        width: '100%', 
+        height: 'auto',
+        overflow: 'visible',
+        // Add padding to prevent content from touching the scrollbar
+        paddingRight: '4px'
+      }}>
         {children}
       </div>
     </motion.div>

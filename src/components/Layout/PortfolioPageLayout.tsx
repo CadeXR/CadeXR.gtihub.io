@@ -268,9 +268,9 @@ export default function PortfolioPageLayout({ children }: PortfolioPageLayoutPro
 
   // Responsive content window style
   const contentWindowStyle = {
-    width: isMobile ? (isVerySmall ? '95%' : '90%') : '650px',
-    maxWidth: isMobile ? '100%' : '650px',
-    maxHeight: isMobile ? '70vh' : '80vh',
+    width: isMobile ? (isVerySmall ? '95%' : '90%') : '900px',
+    maxWidth: isMobile ? '100%' : '900px',
+    maxHeight: isMobile ? '80vh' : '90vh',
   };
 
   return (
@@ -363,23 +363,15 @@ export default function PortfolioPageLayout({ children }: PortfolioPageLayoutPro
         onClose={() => {}}
         defaultPosition={contentPosition}
         onMove={(pos) => setContentPosition(pos)}
-        className="!fixed !w-[650px] max-w-[650px] z-[50]"
+        className="!fixed z-[50]"
         showCloseButton={false}
-        style={{
-          width: '650px',
-          maxWidth: '650px',
-          maxHeight: '80vh',
-        }}
+        style={contentWindowStyle}
       >
         <div 
-          className="px-8 py-6 overflow-y-auto text-white [&_*]:text-white w-full max-w-full"
+          className="px-8 py-6 text-white [&_*]:text-white w-full max-w-full"
           style={{
             width: '100%',
             maxWidth: '100%',
-            maxHeight: 'calc(80vh - 40px)',
-            scrollbarWidth: 'thin',
-            scrollbarColor: 'rgba(255, 255, 255, 0.3) rgba(255, 255, 255, 0.1)',
-            overflowY: 'auto',
             color: 'white',
           }}
           onWheel={(e) => {
@@ -406,6 +398,9 @@ export default function PortfolioPageLayout({ children }: PortfolioPageLayoutPro
     </main>
   )
 }
+
+
+
 
 
 
