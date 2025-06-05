@@ -262,6 +262,7 @@ body:has(.scene-transition-shrink) {
   
   /* Window dimensions */
   --window-padding: 16px;
+  --window-max-height: 85vh; /* Increased from previous values */
   
   /* Mobile scaling */
   --mobile-width-ratio: 0.9; /* 90% of screen width */
@@ -283,6 +284,7 @@ body:has(.scene-transition-shrink) {
     
     /* Smaller window padding */
     --window-padding: 12px;
+    --window-max-height: 80vh; /* Increased from previous values */
   }
 }
 
@@ -503,52 +505,35 @@ body:has(.scene-transition-shrink) {
 .frosted-window {
   height: auto !important;
   min-height: 100px !important;
-  max-height: calc(100vh - var(--header-height) - var(--spacing-sm) * 2) !important;
+  max-height: calc(100vh - var(--header-height) - var(--spacing-sm) * 4) !important;
 }
 
 /* Ensure content is properly contained and scrollable if needed */
 .window-content {
   width: 100% !important;
-  max-height: calc(100vh - var(--header-height) - var(--spacing-sm) * 2 - 60px) !important; /* 60px for window header and padding */
+  height: auto !important;
+  max-height: calc(100vh - var(--header-height) - var(--spacing-sm) * 4 - 60px) !important; /* 60px for window header and padding */
   overflow-y: auto !important;
   box-sizing: border-box !important;
 }
 
-/* Allow windows to size to their content with wider defaults */
-.frosted-window {
-  width: auto !important;
-  height: auto !important;
-  min-width: 400px !important;
-  min-height: 100px !important;
-  max-width: calc(100vw - var(--spacing-sm) * 2) !important;
-  max-height: calc(100vh - var(--header-height) - var(--spacing-sm) * 2) !important;
-}
-
-/* Adjust for mobile */
-@media (max-width: 768px) {
-  .frosted-window {
-    min-width: 300px !important;
-    width: 90% !important;
-  }
-}
-
-/* Make window content determine the size */
+/* Only apply scrollbar when content exceeds the container height */
 .window-content {
-  width: 100% !important;
-  height: auto !important;
-  max-height: calc(100vh - var(--header-height) - var(--spacing-sm) * 2 - 60px) !important;
-  overflow-y: auto !important;
-  box-sizing: border-box !important;
+  overflow-y: visible !important;
 }
 
-/* Fix double scrollbar issues and make windows much wider and taller */
+.window-content.scrollable {
+  overflow-y: auto !important;
+}
+
+/* Fix double scrollbar issues and make windows taller */
 .frosted-window {
   width: auto !important;
   height: auto !important;
-  min-width: 550px !important;
-  min-height: 200px !important;
+  min-width: 450px !important;
+  min-height: 150px !important;
   max-width: calc(100vw - var(--spacing-sm) * 2) !important;
-  max-height: calc(100vh - var(--header-height) - var(--spacing-sm) * 2) !important;
+  max-height: var(--window-max-height) !important; /* Use the new variable */
   overflow-y: auto !important;
   overflow-x: hidden !important;
 }
@@ -866,50 +851,71 @@ body:has(.scene-transition-shrink) {
 /* Reset all window sizing for mobile to ensure proper scaling */
 .frosted-window {
   box-sizing: border-box !important;
-  max-height: calc(100vh - 80px) !important;
+  max-height: var(--window-max-height) !important; /* Use the new variable */
   overflow-y: auto !important;
   overflow-x: hidden !important;
 }
 
-/* Mobile-specific window sizing - more aggressive approach */
+/* Mobile-specific window sizing - more balanced approach */
 @media (max-width: 768px) {
+  :root {
+    --window-max-height: 95vh; /* Increased to 95% of viewport height */
+  }
+  
   .frosted-window {
-    width: 90vw !important;
-    max-width: 90vw !important;
+    width: 95vw !important;
+    max-width: 95vw !important;
     min-width: unset !important;
     left: 50% !important;
-    transform: translateX(-50%) !important;
+    transform: translate(-50%, -50%) !important;
     margin-left: 0 !important;
     margin-right: 0 !important;
     position: fixed !important;
+    /* Allow much taller windows on mobile */
+    max-height: var(--window-max-height) !important;
+    height: auto !important;
+    overflow-y: auto !important;
+    /* Ensure it's centered vertically */
+    top: 50% !important;
+    bottom: auto !important;
   }
 }
 
 /* Small mobile devices */
 @media (max-width: 480px) {
+  :root {
+    --window-max-height: 95vh; /* Keep the same tall height */
+  }
+  
   .frosted-window {
-    width: 92vw !important;
-    max-width: 92vw !important;
+    width: 95vw !important;
+    max-width: 95vw !important;
     padding: 12px !important;
   }
 }
 
 /* Very narrow screens */
 @media (max-width: 360px) {
+  :root {
+    --window-max-height: 95vh; /* Keep the same tall height */
+  }
+  
   .frosted-window {
-    width: 94vw !important;
-    max-width: 94vw !important;
+    width: 96vw !important;
+    max-width: 96vw !important;
     padding: 8px !important;
   }
 }
 
-/* Force center positioning for all windows on mobile */
+/* Force center positioning for all windows on mobile but allow height to adjust */
 @media (max-width: 768px) {
   .frosted-window {
     position: fixed !important;
     top: 50% !important;
     left: 50% !important;
     transform: translate(-50%, -50%) !important;
+    height: auto !important;
+    max-height: var(--window-max-height) !important; /* Use the new variable */
   }
 }
 
@@ -925,6 +931,8 @@ body:has(.scene-transition-shrink) {
     max-width: 92vw !important;
     min-width: unset !important;
     box-sizing: border-box !important;
+    height: auto !important;
+    max-height: var(--window-max-height) !important; /* Use the new variable */
   }
 }
 
@@ -949,6 +957,36 @@ body:has(.scene-transition-shrink) {
     top: 50% !important;
     left: 50% !important;
     transform: translate(-50%, -50%) !important;
+  }
+}
+
+/* Add this at the end of your CSS file to override any conflicting rules */
+.allow-tall-window {
+  height: auto !important;
+  max-height: 85vh !important;
+  overflow-y: auto !important;
+}
+
+.allow-tall-window .window-content {
+  height: auto !important;
+  max-height: none !important;
+  overflow-y: visible !important;
+}
+
+/* Only add scrolling when needed */
+.allow-tall-window.needs-scroll .window-content {
+  max-height: calc(85vh - 60px) !important; /* 60px for header and padding */
+  overflow-y: auto !important;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .allow-tall-window {
+    max-height: 85vh !important;
+  }
+  
+  .allow-tall-window.needs-scroll .window-content {
+    max-height: calc(85vh - 50px) !important; /* 50px for header and padding on mobile */
   }
 }
 

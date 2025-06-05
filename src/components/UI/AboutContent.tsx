@@ -5,7 +5,11 @@ export default function AboutContent() {
   const isMobile = useMediaQuery({ maxWidth: 768 });
   
   return (
-    <div className="text-white space-y-6 p-4 max-w-full overflow-y-auto">
+    <div className="text-white space-y-6 p-4 max-w-full" style={{ 
+      height: 'auto',
+      maxHeight: 'none', // Remove any max-height constraint
+      overflow: 'visible' // Let the parent container handle scrolling if needed
+    }}>
       <h2 className={`${isMobile ? 'text-xl' : 'text-2xl'} font-semibold mb-6`}>About Cade</h2>
       
       <section>
@@ -28,5 +32,8 @@ export default function AboutContent() {
     </div>
   )
 }
+
+
+
 
 

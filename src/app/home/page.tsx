@@ -110,7 +110,7 @@ const getWindowDimensions = () => {
 const WINDOW_DIMENSIONS = getWindowDimensions();
 
 export default function HomePage() {
-  const [isAboutOpen, setIsAboutOpen] = useState(false)
+  const [isAboutOpen, setIsAboutOpen] = useState(true) // Changed from false to true
   const [isSocialsOpen, setIsSocialsOpen] = useState(false)
   const [isPortfolioOpen, setIsPortfolioOpen] = useState(false)
   
@@ -167,6 +167,11 @@ export default function HomePage() {
     setPortfolioPosition(calculateExactCenter('portfolio'));
     setSocialsPosition(calculateExactCenter('socials'));
   }, [isMobile, isVerySmall]);
+
+  // Force center the about window on initial load
+  useEffect(() => {
+    forceCenter('about');
+  }, []);
 
   // Force center a window after it's opened
   const forceCenter = (windowType: 'about' | 'portfolio' | 'socials') => {

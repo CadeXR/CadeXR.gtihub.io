@@ -241,56 +241,29 @@ export default function FrostedWindow({
       defaultWidth = Math.min(900, availableWidth * 0.9); // 900px or 90% for desktop
     }
     
-    // Get window dimensions from style or use defaults
-    let windowWidth = style?.width || defaultWidth;
+    // IMPORTANT: Allow much taller windows
+    const maxHeight = isMobile ? 
+      availableHeight * 0.85 : // 85% of available height on mobile
+      availableHeight * 0.9;  // 90% of available height on desktop
     
-    // If width is specified, ensure it fits within viewport
-    if (typeof windowWidth === 'number') {
-      windowWidth = Math.min(windowWidth, availableWidth);
-    } else if (typeof windowWidth === 'string' && !windowWidth.includes('auto')) {
-      if (windowWidth.includes('%')) {
-        // Handle percentage width
-        const percentage = parseFloat(windowWidth) / 100;
-        windowWidth = Math.min(availableWidth * percentage, availableWidth);
-      } else {
-        windowWidth = Math.min(parseInt(windowWidth), availableWidth);
-      }
-    }
-    
-    // Base styles common to all screen sizes
-    const baseStyles: React.CSSProperties = {
-      padding: isVeryNarrow ? '8px' : (isMobile ? '12px' : 'var(--window-padding)'),
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    return {
+      width: defaultWidth,
+      maxWidth: availableWidth,
+      height: 'auto', // Allow height to be determined by content
+      maxHeight: maxHeight,
+      overflow: 'auto',
+      backgroundColor: 'rgba(0, 0, 0, 0.7)',
       backdropFilter: 'blur(10px)',
       WebkitBackdropFilter: 'blur(10px)',
       borderRadius: '0.75rem',
-      border: '1px solid rgba(255, 255, 255, 0.15)',
-      boxShadow: '0 4px 20px rgba(0, 0, 0, 0.5)',
+      border: '1px solid rgba(255, 255, 255, 0.2)',
+      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
       color: 'white',
-      zIndex: isActive ? 50 : 40,
-      maxWidth: `${availableWidth}px`,
-      maxHeight: `${availableHeight}px`,
-      ...style,
-      // Set width to our calculated value or style width
-      width: isMobile ? `${availableWidth}px` : (typeof windowWidth === 'number' ? `${windowWidth}px` : windowWidth),
-      // Allow height to be determined by content, up to maxHeight
-      height: 'auto',
-      minWidth: isMobile ? 'auto' : '550px', // Remove min-width constraint on mobile
-      minHeight: isVeryNarrow ? '150px' : '200px',
-      boxSizing: 'border-box',
-      // Use absolute positioning with transform for perfect centering
-      position: 'fixed',
-      left: '50%',
-      top: '50%',
-      transform: 'translate(-50%, -50%)',
-      // Adjust for header to ensure equidistant from top and bottom
-      marginTop: `${(headerHeight / 2)}px`,
-      // Only show overflow on y-axis if needed
-      overflowY: 'auto',
-      overflowX: 'hidden',
+      position: 'absolute',
+      zIndex: 10,
+      display: 'flex',
+      flexDirection: 'column',
     };
-
-    return baseStyles;
   };
 
   // Function to center window in viewport
@@ -522,30 +495,54 @@ export default function FrostedWindow({
       if (!windowElement) return;
       
       // Force mobile-specific styles
-      windowElement.style.position = 'fixed';
-      windowElement.style.top = '50%';
-      windowElement.style.left = '50%';
-      windowElement.style.transform = 'translate(-50%, -50%)';
+      (windowElement as HTMLElement).style.position = 'fixed';
+      (windowElement as HTMLElement).style.top = '50%';
+      (windowElement as HTMLElement).style.left = '50%';
+      (windowElement as HTMLElement).style.transform = 'translate(-50%, -50%)';
       
       // Calculate safe width
       const viewportWidth = window.innerWidth;
-      const safeWidth = isVerySmall ? 
-        Math.min(viewportWidth * 0.94, viewportWidth - 16) : 
-        Math.min(viewportWidth * 0.92, viewportWidth - 24);
-      
-      // Force width to be safe
-      windowElement.style.width = `${safeWidth}px`;
-      windowElement.style.maxWidth = `${safeWidth}px`;
-      windowElement.style.minWidth = 'unset';
-      
-      // Ensure window is within viewport vertically
-      const rect = windowElement.getBoundingClientRect();
       const viewportHeight = window.innerHeight;
       
-      if (rect.height > viewportHeight - 40) {
-        windowElement.style.height = `${viewportHeight - 40}px`;
-        windowElement.style.overflowY = 'auto';
+      // Calculate safe width - use more of the available width
+      const safeWidth = isVerySmall ? 
+        Math.min(viewportWidth * 0.95, viewportWidth - 10) : 
+        Math.min(viewportWidth * 0.94, viewportWidth - 16);
+      
+      // Force width to be safe
+      (windowElement as HTMLElement).style.width = `${safeWidth}px`;
+      (windowElement as HTMLElement).style.maxWidth = `${safeWidth}px`;
+      (windowElement as HTMLElement).style.minWidth = 'unset';
+      
+      // CRITICAL: Allow MUCH taller windows on mobile
+      // Use a significantly higher percentage of viewport height
+      const maxHeight = viewportHeight * 0.95; // Increased to 95% of viewport height
+      (windowElement as HTMLElement).style.maxHeight = `${maxHeight}px`;
+      (windowElement as HTMLElement).style.height = 'auto';
+      (windowElement as HTMLElement).style.overflowY = 'auto';
+      
+      // Get the content element and ensure it can expand
+      const contentElement = windowElement.querySelector('.window-content');
+      if (contentElement) {
+        (contentElement as HTMLElement).style.height = 'auto';
+        (contentElement as HTMLElement).style.maxHeight = 'none';
+        (contentElement as HTMLElement).style.overflowY = 'visible';
+        
+        // Check if content is taller than available space
+        const contentHeight = contentElement.scrollHeight;
+        if (contentHeight > maxHeight - 60) { // 60px for header and padding
+          (contentElement as HTMLElement).style.maxHeight = `${maxHeight - 60}px`;
+          (contentElement as HTMLElement).style.overflowY = 'auto';
+        }
       }
+      
+      // Log the dimensions after applying changes
+      console.log('Applied mobile layout with dimensions:', {
+        windowWidth: safeWidth,
+        windowMaxHeight: maxHeight,
+        viewportHeight: viewportHeight,
+        percentage: Math.round((maxHeight / viewportHeight) * 100) + '%'
+      });
     };
     
     // Apply immediately and on resize
@@ -564,11 +561,110 @@ export default function FrostedWindow({
     e.stopPropagation();
   };
 
+  useEffect(() => {
+    if (!isOpen) return;
+    
+    // Get the window element
+    const windowElement = document.getElementById(id || '');
+    
+    if (windowElement) {
+      // Define safe areas
+      const headerHeight = isMobile ? 40 : 48;
+      const topSafeMargin = isMobile ? 8 + headerHeight : 16 + headerHeight;
+      const bottomSafeMargin = isMobile ? 8 : 16;
+      
+      // IMPORTANT: Remove any fixed height constraints
+      (windowElement as HTMLElement).style.height = 'auto';
+      
+      // IMPORTANT: Set a much larger max-height
+      const viewportHeight = window.innerHeight;
+      const maxWindowHeight = isMobile ? 
+        viewportHeight * 0.85 : // 85% of viewport height on mobile
+        viewportHeight * 0.9;  // 90% of viewport height on desktop
+      
+      (windowElement as HTMLElement).style.maxHeight = `${maxWindowHeight}px`;
+      
+      // Get the content element
+      const contentElement = windowElement.querySelector('.window-content');
+      if (contentElement) {
+        // Remove any fixed height constraints on content
+        (contentElement as HTMLElement).style.height = 'auto';
+        (contentElement as HTMLElement).style.maxHeight = 'none';
+        (contentElement as HTMLElement).style.overflowY = 'visible';
+        
+        // Only add scrolling if content exceeds the window height
+        const contentHeight = contentElement.scrollHeight;
+        const windowHeight = windowElement.clientHeight;
+        const headerHeight = windowElement.querySelector('.window-header')?.clientHeight || 0;
+        
+        if (contentHeight > windowHeight - headerHeight - 20) { // 20px buffer
+          (contentElement as HTMLElement).style.maxHeight = `${windowHeight - headerHeight - 20}px`;
+          (contentElement as HTMLElement).style.overflowY = 'auto';
+        }
+      }
+    }
+  }, [isOpen, id, isMobile]);
+
+  useEffect(() => {
+    if (!isOpen || !id) return;
+    
+    // Function to log window dimensions
+    const logWindowDimensions = () => {
+      const windowElement = document.getElementById(id);
+      if (!windowElement) return;
+      
+      const rect = windowElement.getBoundingClientRect();
+      console.log(`Window ${id} dimensions:`, {
+        width: Math.round(rect.width),
+        height: Math.round(rect.height),
+        maxHeight: (windowElement as HTMLElement).style.maxHeight,
+        computedMaxHeight: window.getComputedStyle(windowElement).maxHeight,
+        viewportHeight: window.innerHeight,
+        percentage: Math.round((rect.height / window.innerHeight) * 100) + '%'
+      });
+      
+      // Also log content dimensions
+      const contentElement = windowElement.querySelector('.window-content');
+      if (contentElement) {
+        const contentRect = contentElement.getBoundingClientRect();
+        console.log(`Content for ${id} dimensions:`, {
+          height: Math.round(contentRect.height),
+          scrollHeight: contentElement.scrollHeight,
+          maxHeight: (contentElement as HTMLElement).style.maxHeight,
+          computedMaxHeight: window.getComputedStyle(contentElement).maxHeight,
+          overflow: window.getComputedStyle(contentElement).overflowY
+        });
+      }
+    };
+    
+    // Log immediately after render
+    setTimeout(logWindowDimensions, 100);
+    
+    // Log on resize
+    const resizeObserver = new ResizeObserver(() => {
+      logWindowDimensions();
+    });
+    
+    const windowElement = document.getElementById(id);
+    if (windowElement) {
+      resizeObserver.observe(windowElement);
+    }
+    
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, [isOpen, id]);
+
   return (
     <motion.div
       id={id}
-      className={`frosted-window perfect-center ${className || ''}`}
-      style={getWindowStyles()}
+      className={`frosted-window perfect-center allow-tall-window ${className || ''}`}
+      style={{
+        ...getWindowStyles(),
+        display: isOpen ? 'flex' : 'none',
+        height: 'auto', // Allow height to be determined by content
+        minHeight: '100px',
+      }}
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ 
         opacity: isOpen ? 1 : 0,
@@ -582,24 +678,33 @@ export default function FrostedWindow({
       aria-modal="true"
       aria-labelledby={`${id}-title`}
     >
-      <div style={windowHeaderStyle}>
-        <div 
-          style={windowTitleStyle} 
-          id={`${id}-title`}
-        >
-          {title}
+      <div className="window-header" style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: isMobile ? '0.5rem' : '0.75rem',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+      }}>
+        <div className="window-title" style={{
+          fontSize: isMobile ? '0.9rem' : '1rem',
+          fontWeight: 'bold',
+        }}>
+          {title || ''}
         </div>
         {showCloseButton && (
-          <button 
-            style={closeButtonStyle}
+          <button
             onClick={onClose}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
+            style={{
+              backgroundColor: 'transparent',
+              border: 'none',
+              color: 'white',
+              fontSize: '1rem',
+              cursor: 'pointer',
+              padding: '0.25rem',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
-            }}
-            aria-label="Close window"
           >
             ×
           </button>
@@ -609,9 +714,9 @@ export default function FrostedWindow({
         className="window-content" 
         style={{ 
           width: '100%', 
-          height: 'auto',
-          overflow: 'visible',
-          paddingRight: '4px'
+          height: 'auto', // Allow height to be determined by content
+          overflow: 'visible', // Only show scrollbar when needed
+          padding: isMobile ? '0.75rem' : '1rem',
         }}
       >
         {children}
