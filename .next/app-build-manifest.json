@@ -16,18 +16,6 @@
       "static/chunks/main-app.js",
       "static/css/app/home/page.css",
       "static/chunks/app/home/page.js"
-    ],
-    "/projects/flexvr-wellness/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/projects/flexvr-wellness/page.css",
-      "static/chunks/app/projects/flexvr-wellness/page.js"
-    ],
-    "/activities/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/activities/page.css",
-      "static/chunks/app/activities/page.js"
     ]
   }
 }

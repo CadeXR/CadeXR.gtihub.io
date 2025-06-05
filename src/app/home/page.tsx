@@ -70,31 +70,38 @@ interface SpawnNode {
 // Define window dimensions more accurately with responsive scaling
 const getWindowDimensions = () => {
   if (typeof window === 'undefined') return {
-    about: { width: 400, height: 400 }, // Reduced from 450 to 400
+    about: { width: 400, height: 400 },
     portfolio: { width: 350, height: 600 },
     socials: { width: 350, height: 115 }
   };
   
   const viewportWidth = window.innerWidth;
+  const viewportHeight = window.innerHeight;
   const isMobile = getIsMobile();
   const isVerySmall = getIsVerySmall();
   
-  // Scale down window sizes as screen gets smaller
-  const scaleFactor = isVerySmall ? 0.95 : (isMobile ? 0.9 : 1);
-  const availableWidth = viewportWidth * scaleFactor;
+  // Calculate available space
+  const headerHeight = isMobile ? 40 : 48;
+  const topSafeMargin = isMobile ? 8 + headerHeight : 16 + headerHeight;
+  const bottomSafeMargin = isMobile ? 8 : 16;
+  const sideSafeMargin = isMobile ? 8 : 16;
   
+  const availableWidth = viewportWidth - (2 * sideSafeMargin);
+  const availableHeight = viewportHeight - topSafeMargin - bottomSafeMargin;
+  
+  // Use percentage-based sizing for better responsiveness
   return {
     about: { 
-      width: isMobile ? Math.min(availableWidth - 16, 400) : 400, // Reduced from 450 to 400
-      height: isMobile ? 350 : 400 
+      width: isMobile ? Math.min(availableWidth * 0.95, 400) : 400,
+      height: isMobile ? Math.min(availableHeight * 0.7, 350) : 400 
     },
     portfolio: { 
-      width: isMobile ? Math.min(availableWidth - 16, 350) : 350, 
-      height: isMobile ? 500 : 600 
+      width: isMobile ? Math.min(availableWidth * 0.95, 350) : 350, 
+      height: isMobile ? Math.min(availableHeight * 0.8, 500) : 600 
     },
     socials: { 
-      width: isMobile ? Math.min(availableWidth - 16, 350) : 350, 
-      height: isMobile ? 100 : 115 
+      width: isMobile ? Math.min(availableWidth * 0.95, 350) : 350, 
+      height: isMobile ? Math.min(availableHeight * 0.2, 100) : 115 
     }
   };
 };
@@ -115,7 +122,6 @@ export default function HomePage() {
   const calculateExactCenter = (windowType: 'about' | 'portfolio' | 'socials') => {
     if (typeof window === 'undefined') return { x: 0, y: 0 };
     
-    const safeMargin = isVerySmall ? 8 : (isMobile ? 12 : 16);
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
     
@@ -123,24 +129,22 @@ export default function HomePage() {
     const headerHeight = isMobile ? 40 : 48;
     const topSafeMargin = isMobile ? 8 + headerHeight : 16 + headerHeight;
     const bottomSafeMargin = isMobile ? 8 : 16;
+    const sideSafeMargin = isMobile ? 8 : 16;
     
     // Get window dimensions
     const windowWidth = WINDOW_DIMENSIONS[windowType].width;
     const windowHeight = WINDOW_DIMENSIONS[windowType].height;
     
-    // On mobile, position windows at the bottom but centered horizontally
-    if (isMobile) {
-      return { 
-        x: Math.max((viewportWidth - windowWidth) / 2, safeMargin), 
-        y: Math.min(viewportHeight - windowHeight - safeMargin, viewportHeight - windowHeight - bottomSafeMargin)
-      };
-    }
+    // Center horizontally
+    const centerX = Math.max(sideSafeMargin, (viewportWidth - windowWidth) / 2);
     
-    // On desktop, center windows both horizontally and vertically
-    return { 
-      x: Math.max((viewportWidth - windowWidth) / 2, safeMargin), 
-      y: Math.max((viewportHeight - windowHeight) / 2, topSafeMargin)
-    };
+    // Center vertically with respect to safe areas
+    const centerY = Math.max(
+      topSafeMargin, 
+      (viewportHeight - windowHeight) / 2
+    );
+    
+    return { x: centerX, y: centerY };
   };
   
   // Individual center positions for each window
@@ -383,11 +387,9 @@ export default function HomePage() {
             onMove={() => {}} // Disable moving
             className="frosted-window-about"
             style={{
-              width: 400, // Fixed width in pixels
+              width: isMobile ? '90%' : '400px',
               height: 'auto',
-              maxHeight: typeof window !== 'undefined' ? 
-                `${window.innerHeight - (isMobile ? 96 : 120)}px` : // Dynamic max height based on viewport
-                '80vh',
+              maxHeight: isMobile ? '70vh' : '80vh',
               overflowY: 'auto',
             }}
           >
@@ -403,12 +405,8 @@ export default function HomePage() {
             defaultPosition={socialsPosition}
             onMove={() => {}} // Disable moving
             style={{
-              width: typeof window !== 'undefined' && window.innerWidth <= 768
-                ? 'calc(100% - 16px)'
-                : '350px',
-              minWidth: typeof window !== 'undefined' && window.innerWidth <= 768
-                ? 'calc(100% - 16px)'
-                : '350px',
+              width: isMobile ? '90%' : '350px',
+              minWidth: isMobile ? '90%' : '350px',
             }}
           >
             <SocialContent />

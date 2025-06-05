@@ -27,7 +27,8 @@ export default function FrostedWindow({
   className,
   showCloseButton = true
 }: FrostedWindowProps) {
-  const [isActive, setIsActive] = useState(false)
+  const [isActive, setIsActive] = useState(false);
+  const title = id ? id.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) : '';
   const isMobile = useMediaQuery({ maxWidth: 768 });
   const isVerySmall = useMediaQuery({ maxWidth: 480 });
   const x = useMotionValue(defaultPosition?.x ?? 0)
@@ -180,6 +181,38 @@ export default function FrostedWindow({
     return () => window.removeEventListener('resize', ensureWithinViewport);
   }, [defaultPosition, x, y, style]);
 
+  // Add CSS for the window header and close button
+  const windowHeaderStyle: React.CSSProperties = {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: '0.75rem',
+    paddingBottom: '0.5rem',
+    borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+  };
+
+  const windowTitleStyle: React.CSSProperties = {
+    fontSize: '1rem',
+    fontWeight: 'bold',
+    color: 'white',
+  };
+
+  const closeButtonStyle: React.CSSProperties = {
+    background: 'rgba(255, 255, 255, 0.1)',
+    border: '1px solid rgba(255, 255, 255, 0.2)',
+    color: 'white',
+    width: '24px',
+    height: '24px',
+    borderRadius: '50%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    cursor: 'pointer',
+    fontSize: '1rem',
+    padding: 0,
+    transition: 'all 0.2s ease',
+  };
+
   // Calculate window styles based on device size
   const getWindowStyles = (): React.CSSProperties => {
     const viewportWidth = typeof window !== 'undefined' ? window.innerWidth : 1200;
@@ -195,43 +228,28 @@ export default function FrostedWindow({
     const availableWidth = viewportWidth - (2 * sideSafeMargin);
     const availableHeight = viewportHeight - topSafeMargin - bottomSafeMargin;
     
+    // Default to wider windows - use 80% of available width on mobile, 650px on desktop
+    let defaultWidth = isMobile ? availableWidth * 0.9 : Math.min(650, availableWidth * 0.8);
+    
     // Get window dimensions from style or use defaults
-    let windowWidth = 400; // Default width
-    let windowHeight = 400; // Default height
+    let windowWidth = style?.width || defaultWidth;
     
-    if (style?.width) {
-      if (typeof style.width === 'string') {
-        windowWidth = parseInt(style.width);
-      } else if (typeof style.width === 'number') {
-        windowWidth = style.width;
+    // If width is specified, ensure it fits within viewport
+    if (typeof windowWidth === 'number') {
+      windowWidth = Math.min(windowWidth, availableWidth);
+    } else if (typeof windowWidth === 'string' && !windowWidth.includes('auto')) {
+      if (windowWidth.includes('%')) {
+        // Handle percentage width
+        const percentage = parseFloat(windowWidth) / 100;
+        windowWidth = Math.min(availableWidth * percentage, availableWidth);
+      } else {
+        windowWidth = Math.min(parseInt(windowWidth), availableWidth);
       }
     }
-    
-    if (style?.height && style.height !== 'auto') {
-      if (typeof style.height === 'string') {
-        windowHeight = parseInt(style.height);
-      } else if (typeof style.height === 'number') {
-        windowHeight = style.height;
-      }
-    }
-    
-    // Calculate scaling factor if window is too large
-    const widthScaleFactor = availableWidth / windowWidth;
-    const heightScaleFactor = availableHeight / windowHeight;
-    const scaleFactor = Math.min(widthScaleFactor, heightScaleFactor, 1);
-    
-    // Apply scaling if needed
-    const finalWidth = Math.min(windowWidth * scaleFactor, availableWidth);
-    const finalHeight = style?.height === 'auto' 
-      ? 'auto' 
-      : `${Math.min(windowHeight * scaleFactor, availableHeight)}px`;
-    
-    // Calculate horizontal centering
-    const leftPosition = (viewportWidth - finalWidth) / 2;
     
     // Base styles common to all screen sizes
     const baseStyles: React.CSSProperties = {
-      padding: 'var(--window-padding)',
+      padding: isMobile ? 'var(--window-padding-sm)' : 'var(--window-padding)',
       backgroundColor: 'rgba(0, 0, 0, 0.5)',
       backdropFilter: 'blur(10px)',
       WebkitBackdropFilter: 'blur(10px)',
@@ -239,38 +257,33 @@ export default function FrostedWindow({
       border: '1px solid rgba(255, 255, 255, 0.15)',
       boxShadow: '0 4px 20px rgba(0, 0, 0, 0.5)',
       color: 'white',
-      overflowY: 'auto',
       zIndex: isActive ? 50 : 40,
       maxWidth: `${availableWidth}px`,
       maxHeight: `${availableHeight}px`,
       ...style,
-      // Override dimensions with our calculated values
-      width: `${finalWidth}px`,
-      height: finalHeight,
+      // Set width to our calculated value or style width
+      width: typeof windowWidth === 'number' ? `${windowWidth}px` : windowWidth,
+      // Allow height to be determined by content
+      height: style?.height || 'auto',
+      minWidth: isMobile ? '300px' : '400px',
+      boxSizing: 'border-box',
+      // Use absolute positioning with transform for perfect centering
+      position: 'fixed',
+      left: '50%',
+      top: '50%',
+      transform: 'translate(-50%, -50%)',
+      // Adjust for header to ensure equidistant from top and bottom
+      marginTop: `${(headerHeight / 2)}px`,
+      // Ensure content doesn't overflow
+      overflow: 'visible',
     };
 
-    // Mobile-specific styles
-    if (isMobile) {
-      return {
-        ...baseStyles,
-        bottom: `${bottomSafeMargin}px`,
-        top: 'auto',
-        left: `${leftPosition}px`,
-        position: 'fixed',
-      };
-    }
-
-    // Desktop styles - ensure window doesn't go behind header
-    return {
-      ...baseStyles,
-      minWidth: Math.min(300, availableWidth),
-      position: 'absolute',
-    };
+    return baseStyles;
   };
 
-  // Function to ensure window is within viewport bounds and not behind headers
-  const ensureWindowSafePlacement = useCallback(() => {
-    if (!defaultPosition || !isOpen) return;
+  // Function to center window in viewport
+  const centerWindow = useCallback(() => {
+    if (!isOpen) return;
     
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
@@ -289,53 +302,71 @@ export default function FrostedWindow({
     const windowWidth = rect.width;
     const windowHeight = rect.height;
     
-    // Calculate safe positions
-    let safeX = x.get();
-    let safeY = y.get();
+    // Center horizontally
+    const centerX = Math.max(sideSafeMargin, (viewportWidth - windowWidth) / 2);
     
-    // Ensure window doesn't go off right edge
-    if (safeX + windowWidth > viewportWidth - sideSafeMargin) {
-      safeX = viewportWidth - windowWidth - sideSafeMargin;
-    }
+    // Center vertically with respect to safe areas
+    const centerY = Math.max(
+      topSafeMargin, 
+      (viewportHeight - windowHeight) / 2
+    );
     
-    // Ensure window doesn't go off left edge
-    if (safeX < sideSafeMargin) {
-      safeX = sideSafeMargin;
-    }
+    // Update position
+    x.set(centerX);
+    y.set(centerY);
     
-    // Ensure window doesn't go off bottom edge
-    if (safeY + windowHeight > viewportHeight - bottomSafeMargin) {
-      safeY = viewportHeight - windowHeight - bottomSafeMargin;
+    // If window is too large for the viewport, scale it down
+    if (windowWidth > viewportWidth - (2 * sideSafeMargin) || 
+        windowHeight > viewportHeight - topSafeMargin - bottomSafeMargin) {
+      
+      // Calculate scale factors
+      const widthScale = (viewportWidth - (2 * sideSafeMargin)) / windowWidth;
+      const heightScale = (viewportHeight - topSafeMargin - bottomSafeMargin) / windowHeight;
+      const scale = Math.min(widthScale, heightScale, 1);
+      
+      // Apply scaling if needed (scale < 1)
+      if (scale < 1 && windowElement.style) {
+        windowElement.style.transform = `scale(${scale})`;
+        windowElement.style.transformOrigin = 'top left';
+        
+        // Adjust position to account for scaling
+        const scaledWidth = windowWidth * scale;
+        const scaledHeight = windowHeight * scale;
+        
+        // Center the scaled window
+        const scaledCenterX = Math.max(sideSafeMargin, (viewportWidth - scaledWidth) / 2);
+        const scaledCenterY = Math.max(
+          topSafeMargin, 
+          (viewportHeight - scaledHeight) / 2
+        );
+        
+        x.set(scaledCenterX);
+        y.set(scaledCenterY);
+      }
+    } else if (windowElement.style) {
+      // Reset any scaling if window fits
+      windowElement.style.transform = 'none';
     }
-    
-    // Ensure window doesn't go behind header
-    if (safeY < topSafeMargin) {
-      safeY = topSafeMargin;
-    }
-    
-    // Update position if needed
-    if (safeX !== x.get() || safeY !== y.get()) {
-      x.set(safeX);
-      y.set(safeY);
-    }
-  }, [defaultPosition, id, isOpen, isMobile, x, y]);
+  }, [id, isOpen, isMobile, x, y]);
 
   // Apply safe placement when window opens or resizes
   useEffect(() => {
     if (isOpen) {
-      // Short delay to ensure the window is rendered
-      const timer = setTimeout(() => {
-        ensureWindowSafePlacement();
-      }, 100);
-      
-      window.addEventListener('resize', ensureWindowSafePlacement);
-      
-      return () => {
-        clearTimeout(timer);
-        window.removeEventListener('resize', ensureWindowSafePlacement);
-      };
+      centerWindow();
     }
-  }, [isOpen, ensureWindowSafePlacement]);
+  }, [isOpen, centerWindow]);
+
+  // Add window resize listener to recenter
+  useEffect(() => {
+    const handleResize = () => {
+      if (isOpen) {
+        centerWindow();
+      }
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [isOpen, centerWindow]);
 
   // Initialize position state with centered coordinates
   useEffect(() => {
@@ -393,77 +424,121 @@ export default function FrostedWindow({
     
     // Schedule a check after rendering to ensure window is properly positioned
     setTimeout(() => {
-      ensureWindowSafePlacement();
+      centerWindow();
     }, 100);
-  }, [defaultPosition, isOpen, id, isMobile, style, x, y, ensureWindowSafePlacement]);
+  }, [defaultPosition, isOpen, id, isMobile, style, x, y, centerWindow]);
+
+  // Function to ensure perfect vertical centering
+  const ensurePerfectCentering = useCallback(() => {
+    if (!isOpen) return;
+    
+    const windowElement = document.getElementById(id || '');
+    if (!windowElement) return;
+    
+    // Get viewport dimensions
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    
+    // Get window dimensions
+    const rect = windowElement.getBoundingClientRect();
+    const windowWidth = rect.width;
+    const windowHeight = rect.height;
+    
+    // Define safe areas
+    const headerHeight = isMobile ? 40 : 48;
+    const topSafeMargin = isMobile ? 8 + headerHeight : 16 + headerHeight;
+    const bottomSafeMargin = isMobile ? 8 : 16;
+    const sideSafeMargin = isMobile ? 8 : 16;
+    
+    // Calculate available space
+    const availableWidth = viewportWidth - (2 * sideSafeMargin);
+    const availableHeight = viewportHeight - topSafeMargin - bottomSafeMargin;
+    
+    // If window is too large, scale it down
+    if (windowWidth > availableWidth || windowHeight > availableHeight) {
+      const widthScale = availableWidth / windowWidth;
+      const heightScale = availableHeight / windowHeight;
+      const scale = Math.min(widthScale, heightScale, 1);
+      
+      if (scale < 1) {
+        windowElement.style.transform = `translate(-50%, -50%) scale(${scale})`;
+        windowElement.style.transformOrigin = 'center center';
+      }
+    } else {
+      // Reset transform to just centering
+      windowElement.style.transform = 'translate(-50%, -50%)';
+    }
+    
+    // Adjust for header to ensure equidistant from top and bottom
+    windowElement.style.marginTop = `${headerHeight / 2}px`;
+    
+    // Ensure window is centered
+    windowElement.style.position = 'fixed';
+    windowElement.style.left = '50%';
+    windowElement.style.top = '50%';
+  }, [id, isOpen, isMobile]);
+
+  // Apply perfect centering when window opens or resizes
+  useEffect(() => {
+    if (isOpen) {
+      // Short delay to ensure the window is rendered
+      setTimeout(ensurePerfectCentering, 50);
+    }
+  }, [isOpen, ensurePerfectCentering]);
+
+  // Add window resize listener to maintain perfect centering
+  useEffect(() => {
+    const handleResize = () => {
+      if (isOpen) {
+        ensurePerfectCentering();
+      }
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [isOpen, ensurePerfectCentering]);
+
+  const handleWindowClick = (e: React.MouseEvent) => {
+    setIsActive(true);
+    // Prevent click from propagating to parent elements
+    e.stopPropagation();
+  };
 
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <motion.div
-          id={id}
-          className={`frosted-window z-50 ${className || ''}`}
-          data-frosted-box={id}
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.9 }}
-          transition={{ duration: 0.2 }}
-          style={isMobile ? 
-            getWindowStyles() : 
-            {
-              ...getWindowStyles(),
-              x, 
-              y
-            }
-          }
-          onMouseEnter={() => setIsActive(true)}
-          onMouseLeave={() => setIsActive(false)}
-        >
-          <div className="window-header" style={{ 
-            display: 'flex', 
-            justifyContent: 'flex-end',
-            marginBottom: '1rem'
-          }}>
-            {showCloseButton && (
-              <button
-                onClick={onClose}
-                style={{
-                  width: '24px',
-                  height: '24px',
-                  borderRadius: '50%',
-                  backgroundColor: 'rgba(0, 0, 0, 0.6)',
-                  color: 'white',
-                  border: 'none',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  cursor: 'pointer',
-                  fontSize: '16px',
-                  fontWeight: 'bold',
-                  padding: 0,
-                  marginLeft: 'auto',
-                  transition: 'background-color 0.2s ease',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = 'rgba(40, 40, 40, 0.8)'; // Darker hover state
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.6)'; // Return to original
-                }}
-              >
-                ×
-              </button>
-            )}
-          </div>
-          <div className="window-content">
-            {children}
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
-  )
+    <motion.div
+      id={id}
+      className={`frosted-window perfect-center ${className || ''}`}
+      style={getWindowStyles()}
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ 
+        opacity: isOpen ? 1 : 0,
+        scale: isOpen ? 1 : 0.9,
+        display: isOpen ? 'block' : 'none'
+      }}
+      transition={{ duration: 0.2 }}
+      onClick={handleWindowClick}
+      data-frosted-box={id}
+    >
+      <div style={windowHeaderStyle}>
+        <div style={windowTitleStyle}>{title}</div>
+        {showCloseButton && (
+          <button 
+            style={closeButtonStyle}
+            onClick={onClose}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+            }}
+          >
+            ×
+          </button>
+        )}
+      </div>
+      <div className="window-content">
+        {children}
+      </div>
+    </motion.div>
+  );
 }
-
-
-
-
