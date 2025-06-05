@@ -148,8 +148,13 @@ export default function PortfolioPageLayout({ children }: PortfolioPageLayoutPro
       const viewportWidth = window.innerWidth;
       const viewportHeight = window.innerHeight;
       
+      // Define safe margins based on screen size
+      const sideSafeMargin = isMobile ? (isVerySmall ? 8 : 16) : 24;
+      
       // Adjust content width based on screen size
-      const contentWidth = isMobile ? Math.min(viewportWidth - 32, 650) : 650;
+      const contentWidth = isMobile 
+        ? Math.min(viewportWidth - (2 * sideSafeMargin), 650) 
+        : 650;
       
       // Keep content window centered
       setContentPosition({
@@ -159,8 +164,8 @@ export default function PortfolioPageLayout({ children }: PortfolioPageLayoutPro
       
       // Keep links window positioned relative to navbar
       setLinksPosition({
-        x: isMobile ? 16 : ((viewportWidth - 16) - 350 - 16),
-        y: isMobile ? (viewportHeight - 150) : 60 // Changed from 99 to 60
+        x: isMobile ? sideSafeMargin : ((viewportWidth - sideSafeMargin) - 350 - sideSafeMargin),
+        y: isMobile ? (viewportHeight - 150) : 60
       });
     };
 
@@ -268,8 +273,8 @@ export default function PortfolioPageLayout({ children }: PortfolioPageLayoutPro
 
   // Responsive content window style
   const contentWindowStyle = {
-    width: isMobile ? (isVerySmall ? '95%' : '90%') : '900px',
-    maxWidth: isMobile ? '100%' : '900px',
+    width: isMobile ? (isVerySmall ? 'calc(100vw - 16px)' : 'calc(100vw - 32px)') : '900px',
+    maxWidth: isMobile ? 'calc(100vw - 32px)' : '900px',
     maxHeight: isMobile ? '80vh' : '90vh',
   };
 
@@ -398,6 +403,7 @@ export default function PortfolioPageLayout({ children }: PortfolioPageLayoutPro
     </main>
   )
 }
+
 
 
 

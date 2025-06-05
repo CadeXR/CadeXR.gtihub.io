@@ -222,7 +222,7 @@ export default function FrostedWindow({
     const headerHeight = isMobile ? 40 : 48; // Height of header
     const topSafeMargin = isMobile ? 8 + headerHeight : 16 + headerHeight;
     const bottomSafeMargin = isMobile ? 8 : 16;
-    const sideSafeMargin = isMobile ? 8 : 16;
+    const sideSafeMargin = isMobile ? 16 : 24; // Increased side margins for mobile
     
     // Calculate available space with safe margins
     const availableWidth = viewportWidth - (2 * sideSafeMargin);
@@ -234,9 +234,9 @@ export default function FrostedWindow({
     // Default width based on screen size
     let defaultWidth;
     if (isVeryNarrow) {
-      defaultWidth = availableWidth * 0.98; // Almost full width for very narrow screens
+      defaultWidth = availableWidth; // Full available width for very narrow screens
     } else if (isMobile) {
-      defaultWidth = availableWidth * 0.95; // 95% for mobile
+      defaultWidth = availableWidth; // Full available width for mobile
     } else {
       defaultWidth = Math.min(900, availableWidth * 0.9); // 900px or 90% for desktop
     }
@@ -257,12 +257,9 @@ export default function FrostedWindow({
       }
     }
     
-    // Adjust minimum width based on screen size
-    const minWidth = isVeryNarrow ? '280px' : (isMobile ? '320px' : '550px');
-    
     // Base styles common to all screen sizes
     const baseStyles: React.CSSProperties = {
-      padding: isVeryNarrow ? '8px' : (isMobile ? 'var(--window-padding-sm)' : 'var(--window-padding)'),
+      padding: isVeryNarrow ? '8px' : (isMobile ? '12px' : 'var(--window-padding)'),
       backgroundColor: 'rgba(0, 0, 0, 0.5)',
       backdropFilter: 'blur(10px)',
       WebkitBackdropFilter: 'blur(10px)',
@@ -275,10 +272,10 @@ export default function FrostedWindow({
       maxHeight: `${availableHeight}px`,
       ...style,
       // Set width to our calculated value or style width
-      width: typeof windowWidth === 'number' ? `${windowWidth}px` : windowWidth,
+      width: isMobile ? `${availableWidth}px` : (typeof windowWidth === 'number' ? `${windowWidth}px` : windowWidth),
       // Allow height to be determined by content, up to maxHeight
       height: 'auto',
-      minWidth: minWidth,
+      minWidth: isMobile ? 'auto' : '550px', // Remove min-width constraint on mobile
       minHeight: isVeryNarrow ? '150px' : '200px',
       boxSizing: 'border-box',
       // Use absolute positioning with transform for perfect centering

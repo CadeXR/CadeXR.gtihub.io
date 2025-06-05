@@ -38,11 +38,11 @@ const calculateSafePosition = (desiredX: number, desiredY: number, windowWidth: 
   const isMobile = getIsMobile();
   const isVerySmall = getIsVerySmall();
   
-  // Define safe areas
+  // Define safe areas with scaled margins
   const headerHeight = isMobile ? 40 : 48;
-  const topSafeMargin = isMobile ? 8 + headerHeight : 16 + headerHeight;
-  const bottomSafeMargin = isMobile ? 8 : 16;
-  const sideSafeMargin = isMobile ? 8 : 16;
+  const topSafeMargin = isMobile ? (isVerySmall ? 8 : 12) + headerHeight : 16 + headerHeight;
+  const bottomSafeMargin = isMobile ? (isVerySmall ? 8 : 12) : 16;
+  const sideSafeMargin = isMobile ? (isVerySmall ? 8 : 16) : 24;
 
   // Ensure x position stays within margins
   const safeX = Math.min(
