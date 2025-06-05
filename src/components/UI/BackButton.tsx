@@ -3,19 +3,22 @@
 import { useRouter, usePathname } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { conthrax } from '@/app/fonts'
+import { useMediaQuery } from 'react-responsive'
 
 export default function BackButton() {
   const router = useRouter()
   const pathname = usePathname()
   const [isActive, setIsActive] = useState(false)
   const buttonRef = useRef<HTMLButtonElement>(null)
+  const isMobile = useMediaQuery({ maxWidth: 768 })
+  const isVerySmall = useMediaQuery({ maxWidth: 480 })
 
   const containerStyle: React.CSSProperties = {
     position: 'fixed',
     top: 'var(--spacing-sm)',
     left: 'var(--spacing-sm)',
     zIndex: 50,
-    padding: '0.5rem',
+    padding: isVerySmall ? '0.25rem' : '0.5rem',
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
     backdropFilter: 'blur(10px)',
     WebkitBackdropFilter: 'blur(10px)',
@@ -31,12 +34,12 @@ export default function BackButton() {
   const buttonStyle = {
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
     color: 'white',
-    width: '40px',
-    height: '40px',
+    width: isVerySmall ? '32px' : '40px',
+    height: isVerySmall ? '32px' : '40px',
     borderRadius: '0.5rem',
     cursor: 'pointer',
     border: '1px solid rgba(255, 255, 255, 0.4)',
-    fontSize: '1.25rem',
+    fontSize: isVerySmall ? '1rem' : '1.25rem',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -129,6 +132,7 @@ export default function BackButton() {
     </div>
   )
 }
+
 
 
 
