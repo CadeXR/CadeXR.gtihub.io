@@ -533,9 +533,17 @@ export default function FrostedWindow({
       transition={{ duration: 0.2 }}
       onClick={handleWindowClick}
       data-frosted-box={id}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby={`${id}-title`}
     >
       <div style={windowHeaderStyle}>
-        <div style={windowTitleStyle}>{title}</div>
+        <div 
+          style={windowTitleStyle} 
+          id={`${id}-title`}
+        >
+          {title}
+        </div>
         {showCloseButton && (
           <button 
             style={closeButtonStyle}
@@ -546,18 +554,21 @@ export default function FrostedWindow({
             onMouseLeave={(e) => {
               e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
             }}
+            aria-label="Close window"
           >
             ×
           </button>
         )}
       </div>
-      <div className="window-content" style={{ 
-        width: '100%', 
-        height: 'auto',
-        overflow: 'visible',
-        // Add padding to prevent content from touching the scrollbar
-        paddingRight: '4px'
-      }}>
+      <div 
+        className="window-content" 
+        style={{ 
+          width: '100%', 
+          height: 'auto',
+          overflow: 'visible',
+          paddingRight: '4px'
+        }}
+      >
         {children}
       </div>
     </motion.div>

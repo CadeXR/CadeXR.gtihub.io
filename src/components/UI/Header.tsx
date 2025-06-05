@@ -97,7 +97,7 @@ export default function Header() {
 
   if (!isVisible) return null
 
-  // Responsive header style
+  // Responsive header style with improved readability
   const getHeaderStyle = (): React.CSSProperties => {
     const viewportWidth = typeof window !== 'undefined' ? window.innerWidth : 1200;
     const isVeryNarrow = viewportWidth < 360;
@@ -107,8 +107,8 @@ export default function Header() {
       top: 'var(--spacing-sm)',
       left: `calc(var(--back-button-size) + var(--spacing-sm) * 2)`,
       zIndex: 50,
-      padding: isVeryNarrow ? '0.2rem' : (isMobile ? '0.25rem' : '0.5rem'),
-      backgroundColor: 'rgba(255, 255, 255, 0.1)',
+      padding: isVeryNarrow ? '0.2rem 0.4rem' : (isMobile ? '0.25rem 0.5rem' : '0.5rem 0.75rem'),
+      backgroundColor: 'rgba(0, 0, 0, 0.6)', // Darker background for better contrast
       backdropFilter: 'blur(10px)',
       WebkitBackdropFilter: 'blur(10px)',
       borderRadius: '0.75rem',
@@ -122,7 +122,10 @@ export default function Header() {
       alignItems: 'center',
       justifyContent: 'center',
       overflow: 'hidden',
-      fontSize: isVeryNarrow ? '0.8rem' : 'inherit',
+      fontSize: isVeryNarrow ? '0.85rem' : (isMobile ? '0.9rem' : 'inherit'),
+      fontWeight: 'bold', // Make text bold for better readability
+      color: 'white', // Ensure high contrast
+      textShadow: '0 1px 2px rgba(0, 0, 0, 0.5)', // Add text shadow for better readability
     };
   };
 
@@ -149,6 +152,7 @@ export default function Header() {
     </div>
   )
 }
+
 
 
 
