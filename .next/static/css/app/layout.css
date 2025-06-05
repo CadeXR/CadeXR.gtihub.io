@@ -329,123 +329,6 @@ body:has(.scene-transition-shrink) {
   }
 }
 
-/* Very narrow screens */
-@media (max-width: 360px) {
-  :root {
-    /* Minimal spacing for very narrow screens */
-    --spacing-sm: 4px;
-    --spacing-md: 6px;
-    --spacing-lg: 8px;
-    
-    /* Smallest UI elements */
-    --header-height: 32px;
-    --back-button-size: 32px;
-    --navbar-height: 32px;
-    
-    /* Minimal window padding */
-    --window-padding: 6px;
-  }
-  
-  /* Adjust window dimensions for very narrow screens */
-  .frosted-window {
-    min-width: 280px !important;
-    width: 98% !important;
-    padding: 6px !important;
-  }
-  
-  /* Adjust font sizes for very narrow screens */
-  .frosted-window h1 {
-    font-size: 1.25rem !important;
-  }
-  
-  .frosted-window h2 {
-    font-size: 1.1rem !important;
-  }
-  
-  .frosted-window p {
-    font-size: 0.8rem !important;
-  }
-  
-  /* Ensure UI elements don't overlap */
-  [data-frosted-box="header"] {
-    max-width: calc(100vw - var(--back-button-size) - var(--spacing-sm) * 4 - 60px) !important;
-    font-size: 0.8rem !important;
-  }
-}
-
-/* Base styles for all frosted UI elements */
-.frosted-ui {
-  background-color: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-/* Standardized window styles */
-.frosted-window {
-  max-width: calc(100vw - var(--spacing-md) * 2);
-  max-height: calc(100vh - var(--spacing-md) * 2);
-  overflow: auto;
-  padding: var(--window-padding);
-}
-
-/* Mobile window positioning */
-@media (max-width: 768px) {
-  .frosted-window {
-    width: calc(100vw * var(--mobile-width-ratio)) !important;
-    left: calc((100vw - (100vw * var(--mobile-width-ratio))) / 2) !important;
-    bottom: var(--spacing-sm) !important;
-    top: auto !important;
-    margin-bottom: var(--spacing-sm) !important;
-  }
-  
-  /* Header positioning */
-  [data-frosted-box="header"] {
-    top: var(--spacing-sm) !important;
-    left: calc(var(--back-button-size) + var(--spacing-sm) * 2) !important;
-    height: var(--header-height) !important;
-    max-width: calc(100vw - var(--back-button-size) - var(--spacing-sm) * 4 - 80px) !important;
-  }
-  
-  /* Back button positioning */
-  [data-frosted-box="backbutton"],
-  [data-frosted-box="back-button"] {
-    top: var(--spacing-sm) !important;
-    left: var(--spacing-sm) !important;
-    height: var(--back-button-size) !important;
-    width: var(--back-button-size) !important;
-  }
-  
-  /* Navbar positioning */
-  [data-frosted-box="navbar"] {
-    top: var(--spacing-sm) !important;
-    right: var(--spacing-sm) !important;
-    height: var(--navbar-height) !important;
-  }
-}
-
-/* Very small screens */
-@media (max-width: 480px) {
-  .frosted-window {
-    width: calc(100vw * var(--small-width-ratio)) !important;
-    left: calc((100vw - (100vw * var(--small-width-ratio))) / 2) !important;
-  }
-}
-
-/* Ensure windows maintain their dimensions */
-.frosted-window {
-  box-sizing: border-box !important;
-}
-
-/* Override any responsive width settings */
-@media (max-width: 768px) {
-  .frosted-window {
-    width: auto !important; /* Let the inline style control width */
-    left: auto !important; /* Let the component handle positioning */
-  }
-}
-
 /* Ensure text remains legible at all scales */
 .frosted-window {
   font-size: clamp(14px, 2.5vw, 16px);
@@ -799,6 +682,52 @@ body:has(.scene-transition-shrink) {
 .overflow-y-auto::-webkit-scrollbar-corner {
   background: transparent;
 }
+
+/* Very narrow screens */
+@media (max-width: 360px) {
+  :root {
+    /* Minimal spacing for very narrow screens */
+    --spacing-sm: 4px;
+    --spacing-md: 6px;
+    --spacing-lg: 8px;
+    
+    /* Smallest UI elements */
+    --header-height: 32px;
+    --back-button-size: 32px;
+    --navbar-height: 32px;
+    
+    /* Minimal window padding */
+    --window-padding: 6px;
+  }
+  
+  /* Adjust window dimensions for very narrow screens */
+  .frosted-window {
+    min-width: 280px !important;
+    width: 98% !important;
+    padding: 6px !important;
+  }
+  
+  /* Adjust font sizes for very narrow screens */
+  .frosted-window h1 {
+    font-size: 1.25rem !important;
+  }
+  
+  .frosted-window h2 {
+    font-size: 1.1rem !important;
+  }
+  
+  .frosted-window p {
+    font-size: 0.8rem !important;
+  }
+  
+  /* Ensure UI elements don't overlap */
+  [data-frosted-box="header"] {
+    max-width: calc(100vw - var(--back-button-size) - var(--spacing-sm) * 4 - 60px) !important;
+    font-size: 0.8rem !important;
+  }
+}
+
+
 
 
 
