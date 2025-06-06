@@ -4,6 +4,7 @@ import { useState, useCallback, useEffect, useRef } from 'react'
 import { conthrax } from '@/app/fonts'
 import { useRouter } from 'next/navigation'
 import { useMediaQuery } from 'react-responsive'
+import Image from 'next/image'
 
 interface NavBarProps {
   onOpenAbout: () => void
@@ -47,6 +48,17 @@ export default function NavBar({
     ...buttonStyle,
     backgroundColor: 'rgba(147, 51, 234, 0.3)',
     border: '1px solid rgba(147, 51, 234, 0.6)',
+  }
+
+  // Golden Gear Studios button style
+  const ggButtonStyle = {
+    ...buttonStyle,
+    padding: isVerySmall ? '0.2rem' : (isMobile ? '0.25rem' : '0.4rem'),
+    width: isVerySmall ? '28px' : (isMobile ? '32px' : '36px'),
+    height: isVerySmall ? '28px' : (isMobile ? '32px' : '36px'),
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   }
 
   const updateParticles = useCallback(() => {
@@ -253,6 +265,32 @@ export default function NavBar({
         }}
       >
         {isMobile ? 'Work' : 'Portfolio'}
+      </button>
+      
+      {/* Golden Gear Studios button */}
+      <button 
+        onClick={() => window.open('https://goldengearstudios.com', '_blank')}
+        style={ggButtonStyle}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.3)'
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)'
+        }}
+        aria-label="Golden Gear Studios"
+      >
+        <div style={{ 
+          position: 'relative', 
+          width: isVerySmall ? '20px' : (isMobile ? '24px' : '28px'), 
+          height: isVerySmall ? '20px' : (isMobile ? '24px' : '28px') 
+        }}>
+          <Image
+            src="/media/GG_Gear.png"
+            alt="Golden Gear Studios"
+            fill
+            style={{ objectFit: 'contain' }}
+          />
+        </div>
       </button>
     </nav>
   )

@@ -1,7 +1,3 @@
 {
-  "/home/page": "app/home/page.js",
-  "/projects/personifyai/page": "app/projects/personifyai/page.js",
-  "/projects/battlegrounds/page": "app/projects/battlegrounds/page.js",
-  "/page": "app/page.js",
-  "/activities/page": "app/activities/page.js"
+  "/home/page": "app/home/page.js"
 }
