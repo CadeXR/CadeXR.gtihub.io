@@ -12,6 +12,11 @@ export default function BackButton() {
   const buttonRef = useRef<HTMLButtonElement>(null)
   const isMobile = useMediaQuery({ maxWidth: 768 })
   const isVerySmall = useMediaQuery({ maxWidth: 480 })
+  
+  // Don't show back button on homepage
+  if (pathname === '/' || pathname === '/home' || pathname === '/home/') {
+    return null
+  }
 
   const containerStyle: React.CSSProperties = {
     position: 'fixed',
@@ -108,6 +113,7 @@ export default function BackButton() {
     </div>
   )
 }
+
 
 
 

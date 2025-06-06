@@ -3,15 +3,20 @@
 import { useState, useCallback, useEffect } from 'react'
 import { useMediaQuery } from 'react-responsive'
 import { conthrax } from '@/app/fonts'
+import { usePathname } from 'next/navigation'
 
 export default function Header() {
   const [isActive, setIsActive] = useState(false)
   const [isVisible, setIsVisible] = useState(true)
   const [headerText, setHeaderText] = useState('Cade Gilbert - XR Design, XR Software Dev, Game Design, and AI')
-
+  const pathname = usePathname()
+  
   // Use react-responsive for consistent media queries
   const isMobile = useMediaQuery({ maxWidth: 768 });
   const isVerySmall = useMediaQuery({ maxWidth: 480 });
+  
+  // Check if we're on the homepage
+  const isHomePage = pathname === '/' || pathname === '/home' || pathname === '/home/';
 
   // Set header text based on screen size
   useEffect(() => {
@@ -103,7 +108,34 @@ export default function Header() {
     const viewportWidth = typeof window !== 'undefined' ? window.innerWidth : 1200;
     const isVeryNarrow = viewportWidth < 360;
     
-    // Calculate proper spacing between back button and header
+    // If on homepage, position header on the left
+    if (isHomePage) {
+      return {
+        position: 'fixed' as const,
+        top: 'var(--spacing-sm)',
+        left: 'var(--spacing-sm)', // Position on the left
+        zIndex: 50,
+        padding: isVeryNarrow ? '0.2rem 0.4rem' : (isMobile ? '0.25rem 0.5rem' : '0.5rem 0.75rem'),
+        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+        backdropFilter: 'blur(10px)',
+        WebkitBackdropFilter: 'blur(10px)',
+        borderRadius: '0.75rem',
+        border: '1px solid rgba(255, 255, 255, 0.2)',
+        width: 'fit-content',
+        maxWidth: isMobile ? '70%' : 'none',
+        height: 'var(--back-button-size)', // Match back button height for vertical alignment
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        overflow: 'hidden',
+        fontSize: isVeryNarrow ? '0.85rem' : (isMobile ? '0.9rem' : 'inherit'),
+        fontWeight: 'bold',
+        color: 'white',
+        textShadow: '0 1px 2px rgba(0, 0, 0, 0.5)',
+      };
+    }
+    
+    // Original positioning for non-homepage
     const backButtonWidth = isVerySmall ? 40 : 48;
     const spacingBetween = isVerySmall ? 12 : 20; // Increased spacing between back button and header
     
@@ -159,6 +191,7 @@ export default function Header() {
     </div>
   )
 }
+
 
 
 
