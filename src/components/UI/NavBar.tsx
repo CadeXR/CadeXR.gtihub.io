@@ -25,6 +25,28 @@ export default function NavBar({
   const [buttonsToShow, setButtonsToShow] = useState<number>(3) // Default show all buttons
   const isMobile = useMediaQuery({ maxWidth: 768 })
   const isVerySmall = useMediaQuery({ maxWidth: 480 })
+  const [isHeaderVisible, setIsHeaderVisible] = useState(true)
+
+  // Add this useEffect to handle initial positioning
+  useEffect(() => {
+    // Check header visibility on initial load
+    const checkInitialHeaderVisibility = () => {
+      const headerElement = document.querySelector('[data-frosted-box="header"]')
+      
+      // Check if header is visible
+      const isHeaderHidden = !headerElement || 
+        (headerElement as HTMLElement).style.display === 'none' || 
+        window.getComputedStyle(headerElement).display === 'none'
+      
+      setIsHeaderVisible(!isHeaderHidden)
+    }
+    
+    // Run immediately on component mount
+    checkInitialHeaderVisibility()
+    
+    // Also run after a short delay to ensure all elements are rendered
+    setTimeout(checkInitialHeaderVisibility, 100)
+  }, [])
 
   // Responsive button styles
   const buttonStyle = {
@@ -99,8 +121,19 @@ export default function NavBar({
     const checkOverlap = () => {
       const backButtonElement = document.querySelector('[data-frosted-box="back-button"]')
       const navbarElement = navRef.current
+      const headerElement = document.querySelector('[data-frosted-box="header"]')
       
-      if (!backButtonElement || !navbarElement) return
+      if (!navbarElement) return
+      
+      // Check if header is visible
+      const isHeaderHidden = !headerElement || 
+        (headerElement as HTMLElement).style.display === 'none' || 
+        window.getComputedStyle(headerElement).display === 'none'
+      
+      setIsHeaderVisible(!isHeaderHidden)
+      
+      // Add null check for backButtonElement
+      if (!backButtonElement) return
       
       const backButtonRect = backButtonElement.getBoundingClientRect()
       const navbarRect = navbarElement.getBoundingClientRect()
@@ -148,50 +181,98 @@ export default function NavBar({
   // Calculate navbar width based on screen size
   const getNavbarStyle = () => {
     if (!isMobile) {
-      // Desktop style - align with back button height
-      return {
-        position: 'fixed' as const,
-        top: 'var(--spacing-sm)',  // Same top position as back button
-        right: 'var(--spacing-md)',
-        zIndex: 50,
-        display: 'flex',
-        flexDirection: 'row',
-        gap: '1rem',
-        padding: '0.5rem',
-        backgroundColor: 'rgba(255, 255, 255, 0.1)',
-        backdropFilter: 'blur(10px)',
-        WebkitBackdropFilter: 'blur(10px)',
-        borderRadius: '0.75rem',
-        border: '1px solid rgba(255, 255, 255, 0.2)',
-        height: 'var(--back-button-size)',  // Match back button height
-        alignItems: 'center',
-      } as const;
+      // Desktop style
+      if (isHeaderVisible) {
+        // Original positioning when header is visible
+        return {
+          position: 'fixed' as const,
+          top: 'var(--spacing-sm)',
+          right: 'var(--spacing-md)',
+          zIndex: 50,
+          display: 'flex',
+          flexDirection: 'row',
+          gap: '1rem',
+          padding: '0.5rem',
+          backgroundColor: 'rgba(255, 255, 255, 0.1)',
+          backdropFilter: 'blur(10px)',
+          WebkitBackdropFilter: 'blur(10px)',
+          borderRadius: '0.75rem',
+          border: '1px solid rgba(255, 255, 255, 0.2)',
+          height: 'var(--back-button-size)',
+          alignItems: 'center',
+        } as const;
+      } else {
+        // Centered positioning when header is hidden
+        return {
+          position: 'fixed' as const,
+          top: 'var(--spacing-sm)',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          zIndex: 50,
+          display: 'flex',
+          flexDirection: 'row',
+          gap: '1rem',
+          padding: '0.5rem',
+          backgroundColor: 'rgba(255, 255, 255, 0.1)',
+          backdropFilter: 'blur(10px)',
+          WebkitBackdropFilter: 'blur(10px)',
+          borderRadius: '0.75rem',
+          border: '1px solid rgba(255, 255, 255, 0.2)',
+          height: 'var(--back-button-size)',
+          alignItems: 'center',
+        } as const;
+      }
     } else {
-      // Mobile style - calculate width to fit between back button and right edge
-      const backButtonWidth = isVerySmall ? 40 : 48; // Width of back button
-      const safeMargin = isVerySmall ? 8 : 16;
-      const screenWidth = window.innerWidth;
-      const availableWidth = screenWidth - backButtonWidth - (safeMargin * 3);
-      
-      return {
-        position: 'fixed' as const,
-        top: 'var(--spacing-sm)',  // Same top position as back button
-        right: 'var(--spacing-sm)',
-        zIndex: 50,
-        display: 'flex',
-        flexDirection: 'row',
-        gap: isVerySmall ? '0.4rem' : '0.75rem',
-        padding: isVerySmall ? '0.25rem' : '0.5rem',
-        backgroundColor: 'rgba(255, 255, 255, 0.1)',
-        backdropFilter: 'blur(10px)',
-        WebkitBackdropFilter: 'blur(10px)',
-        borderRadius: '0.75rem',
-        border: '1px solid rgba(255, 255, 255, 0.2)',
-        height: 'var(--back-button-size)',  // Match back button height
-        alignItems: 'center',
-        maxWidth: `${availableWidth}px`,
-        overflowX: 'auto',
-      } as const;
+      // Mobile style
+      if (isHeaderVisible) {
+        // Original mobile positioning when header is visible
+        const backButtonWidth = isVerySmall ? 40 : 48; // Width of back button
+        const safeMargin = isVerySmall ? 8 : 16;
+        const screenWidth = window.innerWidth;
+        const availableWidth = screenWidth - backButtonWidth - (safeMargin * 3);
+        
+        return {
+          position: 'fixed' as const,
+          top: 'var(--spacing-sm)',  // Same top position as back button
+          right: 'var(--spacing-sm)',
+          zIndex: 50,
+          display: 'flex',
+          flexDirection: 'row',
+          gap: isVerySmall ? '0.4rem' : '0.75rem',
+          padding: isVerySmall ? '0.25rem' : '0.5rem',
+          backgroundColor: 'rgba(255, 255, 255, 0.1)',
+          backdropFilter: 'blur(10px)',
+          WebkitBackdropFilter: 'blur(10px)',
+          borderRadius: '0.75rem',
+          border: '1px solid rgba(255, 255, 255, 0.2)',
+          height: 'var(--back-button-size)',  // Match back button height
+          alignItems: 'center',
+          maxWidth: `${availableWidth}px`,
+          overflowX: 'auto',
+        } as const;
+      } else {
+        // Centered mobile positioning when header is hidden
+        return {
+          position: 'fixed' as const,
+          top: 'var(--spacing-sm)',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          zIndex: 50,
+          display: 'flex',
+          flexDirection: 'row',
+          gap: isVerySmall ? '0.4rem' : '0.75rem',
+          padding: isVerySmall ? '0.25rem' : '0.5rem',
+          backgroundColor: 'rgba(255, 255, 255, 0.1)',
+          backdropFilter: 'blur(10px)',
+          WebkitBackdropFilter: 'blur(10px)',
+          borderRadius: '0.75rem',
+          border: '1px solid rgba(255, 255, 255, 0.2)',
+          height: 'var(--back-button-size)',
+          alignItems: 'center',
+          maxWidth: `calc(100vw - var(--spacing-sm) * 2)`,
+          overflowX: 'auto',
+        } as const;
+      }
     }
   }
 
