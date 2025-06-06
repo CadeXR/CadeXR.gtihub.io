@@ -10,7 +10,7 @@ export default function AboutContent() {
       maxHeight: 'none', // Remove any max-height constraint
       overflow: 'visible' // Let the parent container handle scrolling if needed
     }}>
-      <h2 className={`${isMobile ? 'text-xl' : 'text-2xl'} font-semibold mb-6`}>About Cade</h2>
+      <h2 className={`${isMobile ? 'text-xl' : 'text-2xl'} font-semibold mb-6`}>About Me</h2>
       
       <section>
         <p className="mb-4 text-sm md:text-base">
