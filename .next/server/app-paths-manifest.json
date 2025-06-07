@@ -1,8 +1,4 @@
 {
   "/home/page": "app/home/page.js",
-  "/projects/flexvr-wellness/page": "app/projects/flexvr-wellness/page.js",
-  "/projects/battlegrounds/page": "app/projects/battlegrounds/page.js",
-  "/page": "app/page.js",
-  "/projects/hex-vr/page": "app/projects/hex-vr/page.js",
-  "/projects/personifyai/page": "app/projects/personifyai/page.js"
+  "/projects/flexvr-wellness/page": "app/projects/flexvr-wellness/page.js"
 }
