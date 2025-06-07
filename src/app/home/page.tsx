@@ -10,7 +10,8 @@ import AboutContent from '@/components/UI/AboutContent'
 import SocialContent from '@/components/UI/SocialContent'
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
-import { useMediaQuery } from 'react-responsive';
+import { useMediaQuery } from 'react-responsive'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 const MARGIN = 100; // Increased margin for better spacing
 const NAVBAR_WIDTH = 64;
@@ -110,7 +111,10 @@ const getWindowDimensions = () => {
 const WINDOW_DIMENSIONS = getWindowDimensions();
 
 export default function HomePage() {
-  const [isAboutOpen, setIsAboutOpen] = useState(true) // Changed from false to true
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  
+  const [isAboutOpen, setIsAboutOpen] = useState(false) // Start with all windows closed
   const [isSocialsOpen, setIsSocialsOpen] = useState(false)
   const [isPortfolioOpen, setIsPortfolioOpen] = useState(false)
   
@@ -305,6 +309,26 @@ export default function HomePage() {
     setPortfolioPosition(calculateExactCenter('portfolio'));
     setSocialsPosition(calculateExactCenter('socials'));
   }, []);
+
+  // Check query parameters to determine which window to open
+  useEffect(() => {
+    const from = searchParams.get('from')
+    
+    if (from === 'projects') {
+      // Coming from a project page, open portfolio
+      setIsPortfolioOpen(true)
+      setIsAboutOpen(false)
+      setTimeout(() => forceCenter('portfolio'), 100)
+    } else {
+      // Default behavior - open about
+      setIsAboutOpen(true)
+      setIsPortfolioOpen(false)
+      setTimeout(() => forceCenter('about'), 100)
+    }
+    
+    // Always close socials
+    setIsSocialsOpen(false)
+  }, [searchParams])
 
   return (
     <main className="relative w-screen h-screen overflow-hidden bg-black">

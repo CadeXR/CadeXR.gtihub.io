@@ -105,8 +105,8 @@ export default function PortfolioPageLayout({ children }: PortfolioPageLayoutPro
   }, [isNavButtonActive, updateNavButtonParticles])
 
   const handleBack = () => {
-    // Remove transition overlay and directly navigate
-    router.push('/home')
+    // Navigate back to home with a query parameter
+    router.push('/home?from=projects')
   }
 
   // Center all windows by default with responsive sizing
