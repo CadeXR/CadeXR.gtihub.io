@@ -8,10 +8,10 @@ import BackButton from '@/components/UI/BackButton'
 import PortfolioWindow from '@/components/UI/PortfolioWindow'
 import AboutContent from '@/components/UI/AboutContent'
 import SocialContent from '@/components/UI/SocialContent'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import Image from 'next/image'
 import { useMediaQuery } from 'react-responsive'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 
 const MARGIN = 100; // Increased margin for better spacing
 const NAVBAR_WIDTH = 64;
@@ -112,11 +112,11 @@ const WINDOW_DIMENSIONS = getWindowDimensions();
 
 export default function HomePage() {
   const router = useRouter()
-  const searchParams = useSearchParams()
   
   const [isAboutOpen, setIsAboutOpen] = useState(false) // Start with all windows closed
   const [isSocialsOpen, setIsSocialsOpen] = useState(false)
   const [isPortfolioOpen, setIsPortfolioOpen] = useState(false)
+  const [initialLoadComplete, setInitialLoadComplete] = useState(false)
   
   // Use react-responsive for consistent media queries
   const isMobile = useMediaQuery({ maxWidth: 768 });
@@ -171,11 +171,6 @@ export default function HomePage() {
     setPortfolioPosition(calculateExactCenter('portfolio'));
     setSocialsPosition(calculateExactCenter('socials'));
   }, [isMobile, isVerySmall]);
-
-  // Force center the about window on initial load
-  useEffect(() => {
-    forceCenter('about');
-  }, []);
 
   // Force center a window after it's opened
   const forceCenter = (windowType: 'about' | 'portfolio' | 'socials') => {
@@ -238,101 +233,48 @@ export default function HomePage() {
     forceCenter('portfolio');
   };
 
-  const [windowScale, setWindowScale] = useState(1)
-
-  useEffect(() => {
-    console.log('Window states:', {
-      about: isAboutOpen,
-      socials: isSocialsOpen,
-      portfolio: isPortfolioOpen
-    })
+  // Create a simple component just for the search params
+  const ParamsReader = () => {
+    const { useSearchParams } = require('next/navigation')
+    const searchParams = useSearchParams()
     
-    // Add debug logging for positions
-    console.log('Window positions:', {
-      portfolio: portfolioPosition,
-      about: aboutPosition,
-      socials: socialsPosition
-    })
-  }, [isAboutOpen, isSocialsOpen, isPortfolioOpen, portfolioPosition, aboutPosition, socialsPosition])
-
-  useEffect(() => {
-    // Remove transition overlay code - no longer needed
-  }, [])
-
-  // Handle window movement (we'll keep this for reference but disable actual movement)
-  const handleWindowMove = (position: { x: number, y: number }, windowType: 'about' | 'socials' | 'portfolio') => {
-    const windowDimensions = WINDOW_DIMENSIONS[windowType];
-    
-    // Apply margin constraints
-    const safePosition = calculateSafePosition(
-      position.x, 
-      position.y, 
-      windowDimensions.width, 
-      windowDimensions.height
-    );
-
-    // Update position based on window type
-    switch (windowType) {
-      case 'about':
-        setAboutPosition(safePosition);
-        break;
-      case 'socials':
-        setSocialsPosition(safePosition);
-        break;
-      case 'portfolio':
-        setPortfolioPosition(safePosition);
-        break;
-    }
-  };
-
-  useEffect(() => {
-    const handleResize = () => {
-      const isMobile = window.innerWidth <= 768;
-
-      if (isMobile) {
-        setAboutPosition({ x: 0, y: MARGIN });
-        setSocialsPosition({ x: 0, y: MARGIN });
-        setPortfolioPosition({ x: 0, y: MARGIN });
+    useEffect(() => {
+      // Only run once on initial load
+      if (initialLoadComplete) return;
+      
+      const from = searchParams.get('from')
+      
+      if (from === 'projects') {
+        // Coming from a project page, open portfolio
+        setIsPortfolioOpen(true)
+        setIsAboutOpen(false)
+        setTimeout(() => forceCenter('portfolio'), 100)
       } else {
-        setAboutPosition(calculateExactCenter('about'));
-        setPortfolioPosition(calculateExactCenter('portfolio'));
-        setSocialsPosition(calculateExactCenter('socials'));
+        // Default behavior - open about
+        setIsAboutOpen(true)
+        setIsPortfolioOpen(false)
+        setTimeout(() => forceCenter('about'), 100)
       }
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  useEffect(() => {
-    setAboutPosition(calculateExactCenter('about'));
-    setPortfolioPosition(calculateExactCenter('portfolio'));
-    setSocialsPosition(calculateExactCenter('socials'));
-  }, []);
-
-  // Check query parameters to determine which window to open
-  useEffect(() => {
-    const from = searchParams.get('from')
+      
+      // Always close socials
+      setIsSocialsOpen(false)
+      
+      // Mark initial load as complete
+      setInitialLoadComplete(true)
+    }, [searchParams])
     
-    if (from === 'projects') {
-      // Coming from a project page, open portfolio
-      setIsPortfolioOpen(true)
-      setIsAboutOpen(false)
-      setTimeout(() => forceCenter('portfolio'), 100)
-    } else {
-      // Default behavior - open about
-      setIsAboutOpen(true)
-      setIsPortfolioOpen(false)
-      setTimeout(() => forceCenter('about'), 100)
-    }
-    
-    // Always close socials
-    setIsSocialsOpen(false)
-  }, [searchParams])
+    return null
+  }
 
   return (
     <main className="relative w-screen h-screen overflow-hidden bg-black">
       <Scene />
+      
+      {/* Add the Suspense boundary with the ParamsReader */}
+      <Suspense fallback={null}>
+        <ParamsReader />
+      </Suspense>
+      
       <div 
         className="fixed inset-0 flex items-center justify-center pointer-events-none" 
         style={{ 
