@@ -3,6 +3,7 @@
 import './globals.css'
 import { conthrax } from './fonts'
 import { useEffect } from 'react'
+import EmailButton from '@/components/UI/EmailButton'
 
 export default function RootLayout({
   children,
@@ -46,7 +47,10 @@ export default function RootLayout({
         {/* Add canonical URL if needed */}
         <link rel="canonical" href="https://cadedev.com" />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        <EmailButton />
+      </body>
     </html>
   )
 }
