@@ -94,7 +94,7 @@ export default function EmailButton() {
         height: isVerySmall ? '24px' : '28px'
       }}>
         <Image
-          src="/media/mail-icon.png"
+          src="/media/Mail-icon.png"
           alt="Email"
           width={isVerySmall ? 24 : 28}
           height={isVerySmall ? 24 : 28}
