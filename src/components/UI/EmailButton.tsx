@@ -69,7 +69,7 @@ export default function EmailButton() {
   const handleEmailClick = (e: React.MouseEvent) => {
     e.preventDefault();
     // Open Gmail compose with your email pre-filled
-    window.open('https://mail.google.com/mail/?view=cm&fs=1&to=hex.cadeg@gmail.com', '_blank');
+    window.open('https://mail.google.com/mail/?view=cm&fs=1&to=xr.cadeg@gmail.com', '_blank');
   };
 
   return (
