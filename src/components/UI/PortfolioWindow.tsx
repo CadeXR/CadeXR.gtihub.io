@@ -61,6 +61,12 @@ export default function PortfolioWindow({
       onClose={onClose}
       defaultPosition={defaultPosition}
       onMove={onMove}
+      headerImage={{
+        src: "/media/Working.jpg",
+        alt: "Working",
+        height: "150px",
+        objectFit: "cover"
+      }}
       style={{
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
         boxShadow: '0 4px 20px rgba(0, 0, 0, 0.5)',

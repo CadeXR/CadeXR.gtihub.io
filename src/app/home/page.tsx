@@ -317,7 +317,7 @@ export default function HomePage() {
         </div>
         <div className="pointer-events-auto">
           <PortfolioWindow 
-            id="portfolio-window"
+            id="My Works"
             isOpen={isPortfolioOpen}
             onClose={() => setIsPortfolioOpen(false)}
             defaultPosition={portfolioPosition}
@@ -325,7 +325,7 @@ export default function HomePage() {
           />
 
           <FrostedWindow 
-            id=""
+            id="About Cade"
             isOpen={isAboutOpen}
             onClose={() => setIsAboutOpen(false)}
             defaultPosition={aboutPosition}
@@ -350,11 +350,17 @@ export default function HomePage() {
           </FrostedWindow>
 
           <FrostedWindow 
-            id="socials-window"
+            id="socials"
             isOpen={isSocialsOpen}
             onClose={() => setIsSocialsOpen(false)}
             defaultPosition={socialsPosition}
             onMove={() => {}} // Disable moving
+            headerImage={{
+              src: "/media/MountainClouds.png",
+              alt: "Mountain Clouds",
+              height: isMobile ? "120px" : "150px",
+              objectFit: "cover"
+            }}
             style={{
               width: isMobile ? (isVerySmall ? '94vw' : '92vw') : '350px',
               minWidth: isMobile ? 'unset' : '350px',
