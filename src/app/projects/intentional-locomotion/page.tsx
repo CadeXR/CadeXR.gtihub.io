@@ -4,7 +4,14 @@ import PortfolioPageLayout from '@/components/Layout/PortfolioPageLayout'
 
 export default function IntentionalLocomotionPage() {
   return (
-    <PortfolioPageLayout>
+    <PortfolioPageLayout
+      headerImage={{
+        src: "/media/IntentionalLocomotion.png",
+        alt: "",
+        height: "200px",
+        objectFit: "cover"
+      }}
+    >
       <div className="max-w-4xl mx-auto text-white">
         <h1 className="text-4xl font-bold mb-8">Intentional Locomotion - MIT Reality Hack 2025</h1>
         

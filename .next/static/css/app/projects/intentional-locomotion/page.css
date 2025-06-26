@@ -1,0 +1,11 @@
+/*!****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[3].use[1]!./node_modules/next/dist/build/webpack/loaders/next-font-loader/index.js??ruleSet[1].rules[14].oneOf[3].use[2]!./node_modules/next/font/local/target.css?{"path":"src\\app\\fonts.ts","import":"","arguments":[{"src":"./Fonts/Conthrax-SemiBold.otf","display":"swap"}],"variableName":"conthrax"} ***!
+  \****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+@font-face {
+font-family: '__conthrax_84f4b4';
+src: url(/_next/static/media/7088caceded5d5e9-s.p.otf) format('opentype');
+font-display: swap;
+}@font-face {font-family: '__conthrax_Fallback_84f4b4';src: local("Arial");ascent-override: 61.81%;descent-override: 18.12%;line-gap-override: 0.00%;size-adjust: 150.14%
+}.__className_84f4b4 {font-family: '__conthrax_84f4b4', '__conthrax_Fallback_84f4b4'
+}
+

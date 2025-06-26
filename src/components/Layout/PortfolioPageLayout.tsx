@@ -11,6 +11,12 @@ import { useMediaQuery } from 'react-responsive'
 
 interface PortfolioPageLayoutProps {
   children: React.ReactNode
+  headerImage?: {
+    src: string
+    alt?: string
+    height?: number | string
+    objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down'
+  }
 }
 
 // Update buttonStyle to match the main page buttons
@@ -38,7 +44,7 @@ const getButtonStyle = (isMobile: boolean, isVerySmall: boolean) => ({
   height: isVerySmall ? '28px' : (isMobile ? '32px' : '36px'),
 })
 
-export default function PortfolioPageLayout({ children }: PortfolioPageLayoutProps) {
+export default function PortfolioPageLayout({ children, headerImage }: PortfolioPageLayoutProps) {
   const router = useRouter()
   const [isLinksOpen, setIsLinksOpen] = useState(false)
   const [isContentOpen, setIsContentOpen] = useState(true)
@@ -349,6 +355,7 @@ export default function PortfolioPageLayout({ children }: PortfolioPageLayoutPro
         onMove={(pos) => setContentPosition(pos)}
         className="!fixed z-[50]"
         showCloseButton={false}
+        headerImage={headerImage}
         style={contentWindowStyle}
       >
         <div 

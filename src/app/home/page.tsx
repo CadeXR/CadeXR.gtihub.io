@@ -358,7 +358,7 @@ export default function HomePage() {
             headerImage={{
               src: "/media/MountainClouds.png",
               alt: "Mountain Clouds",
-              height: isMobile ? "120px" : "150px",
+              height: isMobile ? "50px" : "50px",
               objectFit: "cover"
             }}
             style={{
