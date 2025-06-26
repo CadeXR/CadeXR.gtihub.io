@@ -325,7 +325,7 @@ export default function HomePage() {
           />
 
           <FrostedWindow 
-            id="about-window"
+            id=""
             isOpen={isAboutOpen}
             onClose={() => setIsAboutOpen(false)}
             defaultPosition={aboutPosition}
