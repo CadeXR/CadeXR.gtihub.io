@@ -4,6 +4,40 @@ import { motion, AnimatePresence, useMotionValue } from 'framer-motion'
 import { useEffect, useCallback, useState } from 'react'
 import { useMediaQuery } from 'react-responsive'
 
+/**
+ * FrostedWindow Component
+ * 
+ * A customizable frosted glass window component with optional header image support.
+ * 
+ * @example
+ * // Basic usage without header image
+ * <FrostedWindow
+ *   id="my-window"
+ *   isOpen={isOpen}
+ *   onClose={() => setIsOpen(false)}
+ *   defaultPosition={{ x: 100, y: 100 }}
+ * >
+ *   <div>Window content here</div>
+ * </FrostedWindow>
+ * 
+ * @example
+ * // Usage with header image
+ * <FrostedWindow
+ *   id="my-window"
+ *   isOpen={isOpen}
+ *   onClose={() => setIsOpen(false)}
+ *   defaultPosition={{ x: 100, y: 100 }}
+ *   headerImage={{
+ *     src: "/path/to/image.jpg",
+ *     alt: "Header image description",
+ *     height: "200px",
+ *     objectFit: "cover"
+ *   }}
+ * >
+ *   <div>Window content here</div>
+ * </FrostedWindow>
+ */
+
 interface FrostedWindowProps {
   id?: string
   isOpen: boolean
@@ -13,6 +47,12 @@ interface FrostedWindowProps {
   style?: React.CSSProperties
   className?: string
   showCloseButton?: boolean
+  headerImage?: {
+    src: string
+    alt?: string
+    height?: number | string
+    objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down'
+  }
   children: React.ReactNode
 }
 
@@ -25,7 +65,8 @@ export default function FrostedWindow({
   onMove,
   style,
   className,
-  showCloseButton = true
+  showCloseButton = true,
+  headerImage
 }: FrostedWindowProps) {
   const [isActive, setIsActive] = useState(false);
   const title = id ? id.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) : '';
@@ -255,7 +296,7 @@ export default function FrostedWindow({
       backgroundColor: 'rgba(0, 0, 0, 0.7)',
       backdropFilter: 'blur(10px)',
       WebkitBackdropFilter: 'blur(10px)',
-      borderRadius: '0.75rem',
+      borderRadius: headerImage ? '0 0 0.75rem 0.75rem' : '0.75rem',
       border: '1px solid rgba(255, 255, 255, 0.2)',
       boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
       color: 'white',
@@ -677,12 +718,39 @@ export default function FrostedWindow({
       aria-modal="true"
       aria-labelledby={`${id}-title`}
     >
+      {headerImage && (
+        <div 
+          className="window-header-image"
+          style={{
+            width: '100%',
+            height: headerImage.height || (isMobile ? '120px' : '150px'),
+            position: 'relative',
+            overflow: 'hidden',
+            borderTopLeftRadius: '0.75rem',
+            borderTopRightRadius: '0.75rem',
+            borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+          }}
+        >
+          <img
+            src={headerImage.src}
+            alt={headerImage.alt || 'Header image'}
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: headerImage.objectFit || 'cover',
+              display: 'block',
+            }}
+          />
+        </div>
+      )}
       <div className="window-header" style={{
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: isMobile ? '0.5rem' : '0.75rem',
         borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+        borderTopLeftRadius: headerImage ? '0' : '0.75rem',
+        borderTopRightRadius: headerImage ? '0' : '0.75rem',
       }}>
         <div className="window-title" style={{
           fontSize: isMobile ? '0.9rem' : '1rem',

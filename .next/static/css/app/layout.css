@@ -1,0 +1,1051 @@
+/*!*****************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[12].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[12].use[3]!./src/app/globals.css ***!
+  \*****************************************************************************************************************************************************************************************************************************************************************/
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Add these CSS variables at the top of your globals.css file */
+:root {
+  --safe-margin-sm: 8px;
+  --safe-margin-md: 16px;
+  --window-padding-sm: 0.75rem;
+  --window-padding-md: 1rem;
+  --window-padding-lg: 2rem;
+  --mobile-width-percentage: 90%;
+  --small-width-percentage: 95%;
+  --header-height-mobile: 40px;
+  --header-height-desktop: 48px;
+  --back-button-size-mobile: 40px;
+  --back-button-size-desktop: 48px;
+  --navbar-height-mobile: 40px;
+  --navbar-height-desktop: 48px;
+}
+
+/* Base styles */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background-color: black;
+}
+
+canvas[data-scene] {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  z-index: 1;
+}
+
+/* Base stacking context */
+.scene-transition-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 9999;
+  transition: opacity 3.5s ease-in-out; /* Match the scene transition duration */
+}
+
+/* Ensure the overlay is above everything else during transitions */
+.scene-transition-overlay {
+  z-index: 99999;
+}
+
+/* Prevent any flickering during transition */
+body:has(.scene-transition-overlay) {
+  background-color: black !important;
+}
+
+.scene-transition-overlay.fade-out {
+  opacity: 0;
+}
+
+/* Remove any conflicting z-index styles */
+.frosted-window {
+  position: absolute;
+  pointer-events: auto;
+}
+
+/* Ensure windows are visible */
+[data-frosted-box="true"] {
+  z-index: 100 !important;
+}
+
+/* Remove any duplicate keyframes and ensure body overflow handling */
+body:has(.scene-transition-grow),
+body:has(.scene-transition-shrink) {
+  overflow: visible !important;
+}
+
+/* Scrollbar styles for dynamic windows */
+.overflow-y-auto {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) rgba(255, 255, 255, 0.1);
+}
+
+.overflow-y-auto::-webkit-scrollbar {
+  width: 8px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+/* Prevent scrolling on the body */
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+}
+
+/* Style scrollbars in dynamic windows */
+.overflow-y-auto {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) rgba(255, 255, 255, 0.1);
+}
+
+.overflow-y-auto::-webkit-scrollbar {
+  width: 8px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.scene-transition-grow,
+.scene-transition-shrink {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: white;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+/* All fade to white transitions are 3.5s */
+.scene-transition-grow {
+  animation: fadeIn 3.5s ease-in-out forwards;
+}
+
+/* All fade from white transitions remain 0.5s */
+.scene-transition-shrink {
+  animation: fadeOut 0.5s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes sceneTransitionGrow {
+  0%, 100% {
+    filter: brightness(1);
+  }
+}
+
+@keyframes sceneTransitionShrink {
+  0%, 100% {
+    filter: brightness(1);
+  }
+}
+
+/* Ensure transitions are smooth */
+body {
+  background: black;
+}
+
+/* Prevent any flickering during transition */
+body:has(.scene-transition-grow),
+body:has(.scene-transition-shrink) {
+  background: black !important;
+}
+
+/* Add these styles to your globals.css */
+.backdrop-blur-md {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Safe area margins to prevent content from being cut off or hidden behind headers */
+:root {
+  --header-safe-area-top: 56px; /* Header height + margin */
+  --safe-margin-bottom: 16px;
+  --safe-margin-sides: 16px;
+}
+
+@media (max-width: 768px) {
+  :root {
+    --header-safe-area-top: 48px; /* Smaller header on mobile */
+    --safe-margin-bottom: 8px;
+    --safe-margin-sides: 8px;
+  }
+}
+
+/* Ensure windows respect safe areas */
+.frosted-window {
+  max-width: calc(100vw - var(--safe-margin-sides) * 2) !important;
+  max-height: calc(100vh - var(--header-safe-area-top) - var(--safe-margin-bottom)) !important;
+  overflow: auto !important;
+}
+
+/* Prevent windows from being positioned behind headers */
+.frosted-window {
+  min-top: var(--header-safe-area-top) !important;
+}
+
+/* Ensure content is scrollable when window is tall */
+.window-content {
+  max-height: calc(100vh - var(--header-safe-area-top) - var(--safe-margin-bottom) - 60px); /* 60px for window header and padding */
+  overflow-y: auto;
+}
+
+/* Responsive scaling for different screen sizes */
+:root {
+  /* Base spacing units */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  
+  /* UI element dimensions */
+  --header-height: 48px;
+  --back-button-size: 48px;
+  --navbar-height: 48px;
+  
+  /* Window dimensions */
+  --window-padding: 16px;
+  --window-max-height: 85vh; /* Increased from previous values */
+  
+  /* Mobile scaling */
+  --mobile-width-ratio: 0.9; /* 90% of screen width */
+  --small-width-ratio: 0.95; /* 95% of screen width */
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  :root {
+    /* Reduce spacing on mobile */
+    --spacing-md: 12px;
+    --spacing-lg: 16px;
+    --spacing-xl: 24px;
+    
+    /* Smaller UI elements on mobile */
+    --header-height: 40px;
+    --back-button-size: 40px;
+    --navbar-height: 40px;
+    
+    /* Smaller window padding */
+    --window-padding: 12px;
+    --window-max-height: 80vh; /* Increased from previous values */
+  }
+}
+
+/* Very small screens */
+@media (max-width: 480px) {
+  :root {
+    /* Further reduce spacing */
+    --spacing-sm: 6px;
+    --spacing-md: 8px;
+    --spacing-lg: 12px;
+    
+    /* Even smaller UI elements */
+    --header-height: 36px;
+    --back-button-size: 36px;
+    --navbar-height: 36px;
+    
+    /* Minimal window padding */
+    --window-padding: 8px;
+  }
+  
+  /* Adjust font sizes for very small screens */
+  .frosted-window h1 {
+    font-size: 1.5rem !important;
+  }
+  
+  .frosted-window h2 {
+    font-size: 1.25rem !important;
+  }
+  
+  .frosted-window p {
+    font-size: 0.875rem !important;
+  }
+}
+
+/* Ensure text remains legible at all scales */
+.frosted-window {
+  font-size: clamp(14px, 2.5vw, 16px);
+}
+
+.frosted-window h1 {
+  font-size: clamp(24px, 5vw, 32px);
+}
+
+.frosted-window h2 {
+  font-size: clamp(20px, 4vw, 24px);
+}
+
+.frosted-window h3 {
+  font-size: clamp(16px, 3.5vw, 20px);
+}
+
+.frosted-window p {
+  font-size: clamp(14px, 2.5vw, 16px);
+  line-height: 1.5;
+}
+
+/* Ensure buttons and interactive elements remain usable */
+.frosted-window button,
+.frosted-window a {
+  min-height: 44px; /* Minimum touch target size */
+  min-width: 44px;
+  padding: clamp(8px, 2vw, 16px);
+  font-size: clamp(14px, 2.5vw, 16px);
+}
+
+/* Ensure content is properly spaced */
+.window-content {
+  padding: clamp(8px, 2vw, 16px);
+}
+
+/* Ensure windows respect viewport bounds */
+.frosted-window {
+  max-width: calc(100vw - var(--spacing-sm) * 2) !important;
+  max-height: calc(100vh - var(--header-height) - var(--spacing-sm) * 2) !important;
+  overflow: auto !important;
+  box-sizing: border-box !important;
+}
+
+/* Prevent windows from being positioned outside safe areas */
+.frosted-window {
+  min-top: var(--header-height) !important;
+  min-left: var(--spacing-sm) !important;
+  max-right: calc(100vw - var(--spacing-sm)) !important;
+  max-bottom: calc(100vh - var(--spacing-sm)) !important;
+}
+
+/* Ensure content is properly contained */
+.window-content {
+  width: 100% !important;
+  height: 100% !important;
+  overflow: auto !important;
+  box-sizing: border-box !important;
+}
+
+/* Ensure windows maintain proper dimensions */
+.frosted-window {
+  transform-origin: top left !important;
+}
+
+/* Ensure windows are always centered both horizontally and vertically */
+.frosted-window {
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  max-width: calc(100vw - var(--spacing-sm) * 2) !important;
+  max-height: calc(100vh - var(--header-height) - var(--spacing-sm) * 2) !important;
+}
+
+/* Ensure windows don't go behind header */
+.frosted-window {
+  margin-top: calc(var(--header-height) / 2) !important;
+}
+
+/* Ensure content is properly contained */
+.window-content {
+  width: 100% !important;
+  height: 100% !important;
+  overflow: auto !important;
+  box-sizing: border-box !important;
+}
+
+/* Ensure windows maintain proper dimensions */
+.frosted-window {
+  transform-origin: top left !important;
+}
+
+/* Ensure windows are always centered horizontally */
+@media (max-width: 768px) {
+  .frosted-window {
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: calc(100vw * var(--mobile-width-ratio)) !important;
+    max-width: calc(100vw - var(--spacing-sm) * 2) !important;
+    bottom: var(--spacing-sm) !important;
+    top: auto !important;
+  }
+}
+
+/* Very small screens */
+@media (max-width: 480px) {
+  .frosted-window {
+    width: calc(100vw * var(--small-width-ratio)) !important;
+    max-width: calc(100vw - var(--spacing-sm) * 2) !important;
+  }
+}
+
+/* Ensure windows are perfectly centered both horizontally and vertically */
+.frosted-window {
+  position: fixed !important;
+  left: 50% !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  max-width: calc(100vw - var(--spacing-sm) * 2) !important;
+  max-height: calc(100vh - var(--header-height) - var(--spacing-sm) * 2) !important;
+  margin-top: calc(var(--header-height) / 2) !important; /* Adjust for header to ensure equidistant */
+}
+
+/* Remove any conflicting positioning styles */
+.frosted-window {
+  bottom: auto !important;
+  right: auto !important;
+}
+
+/* Ensure content is properly contained */
+.window-content {
+  width: 100% !important;
+  height: 100% !important;
+  overflow: auto !important;
+  box-sizing: border-box !important;
+}
+
+/* Ensure windows maintain proper dimensions */
+.frosted-window {
+  transform-origin: top left !important;
+}
+
+/* Ensure windows are always centered horizontally */
+@media (max-width: 768px) {
+  .frosted-window {
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: calc(100vw * var(--mobile-width-ratio)) !important;
+    max-width: calc(100vw - var(--spacing-sm) * 2) !important;
+    bottom: var(--spacing-sm) !important;
+    top: auto !important;
+  }
+}
+
+/* Very small screens */
+@media (max-width: 480px) {
+  .frosted-window {
+    width: calc(100vw * var(--small-width-ratio)) !important;
+    max-width: calc(100vw - var(--spacing-sm) * 2) !important;
+  }
+}
+
+/* Perfect centering class */
+.perfect-center {
+  position: fixed !important;
+  left: 50% !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  margin-top: calc(var(--header-height) / 2) !important; /* Adjust for header to ensure equidistant */
+}
+
+/* Ensure the transform property isn't overridden */
+.perfect-center[style*="transform"] {
+  transform: translate(-50%, -50%) !important;
+}
+
+/* Handle scaling if needed */
+.perfect-center.scaled {
+  transform-origin: center center !important;
+}
+
+/* Ensure windows can expand vertically to fit content */
+.frosted-window {
+  height: auto !important;
+  min-height: 100px !important;
+  max-height: calc(100vh - var(--header-height) - var(--spacing-sm) * 4) !important;
+}
+
+/* Ensure content is properly contained and scrollable if needed */
+.window-content {
+  width: 100% !important;
+  height: auto !important;
+  max-height: calc(100vh - var(--header-height) - var(--spacing-sm) * 4 - 60px) !important; /* 60px for window header and padding */
+  overflow-y: auto !important;
+  box-sizing: border-box !important;
+}
+
+/* Only apply scrollbar when content exceeds the container height */
+.window-content {
+  overflow-y: visible !important;
+}
+
+.window-content.scrollable {
+  overflow-y: auto !important;
+}
+
+/* Fix double scrollbar issues and make windows taller */
+.frosted-window {
+  width: auto !important;
+  height: auto !important;
+  min-width: 450px !important;
+  min-height: 150px !important;
+  max-width: calc(100vw - var(--spacing-sm) * 2) !important;
+  max-height: var(--window-max-height) !important; /* Use the new variable */
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
+/* Ensure window content doesn't have its own scrollbar unless needed */
+.window-content {
+  width: 100% !important;
+  height: auto !important;
+  overflow: visible !important;
+  box-sizing: border-box !important;
+}
+
+/* Only apply scrollbar to specific elements that need it */
+.window-content .scrollable-content {
+  max-height: calc(100vh - var(--header-height) - var(--spacing-sm) * 2 - 100px) !important;
+  overflow-y: auto !important;
+}
+
+/* Adjust for mobile */
+@media (max-width: 768px) {
+  .frosted-window {
+    min-width: 350px !important;
+    width: 95% !important;
+  }
+}
+
+/* Fix double scrollbar issues and make windows wider and taller */
+.frosted-window {
+  width: auto !important;
+  height: auto !important;
+  min-width: 450px !important;
+  min-height: 150px !important;
+  max-width: calc(100vw - var(--spacing-sm) * 2) !important;
+  max-height: calc(100vh - var(--header-height) - var(--spacing-sm) * 2) !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
+/* Ensure window content doesn't have its own scrollbar unless needed */
+.window-content {
+  width: 100% !important;
+  height: auto !important;
+  overflow: visible !important;
+  box-sizing: border-box !important;
+}
+
+/* Only apply scrollbar to specific elements that need it */
+.window-content .scrollable-content {
+  max-height: calc(100vh - var(--header-height) - var(--spacing-sm) * 2 - 100px) !important;
+  overflow-y: auto !important;
+}
+
+/* Stylized scrollbars for all frosted windows */
+.frosted-window {
+  /* Firefox scrollbar styling */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) rgba(0, 0, 0, 0.2);
+}
+
+/* Webkit scrollbar styling (Chrome, Safari, Edge) */
+.frosted-window::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.frosted-window::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  margin: 4px;
+}
+
+.frosted-window::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.frosted-window::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.frosted-window::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Apply the same styling to any scrollable content within windows */
+.window-content .scrollable-content,
+.overflow-y-auto {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) rgba(0, 0, 0, 0.2);
+}
+
+.window-content .scrollable-content::-webkit-scrollbar,
+.overflow-y-auto::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.window-content .scrollable-content::-webkit-scrollbar-track,
+.overflow-y-auto::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  margin: 4px;
+}
+
+.window-content .scrollable-content::-webkit-scrollbar-thumb,
+.overflow-y-auto::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.window-content .scrollable-content::-webkit-scrollbar-thumb:hover,
+.overflow-y-auto::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.window-content .scrollable-content::-webkit-scrollbar-corner,
+.overflow-y-auto::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Accessibility and readability improvements */
+:root {
+  /* Minimum touch target sizes for accessibility */
+  --min-touch-target: 44px;
+  --min-touch-target-small: 36px;
+  
+  /* Minimum font sizes for readability */
+  --min-font-size: 16px;
+  --min-font-size-small: 14px;
+  --min-font-size-heading: 18px;
+  
+  /* Line heights for readability */
+  --line-height-normal: 1.5;
+  --line-height-heading: 1.3;
+  
+  /* Text contrast ratios */
+  --text-opacity: 1;
+  --heading-opacity: 1;
+}
+
+/* Ensure text is readable on all devices */
+.frosted-window {
+  font-size: max(var(--min-font-size), clamp(14px, 4vw, 16px));
+  line-height: var(--line-height-normal);
+  color: rgba(255, 255, 255, var(--text-opacity));
+}
+
+.frosted-window h1, 
+.frosted-window h2, 
+.frosted-window h3, 
+.frosted-window h4 {
+  line-height: var(--line-height-heading);
+  color: rgba(255, 255, 255, var(--heading-opacity));
+  margin-bottom: 0.5em;
+}
+
+.frosted-window h1 {
+  font-size: max(var(--min-font-size-heading), clamp(20px, 6vw, 28px));
+}
+
+.frosted-window h2 {
+  font-size: max(var(--min-font-size-heading), clamp(18px, 5vw, 24px));
+}
+
+.frosted-window h3 {
+  font-size: max(var(--min-font-size-heading), clamp(16px, 4.5vw, 20px));
+}
+
+.frosted-window p, 
+.frosted-window li, 
+.frosted-window span {
+  font-size: max(var(--min-font-size), clamp(14px, 4vw, 16px));
+  margin-bottom: 1em;
+}
+
+/* Ensure buttons and interactive elements are accessible */
+.frosted-window button,
+.frosted-window a,
+.frosted-window input,
+.frosted-window select,
+.frosted-window textarea {
+  min-height: var(--min-touch-target);
+  min-width: var(--min-touch-target);
+  font-size: max(var(--min-font-size), clamp(14px, 4vw, 16px));
+  padding: clamp(8px, 2vw, 12px);
+  border-radius: 4px;
+}
+
+/* Improve spacing for readability */
+.window-content {
+  padding: clamp(12px, 4vw, 20px);
+}
+
+/* Ensure content has adequate spacing */
+.frosted-window p,
+.frosted-window h1,
+.frosted-window h2,
+.frosted-window h3,
+.frosted-window ul,
+.frosted-window ol {
+  margin-bottom: clamp(0.8em, 3vw, 1.2em);
+}
+
+/* Improve list readability */
+.frosted-window ul,
+.frosted-window ol {
+  padding-left: 1.5em;
+}
+
+.frosted-window li {
+  margin-bottom: 0.5em;
+}
+
+/* Mobile-specific improvements */
+@media (max-width: 768px) {
+  :root {
+    --min-touch-target: 44px; /* Maintain minimum touch target size */
+  }
+  
+  /* Increase contrast slightly for better readability on small screens */
+  .frosted-window {
+    --text-opacity: 1;
+    --heading-opacity: 1;
+  }
+  
+  /* Ensure adequate spacing between elements */
+  .frosted-window > * + * {
+    margin-top: 0.8em;
+  }
+  
+  /* Ensure windows have adequate padding */
+  .frosted-window {
+    padding: clamp(12px, 3vw, 16px) !important;
+  }
+}
+
+/* Very small screens */
+@media (max-width: 480px) {
+  :root {
+    --min-touch-target: 44px; /* Maintain minimum touch target size */
+    --min-font-size: 15px; /* Slightly smaller but still readable */
+  }
+  
+  /* Adjust window dimensions for very small screens */
+  .frosted-window {
+    width: calc(100% - 16px) !important;
+    max-width: calc(100% - 16px) !important;
+    margin: 0 auto !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+  }
+}
+
+/* Very narrow screens */
+@media (max-width: 360px) {
+  :root {
+    --min-touch-target-small: 36px; /* Slightly smaller but still accessible */
+    --min-font-size-small: 14px; /* Minimum readable size */
+  }
+  
+  /* Ensure UI elements don't overlap */
+  .frosted-window {
+    width: calc(100% - 8px) !important;
+    max-width: calc(100% - 8px) !important;
+    padding: 8px !important;
+  }
+  
+  /* Adjust header for very narrow screens */
+  [data-frosted-box="header"] {
+    max-width: 60% !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+}
+
+/* Mobile-specific window sizing */
+@media (max-width: 768px) {
+  .frosted-window {
+    width: calc(100vw - 32px) !important;
+    max-width: calc(100vw - 32px) !important;
+    min-width: auto !important; /* Override min-width to allow proper scaling */
+    margin-left: 16px !important;
+    margin-right: 16px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    box-sizing: border-box !important;
+  }
+}
+
+/* Small mobile devices */
+@media (max-width: 480px) {
+  .frosted-window {
+    width: calc(100vw - 24px) !important;
+    max-width: calc(100vw - 24px) !important;
+    margin-left: 12px !important;
+    margin-right: 12px !important;
+    padding: 12px !important;
+  }
+}
+
+/* Very narrow screens */
+@media (max-width: 360px) {
+  .frosted-window {
+    width: calc(100vw - 16px) !important;
+    max-width: calc(100vw - 16px) !important;
+    margin-left: 8px !important;
+    margin-right: 8px !important;
+    padding: 8px !important;
+  }
+}
+
+/* Reset all window sizing for mobile to ensure proper scaling */
+.frosted-window {
+  box-sizing: border-box !important;
+  max-height: var(--window-max-height) !important; /* Use the new variable */
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
+/* Mobile-specific window sizing - more balanced approach */
+@media (max-width: 768px) {
+  :root {
+    --window-max-height: 80vh; /* Reduced to 80% of viewport height */
+  }
+  
+  .frosted-window {
+    width: 95vw !important;
+    max-width: 95vw !important;
+    min-width: unset !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    position: fixed !important;
+    /* Allow taller windows on mobile but avoid navbar clipping */
+    max-height: var(--window-max-height) !important;
+    height: auto !important;
+    overflow-y: auto !important;
+    /* Ensure it's centered vertically */
+    top: 50% !important;
+    bottom: auto !important;
+  }
+}
+
+/* Small mobile devices */
+@media (max-width: 480px) {
+  :root {
+    --window-max-height: 95vh; /* Keep the same tall height */
+  }
+  
+  .frosted-window {
+    width: 95vw !important;
+    max-width: 95vw !important;
+    padding: 12px !important;
+  }
+}
+
+/* Very narrow screens */
+@media (max-width: 360px) {
+  :root {
+    --window-max-height: 95vh; /* Keep the same tall height */
+  }
+  
+  .frosted-window {
+    width: 96vw !important;
+    max-width: 96vw !important;
+    padding: 8px !important;
+  }
+}
+
+/* Force center positioning for all windows on mobile but allow height to adjust */
+@media (max-width: 768px) {
+  .frosted-window {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    height: auto !important;
+    max-height: var(--window-max-height) !important; /* Use the new variable */
+  }
+}
+
+/* Add a script to fix window positioning on mobile */
+@media (max-width: 768px) {
+  /* This will be applied by JavaScript */
+  .mobile-window-fix {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 92vw !important;
+    max-width: 92vw !important;
+    min-width: unset !important;
+    box-sizing: border-box !important;
+    height: auto !important;
+    max-height: var(--window-max-height) !important; /* Use the new variable */
+  }
+}
+
+@media (max-width: 480px) {
+  .mobile-window-fix {
+    width: 94vw !important;
+    max-width: 94vw !important;
+  }
+}
+
+@media (max-width: 360px) {
+  .mobile-window-fix {
+    width: 96vw !important;
+    max-width: 96vw !important;
+  }
+}
+
+/* Force center positioning for all windows on mobile */
+@media (max-width: 768px) {
+  .frosted-window {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+  }
+}
+
+/* Add this at the end of your CSS file to override any conflicting rules */
+.allow-tall-window {
+  height: auto !important;
+  max-height: 85vh !important;
+  overflow-y: auto !important;
+}
+
+.allow-tall-window .window-content {
+  height: auto !important;
+  max-height: none !important;
+  overflow-y: visible !important;
+}
+
+/* Only add scrolling when needed */
+.allow-tall-window.needs-scroll .window-content {
+  max-height: calc(85vh - 60px) !important; /* 60px for header and padding */
+  overflow-y: auto !important;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .allow-tall-window {
+    max-height: 85vh !important;
+  }
+  
+  .allow-tall-window.needs-scroll .window-content {
+    max-height: calc(85vh - 50px) !important; /* 50px for header and padding on mobile */
+  }
+}
+
+/* InTextImage Component Styles */
+.in-text-image {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.in-text-image:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* Ensure proper text wrapping around images */
+.window-content {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  -webkit-hyphens: auto;
+          hyphens: auto;
+}
+
+/* Clear floats to prevent layout issues */
+.window-content::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Responsive image sizing within windows */
+@media (max-width: 768px) {
+  .in-text-image {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .in-text-image {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+}
+
+
+
+
+
+
+
+/*!****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[3].use[1]!./node_modules/next/dist/build/webpack/loaders/next-font-loader/index.js??ruleSet[1].rules[14].oneOf[3].use[2]!./node_modules/next/font/local/target.css?{"path":"src\\app\\fonts.ts","import":"","arguments":[{"src":"./Fonts/Conthrax-SemiBold.otf","display":"swap"}],"variableName":"conthrax"} ***!
+  \****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+@font-face {
+font-family: '__conthrax_84f4b4';
+src: url(/_next/static/media/7088caceded5d5e9-s.p.otf) format('opentype');
+font-display: swap;
+}@font-face {font-family: '__conthrax_Fallback_84f4b4';src: local("Arial");ascent-override: 61.81%;descent-override: 18.12%;line-gap-override: 0.00%;size-adjust: 150.14%
+}.__className_84f4b4 {font-family: '__conthrax_84f4b4', '__conthrax_Fallback_84f4b4'
+}
+

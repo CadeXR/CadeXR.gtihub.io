@@ -331,6 +331,12 @@ export default function HomePage() {
             defaultPosition={aboutPosition}
             onMove={() => {}} // Disable moving
             className="frosted-window-about"
+            headerImage={{
+              src: "/media/AboutBackround.png",
+              alt: "Miku Magic",
+              height: isMobile ? "120px" : "150px",
+              objectFit: "cover"
+            }}
             style={{
               width: isMobile ? (isVerySmall ? '94vw' : '92vw') : '400px',
               height: 'auto',

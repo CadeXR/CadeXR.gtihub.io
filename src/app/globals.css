@@ -987,6 +987,47 @@ body:has(.scene-transition-shrink) {
   }
 }
 
+/* InTextImage Component Styles */
+.in-text-image {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.in-text-image:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* Ensure proper text wrapping around images */
+.window-content {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
+}
+
+/* Clear floats to prevent layout issues */
+.window-content::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Responsive image sizing within windows */
+@media (max-width: 768px) {
+  .in-text-image {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .in-text-image {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+}
+
 
 
 

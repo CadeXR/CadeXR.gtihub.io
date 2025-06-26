@@ -1,5 +1,6 @@
 'use client'
 import { useMediaQuery } from 'react-responsive';
+import InTextImage from './InTextImage';
 
 export default function AboutContent() {
   const isMobile = useMediaQuery({ maxWidth: 768 });
@@ -13,9 +14,19 @@ export default function AboutContent() {
       <h2 className={`${isMobile ? 'text-xl' : 'text-2xl'} font-semibold mb-6`}>About Me</h2>
       
       <section>
+        <InTextImage
+          src="/media/headshotnew.jpg"
+          alt="Professional headshot"
+          width={isMobile ? 120 : 180}
+          height={isMobile ? 120 : 180}
+          float="left"
+          borderRadius="0.75rem"
+          objectFit="cover"
+        />
         <p className="mb-4 text-sm md:text-base">
           I'm an XR community veteran and UX Designer with a focus on immersive experiences. My passion lies in understanding what drives XR forward—through networking, industry research, and active participation in events where I stay on top of trends and emerging technologies. Across the projects I've contributed to, my work has helped reach over half a million installs on the Meta Quest platform.
         </p>
+        <div style={{ clear: 'both' }}></div>
       </section>
 
       <section>
