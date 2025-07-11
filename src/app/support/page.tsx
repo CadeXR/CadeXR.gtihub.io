@@ -37,7 +37,7 @@ export default function SupportPage() {
             Your support helps me continue developing free tools for the XR community
           </p>
           <a 
-            href="https://ko-fi.com" 
+            href="https://ko-fi.com/cadexr" 
             target="_blank" 
             rel="noopener noreferrer"
             className="inline-block px-8 py-4 bg-[rgba(255,102,0,0.3)] hover:bg-[rgba(255,102,0,0.5)] border border-[rgba(255,102,0,0.6)] rounded-lg transition-all duration-300 text-xl font-semibold"
