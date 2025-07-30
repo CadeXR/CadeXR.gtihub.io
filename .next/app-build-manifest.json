@@ -1,0 +1,45 @@
+{
+  "pages": {
+    "/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/layout.css",
+      "static/chunks/app/layout.js"
+    ],
+    "/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/page.js"
+    ],
+    "/home/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/home/page.css",
+      "static/chunks/app/home/page.js"
+    ],
+    "/projects/project-dive/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/projects/project-dive/page.css",
+      "static/chunks/app/projects/project-dive/page.js"
+    ],
+    "/projects/battlegrounds/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/projects/battlegrounds/page.css",
+      "static/chunks/app/projects/battlegrounds/page.js"
+    ],
+    "/projects/flexvr-wellness/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/projects/flexvr-wellness/page.css",
+      "static/chunks/app/projects/flexvr-wellness/page.js"
+    ],
+    "/projects/intentional-locomotion/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/projects/intentional-locomotion/page.css",
+      "static/chunks/app/projects/intentional-locomotion/page.js"
+    ]
+  }
+}

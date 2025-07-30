@@ -1,7 +1,7 @@
 'use client'
 
 import './globals.css'
-import { conthrax } from './fonts'
+import { conthrax, sourceSansPro } from './fonts'
 import { useEffect } from 'react'
 import EmailButton from '@/components/UI/EmailButton'
 
@@ -38,7 +38,7 @@ export default function RootLayout({
   }, []);
 
   return (
-    <html lang="en" className={conthrax.className}>
+    <html lang="en" className={`${conthrax.className} ${sourceSansPro.className}`}>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         <title>Cade Gilbert - XR Design, XR Software Dev, Game Design, and AI</title>

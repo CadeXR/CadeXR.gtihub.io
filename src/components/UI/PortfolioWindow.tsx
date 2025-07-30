@@ -15,6 +15,7 @@ interface PortfolioWindowProps {
 }
 
 const projects = [
+  { name: 'Project Dive (In Progress)', path: '/projects/project-dive' },
   { name: 'Battlegrounds', path: '/projects/battlegrounds' },
   { name: 'FlexVR Wellness - RH24', path: '/projects/flexvr-wellness' },
   { name: 'DeskBuddy - ImmerseGT', path: '/projects/deskbuddy' },

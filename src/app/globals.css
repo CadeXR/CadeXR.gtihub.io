@@ -17,6 +17,10 @@
   --back-button-size-desktop: 48px;
   --navbar-height-mobile: 40px;
   --navbar-height-desktop: 48px;
+  
+  /* Font variables */
+  --font-conthrax: var(--font-conthrax);
+  --font-source-sans-pro: var(--font-source-sans-pro);
 }
 
 /* Base styles */
@@ -27,6 +31,19 @@ html, body {
   width: 100vw;
   overflow: hidden;
   background-color: black;
+  font-family: var(--font-source-sans-pro), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Use Conthrax for headers and specific elements */
+h1, h2, h3, h4, h5, h6,
+.frosted-window h1, .frosted-window h2, .frosted-window h3,
+button, .conthrax-font {
+  font-family: var(--font-conthrax), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Use Source Sans Pro for body text */
+p, span, div, li, a {
+  font-family: var(--font-source-sans-pro), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 canvas[data-scene] {
@@ -304,15 +321,15 @@ body:has(.scene-transition-shrink) {
   
   /* Adjust font sizes for very small screens */
   .frosted-window h1 {
-    font-size: 1.5rem !important;
+    font-size: 2rem !important;
   }
   
   .frosted-window h2 {
-    font-size: 1.25rem !important;
+    font-size: 1.75rem !important;
   }
   
   .frosted-window p {
-    font-size: 0.875rem !important;
+    font-size: 1.1rem !important;
   }
 }
 
@@ -660,9 +677,9 @@ body:has(.scene-transition-shrink) {
   --min-touch-target-small: 36px;
   
   /* Minimum font sizes for readability */
-  --min-font-size: 16px;
-  --min-font-size-small: 14px;
-  --min-font-size-heading: 18px;
+  --min-font-size: 20px;
+  --min-font-size-small: 18px;
+  --min-font-size-heading: 22px;
   
   /* Line heights for readability */
   --line-height-normal: 1.5;
@@ -675,7 +692,7 @@ body:has(.scene-transition-shrink) {
 
 /* Ensure text is readable on all devices */
 .frosted-window {
-  font-size: max(var(--min-font-size), clamp(14px, 4vw, 16px));
+  font-size: max(var(--min-font-size), clamp(18px, 5vw, 20px));
   line-height: var(--line-height-normal);
   color: rgba(255, 255, 255, var(--text-opacity));
 }
@@ -690,21 +707,21 @@ body:has(.scene-transition-shrink) {
 }
 
 .frosted-window h1 {
-  font-size: max(var(--min-font-size-heading), clamp(20px, 6vw, 28px));
+  font-size: max(var(--min-font-size-heading), clamp(26px, 7.5vw, 40px));
 }
 
 .frosted-window h2 {
-  font-size: max(var(--min-font-size-heading), clamp(18px, 5vw, 24px));
+  font-size: max(var(--min-font-size-heading), clamp(22px, 6.5vw, 32px));
 }
 
 .frosted-window h3 {
-  font-size: max(var(--min-font-size-heading), clamp(16px, 4.5vw, 20px));
+  font-size: max(var(--min-font-size-heading), clamp(20px, 6vw, 28px));
 }
 
 .frosted-window p, 
 .frosted-window li, 
 .frosted-window span {
-  font-size: max(var(--min-font-size), clamp(14px, 4vw, 16px));
+  font-size: max(var(--min-font-size), clamp(18px, 5vw, 20px));
   margin-bottom: 1em;
 }
 
@@ -716,8 +733,8 @@ body:has(.scene-transition-shrink) {
 .frosted-window textarea {
   min-height: var(--min-touch-target);
   min-width: var(--min-touch-target);
-  font-size: max(var(--min-font-size), clamp(14px, 4vw, 16px));
-  padding: clamp(8px, 2vw, 12px);
+  font-size: max(var(--min-font-size), clamp(18px, 5vw, 20px));
+  padding: clamp(12px, 3vw, 16px);
   border-radius: 4px;
 }
 
@@ -773,7 +790,7 @@ body:has(.scene-transition-shrink) {
 @media (max-width: 480px) {
   :root {
     --min-touch-target: 44px; /* Maintain minimum touch target size */
-    --min-font-size: 15px; /* Slightly smaller but still readable */
+    --min-font-size: 18px; /* Larger minimum size for better readability */
   }
   
   /* Adjust window dimensions for very small screens */
